@@ -20,7 +20,7 @@ jobs:
       with:
         appId: '294100'    # default
         itemId: '2610120706' # Id of item to update
-        contentPath: 'releases/${{ env.VERSION }}/@IwoRosiak.Holsters'
+        contentPath: 'releases/${{ env.VERSION }}/@armaforces_mods'
         changelog: 'Content of change notes'
       env:
         STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
