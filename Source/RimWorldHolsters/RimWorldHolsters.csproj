@@ -60,7 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="DisplayWeapon.cs" />
     <Compile Include="HarmonyPatches\HarmonyGraphicPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyInitialise.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -18,6 +18,8 @@ namespace RimWorldHolsters.HarmonyPatches
             Vector3 vector = new Vector3(0f, 0f, 0f);
 
             Pawn pawn = (Pawn)tempPawn.GetValue(__instance);
+            //if (pawn.stances.curStance == Stance)
+
             if (!(bool)CarryWeaponOpenly.Invoke(__instance, null))
             {
                 if (pawn.equipment?.Primary != null)

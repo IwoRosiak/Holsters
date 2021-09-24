@@ -17,6 +17,14 @@ namespace RimWorldHolsters
         {
             if (weapon.def.IsRangedWeapon)
             {
+                if (weapon.def.defName.StartsWith("Bow_"))
+                {
+                    return WeaponType.bow;
+                }
+                if (weapon.def.Verbs[0].CausesExplosion)
+                {
+                    return WeaponType.grenades;
+                }
                 if (weapon.def.uiIconScale != 1)
                 {
                     return WeaponType.shortRanged;
@@ -36,24 +44,52 @@ namespace RimWorldHolsters
 
         public static Vector3 GetWeaponPosition(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn)
         {
+            Vector3 pos = Vector3.zero;
             switch (EstablishWeaponType(pawn.equipment.Primary))
             {
                 case WeaponType.grenades:
+                    pos = rootLoc + shortRangedPos[pawnRotation];
                     break;
 
                 case WeaponType.longRanged:
-                    return rootLoc + longRangedPos[pawnRotation];
+                    pos = rootLoc + longRangedPos[pawnRotation] + GetBodyOffset(pawn, pawnRotation);
+                    break;
 
                 case WeaponType.shortRanged:
-                    return rootLoc + shortRangedPos[pawnRotation];
+                    pos = rootLoc + shortRangedPos[pawnRotation];
+                    break;
 
                 case WeaponType.longMelee:
-                    return rootLoc + longMeleePos[pawnRotation];
+                    pos = rootLoc + longMeleePos[pawnRotation] + GetBodyOffset(pawn, pawnRotation);
+                    break;
 
                 case WeaponType.shortMelee:
-                    return rootLoc + shortMeleePos[pawnRotation];
+                    pos = rootLoc + shortMeleePos[pawnRotation];
+                    break;
+
+                case WeaponType.bow:
+                    pos = rootLoc + bowPos[pawnRotation] + GetBodyOffset(pawn, pawnRotation);
+                    break;
             }
-            return Vector3.zero;
+            return pos;
+        }
+
+        private static Vector3 GetBodyOffset(Pawn pawn, Rot4 pawnRotation)
+        {
+            Vector3 offset = Vector3.zero;
+            if (pawn.story.bodyType.defName == "Fat" || pawn.story.bodyType.defName == "Hulk")
+            {
+                if (pawnRotation == Rot4.East)
+                {
+                    offset = new Vector3(-0.2f, 0f, 0f);
+                }
+                if (pawnRotation == Rot4.West)
+                {
+                    offset = new Vector3(0.2f, 0f, 0f);
+                }
+            }
+
+            return offset;
         }
 
         private const float forwardPos = 0f;
@@ -63,63 +99,73 @@ namespace RimWorldHolsters
         {
             {Rot4.South, new Vector3(-0.1f, backPos, 0.1f) },
             {Rot4.North, new Vector3(0f, forwardPos, 0f) },
-            {Rot4.East, new Vector3(-0.2f, backPos, 0f) },
-            {Rot4.West, new Vector3(0.24f, forwardPos, 0f) }
+            {Rot4.East, new Vector3(-0.2f, forwardPos, 0f) },
+            {Rot4.West, new Vector3(0.2f, backPos, 0f) }
         };
 
         private static Dictionary<Rot4, Vector3> shortRangedPos = new Dictionary<Rot4, Vector3>()
         {
-            {Rot4.South, new Vector3(0.1f, forwardPos, -0.25f) },
-            {Rot4.North, new Vector3(-0.1f,backPos, -0.25f) },
-            {Rot4.East, new Vector3(-0.1f, backPos, -0.25f) },
-            {Rot4.West, new Vector3(0.1f, forwardPos, -0.25f) }
+            {Rot4.South, new Vector3(0.15f, forwardPos, -0.3f) },
+            {Rot4.North, new Vector3(-0.15f,backPos, -0.3f) },
+            {Rot4.East, new Vector3(0.15f, backPos, -0.3f) },
+            {Rot4.West, new Vector3(-0.15f, forwardPos, -0.3f)}
         };
 
         private static Dictionary<Rot4, Vector3> longMeleePos = new Dictionary<Rot4, Vector3>()
         {
-            {Rot4.South, new Vector3(-0.1f, backPos, 0f) },
-            {Rot4.North, new Vector3(0f, forwardPos, 0f) },
+            {Rot4.South, new Vector3(-0.1f, backPos, 0.1f) },
+            {Rot4.North, new Vector3(0f, forwardPos, 0.1f) },
             {Rot4.East, new Vector3(-0.2f, forwardPos, 0f) },
-            {Rot4.West, new Vector3(0.24f, backPos, 0f) }
+            {Rot4.West, new Vector3(0.2f, backPos, 0f) }
         };
 
         private static Dictionary<Rot4, Vector3> shortMeleePos = new Dictionary<Rot4, Vector3>()
         {
-            {Rot4.South,  new Vector3(-0.1f, 1f, -0.1f) },
-            {Rot4.North, new Vector3(-0.1f, backPos, -0.1f) },
-            {Rot4.East, new Vector3(0.2f, backPos, -0.1f) },
-            {Rot4.West,  new Vector3(-0.2f, forwardPos, -0.1f) }
+            {Rot4.South,  new Vector3(0.1f, 1f, -0.3f) },
+            {Rot4.North, new Vector3(-0.1f, backPos, -0.3f) },
+            {Rot4.East, new Vector3(0.15f, backPos, -0.3f) },
+            {Rot4.West,  new Vector3(-0.15f, forwardPos, -0.3f) }
+        };
+
+        private static Dictionary<Rot4, Vector3> bowPos = new Dictionary<Rot4, Vector3>()
+        {
+            {Rot4.South, new Vector3(-0.1f, backPos, 0.1f) },
+            {Rot4.North, new Vector3(0f, forwardPos, 0f) },
+            {Rot4.East, new Vector3(-0.2f, backPos, 0f) },
+            {Rot4.West, new Vector3(0.2f, forwardPos, 0f) }
         };
 
         public static float GetWeaponAngle(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn)
         {
+            float angle = 180f;
             switch (EstablishWeaponType(pawn.equipment.Primary))
             {
                 case WeaponType.grenades:
+                    angle = shortRangedAngle[pawnRotation];
                     break;
 
                 case WeaponType.longRanged:
-                    return longRangedAngle[pawnRotation];
+                    angle = longRangedAngle[pawnRotation];
                     break;
 
                 case WeaponType.shortRanged:
-                    return shortRangedAngle[pawnRotation];
+                    angle = shortRangedAngle[pawnRotation];
                     break;
 
                 case WeaponType.longMelee:
-                    return longMeleeAngle[pawnRotation];
+                    angle = longMeleeAngle[pawnRotation];
                     break;
 
                 case WeaponType.shortMelee:
-                    return shortMeleeAngle[pawnRotation];
+                    angle = shortMeleeAngle[pawnRotation];
+                    break;
+
+                case WeaponType.bow:
+                    angle = bowAngle[pawnRotation];
                     break;
             }
-            return 180f;
+            return angle;
         }
-
-        //private static Dictionary<WeaponType, Dictionary<Rot4, float>> weaponsDicts = new Dictionary<WeaponType, Dictionary<Rot4, float>>();
-
-        private const float equipOffset = 65f;
 
         private static Dictionary<Rot4, float> longRangedAngle = new Dictionary<Rot4, float>()
         {
@@ -131,10 +177,10 @@ namespace RimWorldHolsters
 
         private static Dictionary<Rot4, float> shortRangedAngle = new Dictionary<Rot4, float>()
         {
-            {Rot4.South, 45f },
+            {Rot4.South, 40f },
             {Rot4.North, -320f },
             {Rot4.East, -320f },
-            {Rot4.West, 15f }
+            {Rot4.West, 35f }
         };
 
         private static Dictionary<Rot4, float> longMeleeAngle = new Dictionary<Rot4, float>()
@@ -151,6 +197,14 @@ namespace RimWorldHolsters
             {Rot4.North, 110f},
             {Rot4.East, 135f},
             {Rot4.West, 50f}
+        };
+
+        private static Dictionary<Rot4, float> bowAngle = new Dictionary<Rot4, float>()
+        {
+            {Rot4.South, 135},
+            {Rot4.North, 35f},
+            {Rot4.East, -20f},
+            {Rot4.West, 340f}
         };
 
         public static void DrawEquipmentHolstered(Thing eq, Vector3 drawLoc, float aimAngle, Rot4 pawnRotation)
@@ -187,16 +241,7 @@ namespace RimWorldHolsters
             {
                 material = eq.Graphic.MatSingleFor(eq);
             }
-            Graphics.DrawMesh(mesh, drawLoc, Quaternion.AngleAxis(num, Vector3.up), material, 0);
-        }
-
-        private static bool ShouldFlip(Rot4 pawnRotation)
-        {
-            if (pawnRotation == Rot4.West || pawnRotation == Rot4.North)
-            {
-                return true;
-            }
-            return false;
+            Graphics.DrawMesh(mesh, Matrix4x4.TRS(drawLoc, Quaternion.AngleAxis(num, Vector3.up), Vector3.one / eq.def.uiIconScale), material, 0);
         }
     }
 
@@ -206,6 +251,7 @@ namespace RimWorldHolsters
         longRanged,
         shortRanged,
         longMelee,
-        shortMelee
+        shortMelee,
+        bow
     }
 }
