@@ -8,11 +8,6 @@ namespace RimWorldHolsters
     [StaticConstructorOnStartup]
     public static class IR_DisplayWeapon
     {
-        static IR_DisplayWeapon()
-        {
-            //weaponsDicts.Add(WeaponType.longRanged, )
-        }
-
         private static WeaponType EstablishWeaponType(ThingWithComps weapon)
         {
             if (weapon.def.IsRangedWeapon)
@@ -48,51 +43,98 @@ namespace RimWorldHolsters
             switch (EstablishWeaponType(pawn.equipment.Primary))
             {
                 case WeaponType.grenades:
-                    pos = rootLoc + shortRangedPos[pawnRotation];
+                    pos = rootLoc + shortRangedPos[pawnRotation] + GetBodyOffsetSmallWeapons(pawn, pawnRotation);
                     break;
 
                 case WeaponType.longRanged:
-                    pos = rootLoc + longRangedPos[pawnRotation] + GetBodyOffset(pawn, pawnRotation);
+                    pos = rootLoc + longRangedPos[pawnRotation] + GetBodyOffsetLargeWeapons(pawn, pawnRotation);
                     break;
 
                 case WeaponType.shortRanged:
-                    pos = rootLoc + shortRangedPos[pawnRotation];
+                    pos = rootLoc + shortRangedPos[pawnRotation] + GetBodyOffsetSmallWeapons(pawn, pawnRotation);
                     break;
 
                 case WeaponType.longMelee:
-                    pos = rootLoc + longMeleePos[pawnRotation] + GetBodyOffset(pawn, pawnRotation);
+                    pos = rootLoc + longMeleePos[pawnRotation] + GetBodyOffsetLargeWeapons(pawn, pawnRotation);
                     break;
 
                 case WeaponType.shortMelee:
-                    pos = rootLoc + shortMeleePos[pawnRotation];
+                    pos = rootLoc + shortMeleePos[pawnRotation] + GetBodyOffsetSmallWeapons(pawn, pawnRotation);
                     break;
 
                 case WeaponType.bow:
-                    pos = rootLoc + bowPos[pawnRotation] + GetBodyOffset(pawn, pawnRotation);
+                    pos = rootLoc + bowPos[pawnRotation] + GetBodyOffsetLargeWeapons(pawn, pawnRotation);
                     break;
             }
             return pos;
         }
 
-        private static Vector3 GetBodyOffset(Pawn pawn, Rot4 pawnRotation)
+        private static Vector3 GetBodyOffsetLargeWeapons(Pawn pawn, Rot4 pawnRotation)
         {
             Vector3 offset = Vector3.zero;
-            if (pawn.story.bodyType.defName == "Fat" || pawn.story.bodyType.defName == "Hulk")
+            float modif = 0;
+
+            if (pawn.story.bodyType.defName == "Fat")
             {
-                if (pawnRotation == Rot4.East)
-                {
-                    offset = new Vector3(-0.2f, 0f, 0f);
-                }
-                if (pawnRotation == Rot4.West)
-                {
-                    offset = new Vector3(0.2f, 0f, 0f);
-                }
+                modif = 1f;
             }
 
-            return offset;
+            if (pawn.story.bodyType.defName == "Hulk")
+            {
+                modif = 0.5f;
+            }
+
+            if (pawn.story.bodyType.defName == "Thin")
+            {
+                modif = -0.5f;
+            }
+
+            if (pawnRotation == Rot4.East)
+            {
+                offset = new Vector3(-0.2f, 0f, 0f);
+            }
+            if (pawnRotation == Rot4.West)
+            {
+                offset = new Vector3(0.2f, 0f, 0f);
+            }
+
+            return offset * modif;
+        }
+
+        private static Vector3 GetBodyOffsetSmallWeapons(Pawn pawn, Rot4 pawnRotation)
+        {
+            Vector3 offset = Vector3.zero;
+            float modif = 0;
+
+            if (pawn.story.bodyType.defName == "Fat")
+            {
+                modif = 1f;
+            }
+
+            if (pawn.story.bodyType.defName == "Hulk")
+            {
+                modif = 0.5f;
+            }
+
+            if (pawn.story.bodyType.defName == "Thin")
+            {
+                modif = -0.2f;
+            }
+
+            if (pawnRotation == Rot4.North)
+            {
+                offset = new Vector3(-0.2f, 0f, 0f);
+            }
+            if (pawnRotation == Rot4.South)
+            {
+                offset = new Vector3(0.2f, 0f, 0f);
+            }
+
+            return offset * modif;
         }
 
         private const float forwardPos = 0f;
+
         private const float backPos = -0.0028957527f;
 
         private static Dictionary<Rot4, Vector3> longRangedPos = new Dictionary<Rot4, Vector3>()
@@ -107,8 +149,8 @@ namespace RimWorldHolsters
         {
             {Rot4.South, new Vector3(0.15f, forwardPos, -0.3f) },
             {Rot4.North, new Vector3(-0.15f,backPos, -0.3f) },
-            {Rot4.East, new Vector3(0.15f, backPos, -0.3f) },
-            {Rot4.West, new Vector3(-0.15f, forwardPos, -0.3f)}
+            {Rot4.East, new Vector3(0.10f, backPos, -0.3f) },
+            {Rot4.West, new Vector3(-0.10f, forwardPos, -0.3f)}
         };
 
         private static Dictionary<Rot4, Vector3> longMeleePos = new Dictionary<Rot4, Vector3>()
@@ -121,18 +163,18 @@ namespace RimWorldHolsters
 
         private static Dictionary<Rot4, Vector3> shortMeleePos = new Dictionary<Rot4, Vector3>()
         {
-            {Rot4.South,  new Vector3(0.1f, 1f, -0.3f) },
+            {Rot4.South,  new Vector3(0.1f, forwardPos*4, -0.3f) },
             {Rot4.North, new Vector3(-0.1f, backPos, -0.3f) },
-            {Rot4.East, new Vector3(0.15f, backPos, -0.3f) },
-            {Rot4.West,  new Vector3(-0.15f, forwardPos, -0.3f) }
+            {Rot4.East, new Vector3(0.15f, backPos, -0.5f) },
+            {Rot4.West,  new Vector3(-0.15f, forwardPos*4, -0.5f) }
         };
 
         private static Dictionary<Rot4, Vector3> bowPos = new Dictionary<Rot4, Vector3>()
         {
             {Rot4.South, new Vector3(-0.1f, backPos, 0.1f) },
             {Rot4.North, new Vector3(0f, forwardPos, 0f) },
-            {Rot4.East, new Vector3(-0.2f, backPos, 0f) },
-            {Rot4.West, new Vector3(0.2f, forwardPos, 0f) }
+            {Rot4.East, new Vector3(-0.2f, forwardPos, 0f) },
+            {Rot4.West, new Vector3(0.2f,backPos , 0f) }
         };
 
         public static float GetWeaponAngle(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn)
