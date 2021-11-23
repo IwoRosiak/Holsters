@@ -9,22 +9,22 @@ namespace RimWorldHolsters
     {
         public static Vector3 GetWeaponPosition(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn)
         {
-            Vector3 offset = IR_WeaponTypePositions.GetWeaponPos(IR_WeaponType.EstablishWeaponType(pawn.equipment.Primary), pawnRotation);
+            Vector3 offset = IR_WeaponData.GetWeaponPos(IR_WeaponType.EstablishWeaponType(pawn.equipment.Primary), pawnRotation);
 
             if (IR_WeaponType.EstablishWeaponSize(pawn.equipment.Primary) == true)
             {
-                offset += IR_PositionAdjuster.GetBodyOffsetLargeWeapons(pawn, pawnRotation);
+                offset += IR_PositionAdjuster.GetBodyOffsetLargeWeapons(pawnRotation, pawn);
             }
             else
             {
-                offset += IR_PositionAdjuster.GetBodyOffsetSmallWeapons(pawn, pawnRotation);
+                offset += IR_PositionAdjuster.GetBodyOffsetSmallWeapons(pawnRotation, pawn);
             }
             return rootLoc + offset;
         }
 
         public static float GetWeaponAngle(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn)
         {
-            return IR_WeaponTypePositions.GetWeaponAngle(IR_WeaponType.EstablishWeaponType(pawn.equipment.Primary), pawnRotation);
+            return IR_WeaponData.GetWeaponAngle(IR_WeaponType.EstablishWeaponType(pawn.equipment.Primary), pawnRotation);
         }
 
         public static void DrawEquipmentHolstered(Thing eq, Vector3 drawLoc, float aimAngle, Rot4 pawnRotation)

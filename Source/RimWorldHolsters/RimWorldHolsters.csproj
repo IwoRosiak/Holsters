@@ -63,10 +63,14 @@
     <Compile Include="DisplayWeapon.cs" />
     <Compile Include="HarmonyPatches\HarmonyGraphicPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyInitialise.cs" />
+    <Compile Include="Utility\IR_Textures.cs" />
+    <Compile Include="Utility\ModSettings\IR_HolstersMod.cs" />
+    <Compile Include="Utility\IR_WeaponData.cs" />
+    <Compile Include="Utility\ModSettings\IR_HolstersSettings.cs" />
     <Compile Include="WeaponType.cs" />
     <Compile Include="PositionAdjuster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WeaponTypePositions.cs" />
+    <Compile Include="Utility\HolstersInit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
