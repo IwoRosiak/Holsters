@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using RimWorld;
+using System.Collections.Generic;
+using UnityEngine;
 using Verse;
 
 namespace RimWorldHolsters
@@ -15,6 +17,11 @@ namespace RimWorldHolsters
         public override void DoSettingsWindowContents(Rect inRect)
         {
             InitSettingsDict();
+
+            if (curWeapons.NullOrEmpty())
+            {
+                LoadWeapons();
+            }
             //IR_HolstersInit.InitWeaponDataSettings();
             //Widgets.DrawTextureFitted(new Rect(inRect.x, inRect.y, inRect.width, inRect.height), Textures.SettingsBackGround, 1); //later!
 
@@ -25,75 +32,115 @@ namespace RimWorldHolsters
 
             listing.Begin(inRect);
 
+            listing.ColumnWidth = inRect.width / 3.3f;
+
             if (!IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType))
             {
                 IR_HolstersSettings.InitWeaponDataSettings();
+            }
+
+            if (listing.ButtonText("-- current type") && IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType - 1))
+            {
+                currentType--;
+                LoadWeapons();
+            }
+            if (listing.ButtonText("-- current weapon") && curWeaponIndex != 0)
+            {
+                curWeaponIndex--;
             }
 
             if (listing.ButtonText("Reset current type"))
             {
                 IR_HolstersSettings.InitWeaponDataSettings();
             }
+            listing.NewColumn();
+
+            listing.Label("Current weapon type: " + currentType.ToString());
+            listing.Label("Current weapon: " + curWeapons[curWeaponIndex].label);
+            listing.Label("Current coordinates:" + IR_WeaponData.GetWeaponPos(currentType, currentDir).ToString());
+
+            listing.NewColumn();
 
             if (listing.ButtonText("++ current type") && IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType + 1))
             {
                 currentType++;
+                LoadWeapons();
             }
-            if (listing.ButtonText("-- current type") && IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType - 1))
+
+            if (listing.ButtonText("++ current weapon") && curWeaponIndex != curWeapons.Count - 1)
             {
-                currentType--;
+                curWeaponIndex++;
+            }
+
+            if (listing.ButtonText("Output values"))
+            {
+                Log.Message(inRect.size.ToString());
+                Log.Message(IR_WeaponData.GetWeaponPos(currentType, currentDir).ToString());
             }
 
             listing.End();
 
-            Rect bodyFrameRect = new Rect(inRect.x + (0.2f * inRect.width), inRect.y + (0.2f * inRect.height), 0.6f * inRect.width, 0.5f * inRect.width);
+            Rect bodyFrameRect = new Rect(inRect.x + (0.2f * inRect.width), inRect.y + (0.18f * inRect.height), 0.6f * inRect.width, 0.5f * inRect.width);
             Widgets.DrawBoxSolid(bodyFrameRect, Color.gray);
-
-            if (currentDir == Rot4.North)
-            {
-                DrawHead(bodyFrameRect);
-            }
 
             if (DrawingMode())
             {
                 DrawWeapon(bodyFrameRect);
                 DrawBody(bodyFrameRect);
-                if (currentDir != Rot4.North)
-                {
-                    DrawHead(bodyFrameRect);
-                }
+
+                DrawHead(bodyFrameRect);
             }
             else
             {
                 DrawBody(bodyFrameRect);
-                if (currentDir != Rot4.North)
-                {
-                    DrawHead(bodyFrameRect);
-                }
+
+                DrawHead(bodyFrameRect);
+
                 DrawWeapon(bodyFrameRect);
             }
 
             DrawBodyButton(bodyFrameRect);
         }
 
+        private void LoadWeapons()
+        {
+            curWeapons.Clear();
+            foreach (ThingDef weapon in GenDefDatabase.GetAllDefsInDatabaseForDef(typeof(ThingDef)))
+            {
+                if (weapon.IsWeapon && weapon.equipmentType == EquipmentType.Primary && IR_WeaponType.EstablishWeaponType(weapon) == currentType)
+                {
+                    curWeapons.Add(weapon);
+                }
+            }
+        }
+
         private bool DrawingMode()
         {
-            if (IR_WeaponData.GetWeaponPos(currentType, currentDir).y == 0f)
+            if (IR_WeaponData.GetWeaponPos(currentType, currentDir).y >= 1f)
             {
                 return false;
             }
             return true;
         }
 
+        private List<ThingDef> curWeapons = new List<ThingDef>();
+        private int curWeaponIndex = 0;
+
         private void DrawWeapon(Rect rect)
         {
-            Rect weaponRect = new Rect(rect.x + (0.2f * rect.width), rect.y + (0.3f * rect.height), 0.6f * rect.width, 0.4f * rect.width);
-
             Vector2 offset = new Vector2(IR_WeaponData.GetWeaponPos(currentType, currentDir).x, -IR_WeaponData.GetWeaponPos(currentType, currentDir).z);
 
             offset += GetBodySizeOffset();
+            float scale = (1 / curWeapons[curWeaponIndex].uiIconScale);
+            Texture text = curWeapons[curWeaponIndex].graphic.MatNorth.mainTexture;
 
-            Widgets.DrawTextureRotated(weaponRect.center + offset * 100 - new Vector2(0, 34), ChooseTexture(), IR_WeaponData.GetWeaponAngle(currentType, currentDir));
+            if (text.width == 128)
+            {
+                scale /= 2;
+            }
+
+            scale *= 1.35f;
+            Widgets.DrawTextureRotated(rect.center + (offset * pixelRatio), text, IR_WeaponData.GetWeaponAngle(currentType, currentDir), scale);
         }
 
         private Vector2 GetBodySizeOffset()
@@ -124,7 +171,7 @@ namespace RimWorldHolsters
 
         private void DrawBody(Rect rect)
         {
-            Rect bodyRect = new Rect(rect.x + (0.2f * rect.width), rect.y + (0.3f * rect.height), 0.6f * rect.width, 0.4f * rect.width);
+            Rect bodyRect = new Rect(rect.x + (0.2f * rect.width), rect.y + (0.3f * rect.height), 0.6f * rect.width, 0.6f * rect.width);
 
             var texture = ChooseBodyTexture();
 
@@ -133,11 +180,22 @@ namespace RimWorldHolsters
 
         private void DrawHead(Rect rect)
         {
-            Rect headRect = new Rect(rect.x + (0.2f * rect.width), rect.y + (0.2f * rect.height), 0.6f * rect.width, 0.4f * rect.width);
+            Rect headRect = new Rect(rect.x + (0.2f * rect.width), rect.y + (0.3f * rect.height), 0.6f * rect.width, 0.6f * rect.width);
 
             var texture = ChooseHeadTexture();
 
-            Widgets.DrawTextureRotated(rect.center - new Vector2(0, 34), texture, 0);
+            float offset = 0;
+
+            if (currentDir == Rot4.East)
+            {
+                offset = -ChooseHeadOffset();
+            }
+            else if (currentDir == Rot4.West)
+            {
+                offset = ChooseHeadOffset();
+            }
+
+            Widgets.DrawTextureRotated(rect.center - new Vector2(offset * pixelRatio, 34), texture, 0);
         }
 
         private void DrawBodyButton(Rect rect)
@@ -152,11 +210,16 @@ namespace RimWorldHolsters
             Rect buttonLookNorth = new Rect(rect.x + (0.45f * rect.width), rect.y + (0.1f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
             Rect buttonLookSouth = new Rect(rect.x + (0.45f * rect.width), rect.y + (0.8f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
 
-            Rect buttonHulk = new Rect(rect.x, rect.y, 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonThin = new Rect(rect.x + (0.1f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonFat = new Rect(rect.x + (0.2f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonMale = new Rect(rect.x + (0.3f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonFemale = new Rect(rect.x + (0.4f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
+            Rect buttonRotateLeft = new Rect(rect.x + (0.1f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
+            Rect buttonRotateRight = new Rect(rect.x + (0.8f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
+            Rect buttonRotateLeftPlus = new Rect(rect.x, rect.y, 0.1f * rect.width, 0.1f * rect.height);
+            Rect buttonRotateRightPlus = new Rect(rect.x + (0.9f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
+
+            Rect buttonHulk = new Rect(rect.x, rect.y + rect.height, 0.2f * rect.width, 0.1f * rect.height);
+            Rect buttonThin = new Rect(rect.x + (0.2f * rect.width), rect.y + rect.height, 0.2f * rect.width, 0.1f * rect.height);
+            Rect buttonFat = new Rect(rect.x + (0.4f * rect.width), rect.y + rect.height, 0.2f * rect.width, 0.1f * rect.height);
+            Rect buttonMale = new Rect(rect.x + (0.6f * rect.width), rect.y + rect.height, 0.2f * rect.width, 0.1f * rect.height);
+            Rect buttonFemale = new Rect(rect.x + (0.8f * rect.width), rect.y + rect.height, 0.2f * rect.width, 0.1f * rect.height);
 
             if (Widgets.ButtonText(buttonWest, "-X"))
             {
@@ -198,6 +261,32 @@ namespace RimWorldHolsters
             if (Widgets.ButtonText(buttonLookSouth, "S"))
             {
                 currentDir = Rot4.South;
+            }
+
+            if (Widgets.ButtonText(buttonRotateLeftPlus, "Rot --"))
+            {
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir];
+                tempX -= 5;
+                IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir] = tempX;
+            }
+            if (Widgets.ButtonText(buttonRotateLeft, "Rot -"))
+            {
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir];
+                tempX -= 1;
+                IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir] = tempX;
+            }
+
+            if (Widgets.ButtonText(buttonRotateRight, "Rot +"))
+            {
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir];
+                tempX += 1;
+                IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir] = tempX;
+            }
+            if (Widgets.ButtonText(buttonRotateRightPlus, "Rot ++"))
+            {
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir];
+                tempX += 5;
+                IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir] = tempX;
             }
 
             if (Widgets.ButtonText(buttonFat, "Fat"))
@@ -301,6 +390,33 @@ namespace RimWorldHolsters
             }
         }
 
+        private float ChooseHeadOffset()
+        {
+            switch (currentBody)
+            {
+                default:
+                case BodyType.hulk:
+                    return BodyTypeDefOf.Hulk.headOffset.x;
+                    break;
+
+                case BodyType.fat:
+                    return BodyTypeDefOf.Fat.headOffset.x;
+                    break;
+
+                case BodyType.male:
+                    return BodyTypeDefOf.Male.headOffset.x;
+                    break;
+
+                case BodyType.thin:
+                    return BodyTypeDefOf.Thin.headOffset.x;
+                    break;
+
+                case BodyType.female:
+                    return BodyTypeDefOf.Female.headOffset.x;
+                    break;
+            }
+        }
+
         private Vector2 BodyOffset()
         {
             return Vector2.zero;
@@ -322,6 +438,8 @@ namespace RimWorldHolsters
         private BodyType currentBody = BodyType.male;
         private WeaponType currentType = WeaponType.longMelee;
         private Rot4 currentDir = Rot4.South;
+
+        private const float pixelRatio = 96;
     }
 
     public enum BodyType

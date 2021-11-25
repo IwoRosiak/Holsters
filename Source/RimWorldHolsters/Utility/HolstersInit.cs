@@ -119,7 +119,7 @@ namespace RimWorldHolsters
             };
         }
 
-        private const float forwardPos = 0f;
+        private const float forwardPos = 1f;
 
         private const float backPos = -0.0028957527f;
     }
