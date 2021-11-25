@@ -45,10 +45,10 @@ namespace RimWorldHolsters
 
             IR_WeaponData.shortRanged.pos = new Dictionary<Rot4, Vector3>()
             {
-                {Rot4.South, new Vector3(0.15f, forwardPos, -0.3f) },
-                {Rot4.North, new Vector3(-0.15f,backPos, -0.3f) },
-                {Rot4.East, new Vector3(0.10f, backPos, -0.3f) },
-                {Rot4.West, new Vector3(-0.10f, forwardPos, -0.3f)}
+                {Rot4.South, new Vector3(0.15f, forwardPos, -0.25f) },
+                {Rot4.North, new Vector3(-0.15f,backPos, -0.25f) },
+                {Rot4.East, new Vector3(0.10f, backPos, -0.25f) },
+                {Rot4.West, new Vector3(-0.05f, forwardPos, -0.25f)}
             };
 
             IR_WeaponData.shortRanged.angle = new Dictionary<Rot4, float>()

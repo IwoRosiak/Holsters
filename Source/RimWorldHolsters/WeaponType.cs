@@ -22,7 +22,7 @@ namespace RimWorldHolsters
                 {
                     return WeaponType.grenades;
                 }
-                if (weapon.uiIconScale != 1)
+                if (weapon.uiIconScale > 1.1f)
                 {
                     return WeaponType.shortRanged;
                 }
@@ -30,7 +30,7 @@ namespace RimWorldHolsters
             }
             if (weapon.IsMeleeWeapon)
             {
-                if (weapon.uiIconScale != 1)
+                if (weapon.uiIconScale > 1.1f)
                 {
                     return WeaponType.shortMelee;
                 }

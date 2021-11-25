@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -22,66 +23,61 @@ namespace RimWorldHolsters
             {
                 LoadWeapons();
             }
-            //IR_HolstersInit.InitWeaponDataSettings();
-            //Widgets.DrawTextureFitted(new Rect(inRect.x, inRect.y, inRect.width, inRect.height), Textures.SettingsBackGround, 1); //later!
 
-            //Rect masterRect = new Rect(inRect.x + (0.1f * inRect.width), inRect.y + 40, 0.8f * inRect.width, 936);
-            //Rect TopSettings = new Rect(masterRect.x, masterRect.y, masterRect.width, 45);
+            Widgets.DrawTextureFitted(inRect, IR_Textures.background, 1);
 
             Listing_Standard listing = new Listing_Standard();
 
             listing.Begin(inRect);
 
-            listing.ColumnWidth = inRect.width / 3.3f;
+            listing.ColumnWidth = inRect.width / 3.15f;
 
             if (!IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType))
             {
                 IR_HolstersSettings.InitWeaponDataSettings();
             }
 
-            if (listing.ButtonText("-- current type") && IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType - 1))
+            if (listing.ButtonText("Previous weapon type") && IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType - 1))
             {
                 currentType--;
                 LoadWeapons();
             }
-            if (listing.ButtonText("-- current weapon") && curWeaponIndex != 0)
+            if (listing.ButtonText("Previous weapon") && curWeaponIndex != 0)
             {
                 curWeaponIndex--;
             }
 
-            if (listing.ButtonText("Reset current type"))
+            if (listing.ButtonText("Reset everything"))
             {
                 IR_HolstersSettings.InitWeaponDataSettings();
             }
             listing.NewColumn();
-
             listing.Label("Current weapon type: " + currentType.ToString());
             listing.Label("Current weapon: " + curWeapons[curWeaponIndex].label);
-            listing.Label("Current coordinates:" + IR_WeaponData.GetWeaponPos(currentType, currentDir).ToString());
+            listing.Label("Current coordinates: " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir).x, 3) + "X " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir).z, 3) + "Y");
 
             listing.NewColumn();
 
-            if (listing.ButtonText("++ current type") && IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType + 1))
+            if (listing.ButtonText("Next weapon type") && IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType + 1))
             {
                 currentType++;
                 LoadWeapons();
             }
 
-            if (listing.ButtonText("++ current weapon") && curWeaponIndex != curWeapons.Count - 1)
+            if (listing.ButtonText("Next weapon") && curWeaponIndex != curWeapons.Count - 1)
             {
                 curWeaponIndex++;
             }
 
-            if (listing.ButtonText("Output values"))
+            if (listing.ButtonText("Reset current (coming soon!)"))
             {
-                Log.Message(inRect.size.ToString());
-                Log.Message(IR_WeaponData.GetWeaponPos(currentType, currentDir).ToString());
             }
 
             listing.End();
 
-            Rect bodyFrameRect = new Rect(inRect.x + (0.2f * inRect.width), inRect.y + (0.18f * inRect.height), 0.6f * inRect.width, 0.5f * inRect.width);
-            Widgets.DrawBoxSolid(bodyFrameRect, Color.gray);
+            Rect bodyFrameRect = new Rect(inRect.x + (0.2f * inRect.width), inRect.y + (0.3f * inRect.height), 0.6f * inRect.width, 0.6f * inRect.height);
+
+            Widgets.DrawTextureFitted(bodyFrameRect, IR_Textures.backgroundPawn, 1);
 
             if (DrawingMode())
             {
@@ -104,10 +100,11 @@ namespace RimWorldHolsters
 
         private void LoadWeapons()
         {
+            curWeaponIndex = 0;
             curWeapons.Clear();
             foreach (ThingDef weapon in GenDefDatabase.GetAllDefsInDatabaseForDef(typeof(ThingDef)))
             {
-                if (weapon.IsWeapon && weapon.equipmentType == EquipmentType.Primary && IR_WeaponType.EstablishWeaponType(weapon) == currentType)
+                if (weapon.IsWeapon && weapon.equipmentType == EquipmentType.Primary && IR_WeaponType.EstablishWeaponType(weapon) == currentType && weapon.tradeability != Tradeability.None)
                 {
                     curWeapons.Add(weapon);
                 }
@@ -221,7 +218,7 @@ namespace RimWorldHolsters
             Rect buttonMale = new Rect(rect.x + (0.6f * rect.width), rect.y + rect.height, 0.2f * rect.width, 0.1f * rect.height);
             Rect buttonFemale = new Rect(rect.x + (0.8f * rect.width), rect.y + rect.height, 0.2f * rect.width, 0.1f * rect.height);
 
-            if (Widgets.ButtonText(buttonWest, "-X"))
+            if (Widgets.ButtonText(buttonWest, "-X", true, true, Color.blue, true))
             {
                 var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir];
                 tempX.x -= 0.05f;
@@ -311,65 +308,9 @@ namespace RimWorldHolsters
             }
         }
 
-        private Texture ChooseTexture()
-        {
-            switch (currentType)
-            {
-                case WeaponType.grenades:
-                    return IR_Textures.grenades;
-                    break;
-
-                case WeaponType.longRanged:
-                    return IR_Textures.rifle;
-                    break;
-
-                case WeaponType.shortRanged:
-                    return IR_Textures.revolver;
-                    break;
-
-                case WeaponType.longMelee:
-                    return IR_Textures.sword;
-                    break;
-
-                case WeaponType.shortMelee:
-                    return IR_Textures.knife;
-                    break;
-
-                case WeaponType.bow:
-                    return IR_Textures.bow;
-                    break;
-            }
-            return IR_Textures.sword;
-        }
-
         private Texture ChooseBodyTexture()
         {
-            switch (currentBody)
-            {
-                case BodyType.hulk:
-                    return IR_Textures.hulkBody[currentDir];
-                    break;
-
-                case BodyType.fat:
-                    return IR_Textures.fatBody[currentDir];
-                    break;
-
-                case BodyType.thin:
-                    return IR_Textures.thinBody[currentDir];
-                    break;
-
-                case BodyType.male:
-                    return IR_Textures.maleBody[currentDir];
-                    break;
-
-                case BodyType.female:
-                    return IR_Textures.femaleBody[currentDir];
-                    break;
-
-                default:
-                    return IR_Textures.maleBody[currentDir];
-                    break;
-            }
+            return IR_Textures.bodies[currentBody][currentDir];
         }
 
         private Texture ChooseHeadTexture()
