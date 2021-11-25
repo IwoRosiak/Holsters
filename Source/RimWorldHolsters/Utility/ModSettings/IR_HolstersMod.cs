@@ -54,7 +54,7 @@ namespace RimWorldHolsters
             listing.NewColumn();
             listing.Label("Current weapon type: " + currentType.ToString());
             listing.Label("Current weapon: " + curWeapons[curWeaponIndex].label);
-            listing.Label("Current coordinates: " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir).x, 3) + "X " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir).z, 3) + "Y");
+            listing.Label("Current coordinates: " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir).x, 3) + "X " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir).z, 3) + "Y " + "Angle: " + IR_WeaponData.GetWeaponAngle(currentType, currentDir));
 
             listing.NewColumn();
 

@@ -63,31 +63,31 @@ namespace RimWorldHolsters
 
             IR_WeaponData.longMelee.pos = new Dictionary<Rot4, Vector3>()
             {
-                {Rot4.South, new Vector3(-0.1f, backPos, 0.1f) },
-                {Rot4.North, new Vector3(0f, forwardPos, 0.1f) },
-                {Rot4.East, new Vector3(-0.2f, forwardPos, 0f) },
+                {Rot4.South, new Vector3(-0.05f, backPos, 0.05f) },
+                {Rot4.North, new Vector3(0.05f, forwardPos, -0.05f) },
+                {Rot4.East, new Vector3(-0.25f, forwardPos, 0f) },
                 {Rot4.West, new Vector3(0.2f, backPos, 0f) }
             };
 
             IR_WeaponData.longMelee.angle = new Dictionary<Rot4, float>()
             {
-                {Rot4.South, 65f},
+                {Rot4.South, 55f},
                 {Rot4.North, 120f},
-                {Rot4.East, 115f},
-                {Rot4.West, 70f}
+                {Rot4.East, 110f},
+                {Rot4.West, 75f}
             };
 
             IR_WeaponData.shortMelee.pos = new Dictionary<Rot4, Vector3>()
             {
-                {Rot4.South,  new Vector3(0.1f, forwardPos*4, -0.3f) },
+                {Rot4.South,  new Vector3(0.15f, forwardPos*2, -0.2f) },
                 {Rot4.North, new Vector3(-0.1f, backPos, -0.3f) },
-                {Rot4.East, new Vector3(0.15f, backPos, -0.5f) },
-                {Rot4.West,  new Vector3(-0.15f, forwardPos*4, -0.5f) }
+                {Rot4.East, new Vector3(0.05f, backPos, -0.2f) },
+                {Rot4.West,  new Vector3(-0.05f, forwardPos*2, -0.2f) }
             };
 
             IR_WeaponData.shortMelee.angle = new Dictionary<Rot4, float>()
             {
-                {Rot4.South, 70f},
+                {Rot4.South, 60f},
                 {Rot4.North, 110f},
                 {Rot4.East, 135f},
                 {Rot4.West, 50f}
