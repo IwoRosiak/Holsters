@@ -110,12 +110,32 @@ namespace RimWorldHolsters
                 {Rot4.West, 340f}
             };
 
+            IR_WeaponData.grenades.pos = new Dictionary<Rot4, Vector3>()
+            {
+                {Rot4.South, new Vector3(0.15f, forwardPos, -0.25f) },
+                {Rot4.North, new Vector3(-0.15f,backPos, -0.25f) },
+                {Rot4.East, new Vector3(0.10f, backPos, -0.25f) },
+                {Rot4.West, new Vector3(-0.05f, forwardPos, -0.25f)}
+            };
+
+            IR_WeaponData.grenades.angle = new Dictionary<Rot4, float>()
+            {
+               {Rot4.South, 40f },
+                {Rot4.North, -320f },
+                {Rot4.East, -320f },
+                {Rot4.West, 35f }
+            };
+
             IR_WeaponData.weaponData = new Dictionary<WeaponType, WeaponPos>() {
                 {WeaponType.longRanged, IR_WeaponData.longRanged},
                 {WeaponType.shortRanged, IR_WeaponData.shortRanged},
                 {WeaponType.longMelee, IR_WeaponData.longMelee},
                 {WeaponType.shortMelee, IR_WeaponData.shortMelee},
-                {WeaponType.bow, IR_WeaponData.bow}
+                {WeaponType.bow, IR_WeaponData.bow},
+                {WeaponType.grenades, IR_WeaponData.grenades},
+               // {WeaponType.custom1,  IR_WeaponData.custom1},
+                //{WeaponType.custom2,  IR_WeaponData.custom2},
+               // {WeaponType.custom3,  IR_WeaponData.custom3}
             };
         }
 

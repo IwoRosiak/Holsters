@@ -5,13 +5,18 @@ namespace RimWorldHolsters
     [StaticConstructorOnStartup]
     public static class IR_WeaponType
     {
-        public static WeaponType EstablishWeaponType(ThingWithComps weapon)
+        public static WeaponType EstablishWeaponType(this ThingWithComps weapon)
         {
             return EstablishWeaponType(weapon.def);
         }
 
-        public static WeaponType EstablishWeaponType(ThingDef weapon)
+        public static WeaponType EstablishWeaponType(this ThingDef weapon)
         {
+            if (IR_HolstersSettings.WeaponSpecialType.ContainsKey(weapon.defName))
+            {
+                return IR_HolstersSettings.WeaponSpecialType[weapon.defName];
+            }
+
             if (weapon.IsRangedWeapon)
             {
                 if (weapon.defName.StartsWith("Bow_"))

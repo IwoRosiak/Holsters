@@ -12,90 +12,30 @@ namespace RimWorldHolsters
 
         public static Dictionary<WeaponType, WeaponPos> WeaponDataSettings;
 
+        public static Dictionary<string, WeaponType> WeaponSpecialType;
+
         public static WeaponPos longRangedSettings;
         public static WeaponPos shortRangedSettings;
         public static WeaponPos longMeleeSettings;
         public static WeaponPos shortMeleeSettings;
         public static WeaponPos bowSettings;
+        public static WeaponPos grenadesSettings;
+        public static WeaponPos custom1Settings;
+        public static WeaponPos custom2Settings;
+        public static WeaponPos custom3Settings;
+        public static WeaponPos doNotDisplaySettings;
 
         public override void ExposeData()
         {
             Scribe_Collections.Look(ref WeaponDataSettings, "WeaponDataSettings", LookMode.Value, LookMode.Deep);
+            Scribe_Collections.Look(ref WeaponSpecialType, "WeaponSpecialType", LookMode.Value, LookMode.Value);
 
             base.ExposeData();
         }
 
-        public static void InitWeaponDataSettings()
+        public static void InitSpecificSetting(WeaponType type, WeaponPos settings)
         {
-            //RANGED
-            IR_HolstersSettings.longRangedSettings.pos = new Dictionary<Rot4, Vector3>()
-            {
-                {Rot4.South, Vector3.zero },
-                {Rot4.North, Vector3.zero },
-                {Rot4.East, Vector3.zero },
-                {Rot4.West, Vector3.zero }
-            };
-
-            IR_HolstersSettings.longRangedSettings.angle = new Dictionary<Rot4, float>()
-            {
-                {Rot4.South, 0},
-                {Rot4.North, 0},
-                {Rot4.East, 0},
-                {Rot4.West, 0}
-            };
-
-            IR_HolstersSettings.shortRangedSettings.pos = new Dictionary<Rot4, Vector3>()
-            {
-                {Rot4.South, Vector3.zero },
-                {Rot4.North, Vector3.zero },
-                {Rot4.East, Vector3.zero },
-                {Rot4.West, Vector3.zero}
-            };
-
-            IR_HolstersSettings.shortRangedSettings.angle = new Dictionary<Rot4, float>()
-            {
-                {Rot4.South, 0 },
-                {Rot4.North, 0 },
-                {Rot4.East, 0 },
-                {Rot4.West, 0 }
-            };
-
-            //MELEE
-
-            IR_HolstersSettings.longMeleeSettings.pos = new Dictionary<Rot4, Vector3>()
-            {
-                {Rot4.South,Vector3.zero },
-                {Rot4.North, Vector3.zero },
-                {Rot4.East,Vector3.zero },
-                {Rot4.West, Vector3.zero }
-            };
-
-            IR_HolstersSettings.longMeleeSettings.angle = new Dictionary<Rot4, float>()
-            {
-                {Rot4.South, 0},
-                {Rot4.North, 0},
-                {Rot4.East, 0},
-                {Rot4.West, 0}
-            };
-
-            IR_HolstersSettings.shortMeleeSettings.pos = new Dictionary<Rot4, Vector3>()
-            {
-                {Rot4.South,  Vector3.zero },
-                {Rot4.North, Vector3.zero },
-                {Rot4.East, Vector3.zero},
-                {Rot4.West,  Vector3.zero}
-            };
-
-            IR_HolstersSettings.shortMeleeSettings.angle = new Dictionary<Rot4, float>()
-            {
-                {Rot4.South, 0},
-                {Rot4.North, 0},
-                {Rot4.East, 0},
-                {Rot4.West, 0}
-            };
-
-            //OTHER
-            IR_HolstersSettings.bowSettings.pos = new Dictionary<Rot4, Vector3>()
+            settings.pos = new Dictionary<Rot4, Vector3>()
             {
                 {Rot4.South, Vector3.zero},
                 {Rot4.North, Vector3.zero},
@@ -103,7 +43,7 @@ namespace RimWorldHolsters
                 {Rot4.West, Vector3.zero}
             };
 
-            IR_HolstersSettings.bowSettings.angle = new Dictionary<Rot4, float>()
+            settings.angle = new Dictionary<Rot4, float>()
             {
                 {Rot4.South, 0},
                 {Rot4.North, 0},
@@ -111,12 +51,24 @@ namespace RimWorldHolsters
                 {Rot4.West, 0}
             };
 
+            IR_HolstersSettings.WeaponDataSettings.Remove(type);
+
+            IR_HolstersSettings.WeaponDataSettings.Add(type, settings);
+        }
+
+        public static void InitWeaponDataSettings()
+        {
             IR_HolstersSettings.WeaponDataSettings = new Dictionary<WeaponType, WeaponPos>() {
                 {WeaponType.longRanged, longRangedSettings},
                 {WeaponType.shortRanged, shortRangedSettings},
                 {WeaponType.longMelee, longMeleeSettings},
                 {WeaponType.shortMelee, shortMeleeSettings},
-                {WeaponType.bow, bowSettings}
+                {WeaponType.bow, bowSettings},
+                {WeaponType.grenades, grenadesSettings},
+                {WeaponType.custom1,  custom1Settings},
+                {WeaponType.custom2,  custom2Settings},
+                {WeaponType.custom3,  custom3Settings},
+                {WeaponType.doNotDisplay,  doNotDisplaySettings}
             };
         }
     }

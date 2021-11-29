@@ -29,6 +29,10 @@ namespace RimWorldHolsters
 
         public static void DrawEquipmentHolstered(Thing eq, Vector3 drawLoc, float aimAngle, Rot4 pawnRotation)
         {
+            if (eq.def.EstablishWeaponType() == WeaponType.doNotDisplay)
+            {
+                return;
+            }
             float num = aimAngle;
             Mesh mesh;
             if (num < 0)
@@ -61,6 +65,9 @@ namespace RimWorldHolsters
             {
                 material = eq.Graphic.MatSingleFor(eq);
             }
+
+            Vector3 scale = Vector3.one;
+
             Graphics.DrawMesh(mesh, Matrix4x4.TRS(drawLoc, Quaternion.AngleAxis(num, Vector3.up), Vector3.one / eq.def.uiIconScale), material, 0);
         }
     }
@@ -72,6 +79,10 @@ namespace RimWorldHolsters
         shortRanged,
         longMelee,
         shortMelee,
-        bow
+        bow,
+        doNotDisplay,
+        custom1,
+        custom2,
+        custom3
     }
 }

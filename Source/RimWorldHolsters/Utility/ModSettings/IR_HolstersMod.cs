@@ -21,7 +21,18 @@ namespace RimWorldHolsters
 
             if (curWeapons.NullOrEmpty())
             {
-                LoadWeapons();
+                TryLoadWeapons();
+            }
+
+            if (!IR_HolstersSettings.WeaponDataSettings.ContainsKey(WeaponType.doNotDisplay))
+            {
+                IR_HolstersSettings.InitWeaponDataSettings();
+                Log.Message("dsa]=d");
+            }
+
+            if (IR_HolstersSettings.WeaponDataSettings[currentType].pos.NullOrEmpty())
+            {
+                IR_HolstersSettings.InitSpecificSetting(currentType, IR_HolstersSettings.WeaponDataSettings[currentType]);
             }
 
             Widgets.DrawTextureFitted(inRect, IR_Textures.background, 1);
@@ -40,7 +51,9 @@ namespace RimWorldHolsters
             if (listing.ButtonText("Previous weapon type") && IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType - 1))
             {
                 currentType--;
-                LoadWeapons();
+
+                TryLoadWeapons();
+                return;
             }
             if (listing.ButtonText("Previous weapon") && curWeaponIndex != 0)
             {
@@ -50,10 +63,19 @@ namespace RimWorldHolsters
             if (listing.ButtonText("Reset everything"))
             {
                 IR_HolstersSettings.InitWeaponDataSettings();
+                return;
             }
             listing.NewColumn();
             listing.Label("Current weapon type: " + currentType.ToString());
-            listing.Label("Current weapon: " + curWeapons[curWeaponIndex].label);
+            if (curWeapons.NullOrEmpty())
+            {
+                listing.Label("Current weapon: NONE");
+            }
+            else
+            {
+                listing.Label("Current weapon: " + curWeapons[curWeaponIndex].label);
+            }
+
             listing.Label("Current coordinates: " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir).x, 3) + "X " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir).z, 3) + "Y " + "Angle: " + IR_WeaponData.GetWeaponAngle(currentType, currentDir));
 
             listing.NewColumn();
@@ -61,7 +83,8 @@ namespace RimWorldHolsters
             if (listing.ButtonText("Next weapon type") && IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType + 1))
             {
                 currentType++;
-                LoadWeapons();
+                TryLoadWeapons();
+                return;
             }
 
             if (listing.ButtonText("Next weapon") && curWeaponIndex != curWeapons.Count - 1)
@@ -71,6 +94,12 @@ namespace RimWorldHolsters
 
             if (listing.ButtonText("Reset current (coming soon!)"))
             {
+            }
+
+            sendToCat = (WeaponType)listing.Slider((float)sendToCat, 0, 9);
+            if (listing.ButtonText("Change type to: " + sendToCat))
+            {
+                ChangeWeaponType(sendToCat);
             }
 
             listing.End();
@@ -98,7 +127,9 @@ namespace RimWorldHolsters
             DrawBodyButton(bodyFrameRect);
         }
 
-        private void LoadWeapons()
+        private WeaponType sendToCat;
+
+        private bool TryLoadWeapons()
         {
             curWeaponIndex = 0;
             curWeapons.Clear();
@@ -109,6 +140,28 @@ namespace RimWorldHolsters
                     curWeapons.Add(weapon);
                 }
             }
+            if (curWeapons.NullOrEmpty())
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private void ChangeWeaponType(WeaponType cat)
+        {
+            if (curWeapons.NullOrEmpty())
+            {
+                return;
+            }
+            var weapon = GetCurWeapon();
+            if (IR_HolstersSettings.WeaponSpecialType.ContainsKey(weapon.defName))
+            {
+                IR_HolstersSettings.WeaponSpecialType.Remove(weapon.defName);
+            }
+
+            IR_HolstersSettings.WeaponSpecialType.Add(weapon.defName, cat);
+
+            TryLoadWeapons();
         }
 
         private bool DrawingMode()
@@ -125,19 +178,23 @@ namespace RimWorldHolsters
 
         private void DrawWeapon(Rect rect)
         {
+            if (curWeapons.NullOrEmpty() || currentType == WeaponType.doNotDisplay)
+            {
+                return;
+            }
             Vector2 offset = new Vector2(IR_WeaponData.GetWeaponPos(currentType, currentDir).x, -IR_WeaponData.GetWeaponPos(currentType, currentDir).z);
 
             offset += GetBodySizeOffset();
-            float scale = (1 / curWeapons[curWeaponIndex].uiIconScale);
+
             Texture text = curWeapons[curWeaponIndex].graphic.MatNorth.mainTexture;
+            float scale = ((1 / curWeapons[curWeaponIndex].uiIconScale) / (text.width / 64)) * 1.35f * GetCurWeapon().graphic.drawSize.x;
 
-            if (text.width == 128)
-            {
-                scale /= 2;
-            }
-
-            scale *= 1.35f;
             Widgets.DrawTextureRotated(rect.center + (offset * pixelRatio), text, IR_WeaponData.GetWeaponAngle(currentType, currentDir), scale);
+        }
+
+        private ThingDef GetCurWeapon()
+        {
+            return curWeapons[curWeaponIndex];
         }
 
         private Vector2 GetBodySizeOffset()
@@ -202,6 +259,9 @@ namespace RimWorldHolsters
             Rect buttonNorth = new Rect(rect.x + (0.45f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
             Rect buttonSouth = new Rect(rect.x + (0.45f * rect.width), rect.y + (0.9f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
 
+            Rect buttonLayerMinus = new Rect(rect.x + (0.35f * rect.width), rect.y + (0.9f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+            Rect buttonLayerPlus = new Rect(rect.x + (0.55f * rect.width), rect.y + (0.9f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+
             Rect buttonLookWest = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
             Rect buttonLookEast = new Rect(rect.x + (0.8f * rect.width), rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
             Rect buttonLookNorth = new Rect(rect.x + (0.45f * rect.width), rect.y + (0.1f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
@@ -240,6 +300,20 @@ namespace RimWorldHolsters
             {
                 var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir];
                 tempX.z -= 0.05f;
+                IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir] = tempX;
+            }
+
+            if (Widgets.ButtonText(buttonLayerMinus, "Layer -"))
+            {
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir];
+                tempX.y -= 0.01f;
+                IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir] = tempX;
+            }
+
+            if (Widgets.ButtonText(buttonLayerPlus, "Layer +"))
+            {
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir];
+                tempX.y += 0.01f;
                 IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir] = tempX;
             }
 
@@ -358,16 +432,16 @@ namespace RimWorldHolsters
             }
         }
 
-        private Vector2 BodyOffset()
-        {
-            return Vector2.zero;
-        }
-
         private void InitSettingsDict()
         {
             if (IR_HolstersSettings.WeaponDataSettings.NullOrEmpty())
             {
                 IR_HolstersSettings.InitWeaponDataSettings();
+            }
+
+            if (IR_HolstersSettings.WeaponSpecialType.NullOrEmpty())
+            {
+                IR_HolstersSettings.WeaponSpecialType = new Dictionary<string, WeaponType>();
             }
         }
 
@@ -377,7 +451,7 @@ namespace RimWorldHolsters
         }
 
         private BodyType currentBody = BodyType.male;
-        private WeaponType currentType = WeaponType.longMelee;
+        private WeaponType currentType = WeaponType.longRanged;
         private Rot4 currentDir = Rot4.South;
 
         private const float pixelRatio = 96;
