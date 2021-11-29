@@ -27,7 +27,6 @@ namespace RimWorldHolsters
             if (!IR_HolstersSettings.WeaponDataSettings.ContainsKey(WeaponType.doNotDisplay))
             {
                 IR_HolstersSettings.InitWeaponDataSettings();
-                Log.Message("dsa]=d");
             }
 
             if (IR_HolstersSettings.WeaponDataSettings[currentType].pos.NullOrEmpty())
@@ -96,11 +95,11 @@ namespace RimWorldHolsters
             {
             }
 
-            sendToCat = (WeaponType)listing.Slider((float)sendToCat, 0, 9);
             if (listing.ButtonText("Change type to: " + sendToCat))
             {
                 ChangeWeaponType(sendToCat);
             }
+            sendToCat = (WeaponType)listing.Slider((float)sendToCat, 0, 9);
 
             listing.End();
 
@@ -306,14 +305,14 @@ namespace RimWorldHolsters
             if (Widgets.ButtonText(buttonLayerMinus, "Layer -"))
             {
                 var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir];
-                tempX.y -= 0.01f;
+                tempX.y -= 0.1f;
                 IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir] = tempX;
             }
 
             if (Widgets.ButtonText(buttonLayerPlus, "Layer +"))
             {
                 var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir];
-                tempX.y += 0.01f;
+                tempX.y += 0.1f;
                 IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir] = tempX;
             }
 
