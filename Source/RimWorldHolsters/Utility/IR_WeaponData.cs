@@ -14,7 +14,13 @@ namespace RimWorldHolsters
                 baseOffset = weaponData[type].pos[rot];
             }
 
-            return baseOffset + IR_HolstersSettings.WeaponDataSettings[type].pos[rot];
+            Vector3 settingsOffset = Vector3.zero;
+            if (IR_HolstersSettings.WeaponDataSettings.ContainsKey(type) && !IR_HolstersSettings.WeaponDataSettings[type].pos.NullOrEmpty())
+            {
+                settingsOffset = IR_HolstersSettings.WeaponDataSettings[type].pos[rot];
+            }
+
+            return baseOffset + settingsOffset;
         }
 
         public static float GetWeaponAngle(WeaponType type, Rot4 rot)
@@ -24,7 +30,13 @@ namespace RimWorldHolsters
             {
                 baseOffset = weaponData[type].angle[rot];
             }
-            return baseOffset + IR_HolstersSettings.WeaponDataSettings[type].angle[rot];
+            float settingsOffset = 0;
+            if (IR_HolstersSettings.WeaponDataSettings.ContainsKey(type) && !IR_HolstersSettings.WeaponDataSettings[type].angle.NullOrEmpty())
+            {
+                settingsOffset = IR_HolstersSettings.WeaponDataSettings[type].angle[rot];
+            }
+
+            return baseOffset + settingsOffset;
         }
 
         public static Dictionary<WeaponType, WeaponPos> weaponData;

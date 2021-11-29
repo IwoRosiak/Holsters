@@ -59,9 +59,10 @@ namespace RimWorldHolsters
                 curWeaponIndex--;
             }
 
-            if (listing.ButtonText("Reset everything"))
+            if (listing.ButtonText("Reset every type"))
             {
                 IR_HolstersSettings.InitWeaponDataSettings();
+
                 return;
             }
             listing.NewColumn();
@@ -91,8 +92,9 @@ namespace RimWorldHolsters
                 curWeaponIndex++;
             }
 
-            if (listing.ButtonText("Reset current (coming soon!)"))
+            if (listing.ButtonText("Reset current type"))
             {
+                IR_HolstersSettings.InitSpecificSetting(currentType, IR_HolstersSettings.WeaponDataSettings[currentType]);
             }
 
             if (listing.ButtonText("Change type to: " + sendToCat))
