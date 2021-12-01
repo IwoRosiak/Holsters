@@ -20,7 +20,7 @@ namespace RimWorldHolsters.HarmonyPatches
 
             Pawn pawn = (Pawn)tempPawn.GetValue(__instance);
 
-            if (!pawn.Dead && pawn.GetPosture() == PawnPosture.Standing && pawn.equipment?.Primary != null && !(bool)CarryWeaponOpenly?.Invoke(__instance, null) && IR_WeaponType.EstablishWeaponType(pawn.equipment.Primary) != WeaponType.grenades)
+            if (!pawn.Dead && pawn.GetPosture() == PawnPosture.Standing && pawn.equipment?.Primary != null && !(bool)CarryWeaponOpenly?.Invoke(__instance, null))
             {
                 vector += IR_DisplayWeapon.GetWeaponPosition(rootLoc, pawnRotation, pawn);
                 float angle = IR_DisplayWeapon.GetWeaponAngle(rootLoc, pawnRotation, pawn);

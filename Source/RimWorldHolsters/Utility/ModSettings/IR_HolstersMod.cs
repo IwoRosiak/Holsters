@@ -54,9 +54,16 @@ namespace RimWorldHolsters
                 TryLoadWeapons();
                 return;
             }
-            if (listing.ButtonText("Previous weapon") && curWeaponIndex != 0)
+            if (listing.ButtonText("Previous weapon"))
             {
-                curWeaponIndex--;
+                if (curWeaponIndex == 0)
+                {
+                    curWeaponIndex = curWeapons.Count - 1;
+                }
+                else
+                {
+                    curWeaponIndex--;
+                }
             }
 
             if (listing.ButtonText("Reset every type"))
@@ -87,9 +94,16 @@ namespace RimWorldHolsters
                 return;
             }
 
-            if (listing.ButtonText("Next weapon") && curWeaponIndex != curWeapons.Count - 1)
+            if (listing.ButtonText("Next weapon"))
             {
-                curWeaponIndex++;
+                if (curWeaponIndex == curWeapons.Count - 1)
+                {
+                    curWeaponIndex = 0;
+                }
+                else
+                {
+                    curWeaponIndex++;
+                }
             }
 
             if (listing.ButtonText("Reset current type"))

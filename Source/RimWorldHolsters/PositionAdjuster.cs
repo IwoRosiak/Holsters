@@ -8,17 +8,17 @@ namespace RimWorldHolsters
     {
         public static BodyType GetBodyType(Pawn pawn)
         {
-            if (pawn.story.bodyType.defName == "Fat")
+            if (pawn.story?.bodyType?.defName == "Fat")
             {
                 return BodyType.fat;
             }
 
-            if (pawn.story.bodyType.defName == "Hulk")
+            if (pawn.story?.bodyType?.defName == "Hulk")
             {
                 return BodyType.hulk;
             }
 
-            if (pawn.story.bodyType.defName == "Thin")
+            if (pawn.story?.bodyType?.defName == "Thin")
             {
                 return BodyType.thin;
             }
@@ -55,10 +55,8 @@ namespace RimWorldHolsters
                     modif = -0.2f;
                     break;
 
-                case BodyType.male:
-                    break;
+                default:
 
-                case BodyType.female:
                     break;
             }
 
