@@ -12,7 +12,7 @@ namespace RimWorldHolsters
 
         public static WeaponType EstablishWeaponType(this ThingDef weapon)
         {
-            if (IR_HolstersSettings.WeaponSpecialType.ContainsKey(weapon.defName))
+            if (!IR_HolstersSettings.WeaponSpecialType.NullOrEmpty() && IR_HolstersSettings.WeaponSpecialType.ContainsKey(weapon.defName))
             {
                 return IR_HolstersSettings.WeaponSpecialType[weapon.defName];
             }
