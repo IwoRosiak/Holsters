@@ -9,13 +9,13 @@ namespace RimWorldHolsters
         public static Vector3 GetWeaponPos(WeaponType type, Rot4 rot)
         {
             Vector3 baseOffset = Vector3.zero;
-            if (weaponData.ContainsKey(type))
+            if (weaponData?.ContainsKey(type) == true)
             {
                 baseOffset = weaponData[type].pos[rot];
             }
 
             Vector3 settingsOffset = Vector3.zero;
-            if (IR_HolstersSettings.WeaponDataSettings.ContainsKey(type) && !IR_HolstersSettings.WeaponDataSettings[type].pos.NullOrEmpty())
+            if (IR_HolstersSettings.WeaponDataSettings?.ContainsKey(type) == true && !IR_HolstersSettings.WeaponDataSettings[type].pos.NullOrEmpty())
             {
                 settingsOffset = IR_HolstersSettings.WeaponDataSettings[type].pos[rot];
             }
@@ -26,12 +26,12 @@ namespace RimWorldHolsters
         public static float GetWeaponAngle(WeaponType type, Rot4 rot)
         {
             float baseOffset = 0;
-            if (weaponData.ContainsKey(type))
+            if (weaponData?.ContainsKey(type) == true)
             {
                 baseOffset = weaponData[type].angle[rot];
             }
             float settingsOffset = 0;
-            if (IR_HolstersSettings.WeaponDataSettings.ContainsKey(type) && !IR_HolstersSettings.WeaponDataSettings[type].angle.NullOrEmpty())
+            if (IR_HolstersSettings.WeaponDataSettings?.ContainsKey(type) == true && !IR_HolstersSettings.WeaponDataSettings[type].angle.NullOrEmpty())
             {
                 settingsOffset = IR_HolstersSettings.WeaponDataSettings[type].angle[rot];
             }
