@@ -24,13 +24,13 @@ namespace RimWorldHolsters.HarmonyPatches
             {
                 return;
             }
-
-            Stance_Busy stance_Busy = pawn.stances.curStance as Stance_Busy;
+            /*
+            Stance_Busy stance_Busy = pawn.stances?.curStance as Stance_Busy;
 
             if (stance_Busy != null && !stance_Busy.neverAimWeapon && stance_Busy.focusTarg.IsValid && (flags & PawnRenderFlags.NeverAimWeapon) == PawnRenderFlags.None)
             {
                 return;
-            }
+            }*/
 
             if (pawn.GetPosture() == PawnPosture.Standing && pawn.equipment?.Primary != null && !(bool)CarryWeaponOpenly?.Invoke(__instance, null))
             {

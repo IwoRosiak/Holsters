@@ -39,6 +39,17 @@ namespace RimWorldHolsters
             return baseOffset + settingsOffset;
         }
 
+        public static bool GetWeaponFlip(WeaponType type, Rot4 rot)
+        {
+            bool isFlip = false;
+            if (IR_HolstersSettings.WeaponDataSettings?.ContainsKey(type) == true && IR_HolstersSettings.WeaponDataSettings[type].flip?.ContainsKey(rot) == true && !IR_HolstersSettings.WeaponDataSettings[type].flip.NullOrEmpty())
+            {
+                isFlip = IR_HolstersSettings.WeaponDataSettings[type].GetFlip(rot);
+            }
+
+            return isFlip;
+        }
+
         public static Dictionary<WeaponType, WeaponPos> weaponData;
 
         public static WeaponPos longRanged = new WeaponPos();

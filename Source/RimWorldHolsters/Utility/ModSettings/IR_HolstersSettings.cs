@@ -43,6 +43,14 @@ namespace RimWorldHolsters
                 {Rot4.West, Vector3.zero}
             };
 
+            settings.flip = new Dictionary<Rot4, bool>()
+            {
+                {Rot4.South, false},
+                {Rot4.North, false},
+                {Rot4.East, false},
+                {Rot4.West, false}
+            };
+
             settings.angle = new Dictionary<Rot4, float>()
             {
                 {Rot4.South, 0},

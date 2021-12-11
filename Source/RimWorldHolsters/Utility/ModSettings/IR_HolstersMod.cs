@@ -29,7 +29,7 @@ namespace RimWorldHolsters
                 IR_HolstersSettings.InitWeaponDataSettings();
             }
 
-            if (IR_HolstersSettings.WeaponDataSettings[currentType].pos.NullOrEmpty())
+            if (IR_HolstersSettings.WeaponDataSettings[currentType].pos.NullOrEmpty() || IR_HolstersSettings.WeaponDataSettings[currentType].flip.NullOrEmpty())
             {
                 IR_HolstersSettings.InitSpecificSetting(currentType, IR_HolstersSettings.WeaponDataSettings[currentType]);
             }
@@ -70,6 +70,14 @@ namespace RimWorldHolsters
             {
                 IR_HolstersSettings.InitWeaponDataSettings();
 
+                return;
+            }
+
+            if (listing.ButtonText("Flip"))
+            {
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].flip[currentDir];
+                tempX = !tempX;
+                IR_HolstersSettings.WeaponDataSettings[currentType].flip[currentDir] = tempX;
                 return;
             }
             listing.NewColumn();
@@ -204,7 +212,22 @@ namespace RimWorldHolsters
             Texture text = curWeapons[curWeaponIndex].graphic.MatNorth.mainTexture;
             float scale = ((1 / curWeapons[curWeaponIndex].uiIconScale) / (text.width / 64)) * 1.35f * GetCurWeapon().graphic.drawSize.x;
 
-            Widgets.DrawTextureRotated(rect.center + (offset * pixelRatio), text, IR_WeaponData.GetWeaponAngle(currentType, currentDir), scale);
+            //Widgets.DrawTextureRotated(rect.center + (offset * pixelRatio), text, IR_WeaponData.GetWeaponAngle(currentType, currentDir), scale);
+
+            Vector2 center = rect.center + (offset * pixelRatio);
+
+            float num = (float)text.width * scale;
+
+            float num2 = (float)text.height * scale;
+
+            if (IR_WeaponData.GetWeaponFlip(currentType, currentDir))
+            {
+                num2 = (float)text.height * -scale;
+            }
+
+            Widgets.DrawTextureRotated(new Rect(center.x - num / 2f, center.y - num2 / 2f, num, num2), text, IR_WeaponData.GetWeaponAngle(currentType, currentDir));
+
+            //Widgets.DrawTextureRotated(new Rect(center.x - num / 2f, center.y - num2 / 2f, num, num2), text, IR_WeaponData.GetWeaponAngle(currentType, currentDir));
         }
 
         private ThingDef GetCurWeapon()

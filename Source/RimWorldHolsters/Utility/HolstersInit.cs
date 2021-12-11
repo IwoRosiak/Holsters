@@ -8,11 +8,23 @@ namespace RimWorldHolsters
     {
         public Dictionary<Rot4, Vector3> pos;
         public Dictionary<Rot4, float> angle;
+        public Dictionary<Rot4, bool> flip;
+
+        public bool GetFlip(Rot4 rot)
+        {
+            if (!flip.NullOrEmpty() && flip?.ContainsKey(rot) == true)
+            {
+                return flip[rot];
+            }
+
+            return false;
+        }
 
         public void ExposeData()
         {
             Scribe_Collections.Look(ref pos, "pos", LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref angle, "angle", LookMode.Value, LookMode.Value);
+            Scribe_Collections.Look(ref flip, "flip", LookMode.Value, LookMode.Value);
         }
     }
 
@@ -54,8 +66,8 @@ namespace RimWorldHolsters
             IR_WeaponData.shortRanged.angle = new Dictionary<Rot4, float>()
             {
                 {Rot4.South, 40f },
-                {Rot4.North, -320f },
-                {Rot4.East, -320f },
+                {Rot4.North, 320f },
+                {Rot4.East, 320f },
                 {Rot4.West, 35f }
             };
 
@@ -106,7 +118,7 @@ namespace RimWorldHolsters
             {
                 {Rot4.South, 135},
                 {Rot4.North, 35f},
-                {Rot4.East, -20f},
+                {Rot4.East, 20f},
                 {Rot4.West, 340f}
             };
 
@@ -121,8 +133,8 @@ namespace RimWorldHolsters
             IR_WeaponData.grenades.angle = new Dictionary<Rot4, float>()
             {
                {Rot4.South, 40f },
-                {Rot4.North, -320f },
-                {Rot4.East, -320f },
+                {Rot4.North, 320f },
+                {Rot4.East, 320f },
                 {Rot4.West, 35f }
             };
 

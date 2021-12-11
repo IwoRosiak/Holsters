@@ -34,15 +34,14 @@ namespace RimWorldHolsters
                 return;
             }
             float num = aimAngle;
-            Mesh mesh;
-            if (num < 0)
+            Mesh mesh = MeshPool.plane10;
+
+            float flip = 1;
+
+            if (IR_WeaponData.GetWeaponFlip(eq.def.EstablishWeaponType(), pawnRotation))
             {
                 mesh = MeshPool.plane10Flip;
-                num = -num;
-            }
-            else
-            {
-                mesh = MeshPool.plane10;
+                num += 180;
             }
 
             num %= 360f;
@@ -65,8 +64,6 @@ namespace RimWorldHolsters
             {
                 material = eq.Graphic.MatSingleFor(eq);
             }
-
-            Vector3 scale = Vector3.one;
 
             Graphics.DrawMesh(mesh, Matrix4x4.TRS(drawLoc, Quaternion.AngleAxis(num, Vector3.up), Vector3.one / eq.def.uiIconScale), material, 0);
         }
