@@ -7,11 +7,11 @@ namespace RimWorldHolsters
     [StaticConstructorOnStartup]
     public static class IR_DisplayWeapon
     {
-        public static Vector3 GetWeaponPosition(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn)
+        public static Vector3 GetWeaponPosition(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn, ThingWithComps weapon, bool isSidearm = false)
         {
-            Vector3 offset = IR_WeaponData.GetWeaponPos(IR_WeaponType.EstablishWeaponType(pawn.equipment.Primary), pawnRotation);
+            Vector3 offset = IR_WeaponData.GetWeaponPos(IR_WeaponType.EstablishWeaponType(weapon), pawnRotation, isSidearm);
 
-            if (IR_WeaponType.EstablishWeaponSize(pawn.equipment.Primary) == true)
+            if (IR_WeaponType.EstablishWeaponSize(weapon) == true)
             {
                 offset += IR_PositionAdjuster.GetBodyOffsetLargeWeapons(pawnRotation, pawn);
             }
@@ -22,12 +22,12 @@ namespace RimWorldHolsters
             return rootLoc + offset;
         }
 
-        public static float GetWeaponAngle(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn)
+        public static float GetWeaponAngle(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn, ThingWithComps weapon, bool isSidearm = false)
         {
-            return IR_WeaponData.GetWeaponAngle(IR_WeaponType.EstablishWeaponType(pawn.equipment.Primary), pawnRotation);
+            return IR_WeaponData.GetWeaponAngle(IR_WeaponType.EstablishWeaponType(weapon), pawnRotation, isSidearm);
         }
 
-        public static void DrawEquipmentHolstered(Thing eq, Vector3 drawLoc, float aimAngle, Rot4 pawnRotation)
+        public static void DrawEquipmentHolstered(Thing eq, Vector3 drawLoc, float aimAngle, Rot4 pawnRotation, bool isSide)
         {
             if (eq.def.EstablishWeaponType() == WeaponType.doNotDisplay)
             {
@@ -38,7 +38,7 @@ namespace RimWorldHolsters
 
             float flip = 1;
 
-            if (IR_WeaponData.GetWeaponFlip(eq.def.EstablishWeaponType(), pawnRotation))
+            if (IR_WeaponData.GetWeaponFlip(eq.def.EstablishWeaponType(), pawnRotation, isSide))
             {
                 mesh = MeshPool.plane10Flip;
                 num += 180;

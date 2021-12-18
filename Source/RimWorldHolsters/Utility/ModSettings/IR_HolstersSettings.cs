@@ -64,6 +64,37 @@ namespace RimWorldHolsters
             IR_HolstersSettings.WeaponDataSettings.Add(type, settings);
         }
 
+        public static void InitSpecificSideSetting(WeaponType type, WeaponPos settings)
+        {
+            settings.posSide = new Dictionary<Rot4, Vector3>()
+            {
+                {Rot4.South, Vector3.zero},
+                {Rot4.North, Vector3.zero},
+                {Rot4.East, Vector3.zero},
+                {Rot4.West, Vector3.zero}
+            };
+
+            settings.flipSide = new Dictionary<Rot4, bool>()
+            {
+                {Rot4.South, false},
+                {Rot4.North, false},
+                {Rot4.East, false},
+                {Rot4.West, false}
+            };
+
+            settings.angleSide = new Dictionary<Rot4, float>()
+            {
+                {Rot4.South, 0},
+                {Rot4.North, 0},
+                {Rot4.East, 0},
+                {Rot4.West, 0}
+            };
+
+            IR_HolstersSettings.WeaponDataSettings.Remove(type);
+
+            IR_HolstersSettings.WeaponDataSettings.Add(type, settings);
+        }
+
         public static void InitWeaponDataSettings()
         {
             IR_HolstersSettings.WeaponDataSettings = new Dictionary<WeaponType, WeaponPos>() {

@@ -34,6 +34,11 @@ namespace RimWorldHolsters
                 IR_HolstersSettings.InitSpecificSetting(currentType, IR_HolstersSettings.WeaponDataSettings[currentType]);
             }
 
+            if (IR_HolstersSettings.WeaponDataSettings[currentType].posSide.NullOrEmpty() || IR_HolstersSettings.WeaponDataSettings[currentType].flipSide.NullOrEmpty())
+            {
+                IR_HolstersSettings.InitSpecificSideSetting(currentType, IR_HolstersSettings.WeaponDataSettings[currentType]);
+            }
+
             Widgets.DrawTextureFitted(inRect, IR_Textures.background, 1);
 
             Listing_Standard listing = new Listing_Standard();
@@ -75,9 +80,9 @@ namespace RimWorldHolsters
 
             if (listing.ButtonText("Flip"))
             {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].flip[currentDir];
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetFlip(currentDir, isCurModeSide);
                 tempX = !tempX;
-                IR_HolstersSettings.WeaponDataSettings[currentType].flip[currentDir] = tempX;
+                IR_HolstersSettings.WeaponDataSettings[currentType].SetFlip(currentDir, tempX, isCurModeSide);
                 return;
             }
             listing.NewColumn();
@@ -91,7 +96,23 @@ namespace RimWorldHolsters
                 listing.Label("Current weapon: " + curWeapons[curWeaponIndex].label);
             }
 
-            listing.Label("Current coordinates: " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir).x, 3) + "X " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir).z, 3) + "Y " + "Angle: " + IR_WeaponData.GetWeaponAngle(currentType, currentDir));
+            listing.Label("Current coordinates: " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).x, 3) + "X " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).z, 3) + "Y " + "Angle: " + IR_WeaponData.GetWeaponAngle(currentType, currentDir, isCurModeSide));
+
+            String currentModeLabel;
+            if (isCurModeSide)
+            {
+                currentModeLabel = "sidearms";
+            }
+            else
+            {
+                currentModeLabel = "primary";
+            }
+
+            if (listing.ButtonText("Current mode: " + currentModeLabel))
+            {
+                isCurModeSide = !isCurModeSide;
+                return;
+            }
 
             listing.NewColumn();
 
@@ -189,7 +210,7 @@ namespace RimWorldHolsters
 
         private bool DrawingMode()
         {
-            if (IR_WeaponData.GetWeaponPos(currentType, currentDir).y >= 1f)
+            if (IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).y >= 1f)
             {
                 return false;
             }
@@ -205,7 +226,7 @@ namespace RimWorldHolsters
             {
                 return;
             }
-            Vector2 offset = new Vector2(IR_WeaponData.GetWeaponPos(currentType, currentDir).x, -IR_WeaponData.GetWeaponPos(currentType, currentDir).z);
+            Vector2 offset = new Vector2(IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).x, -IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).z);
 
             offset += GetBodySizeOffset();
 
@@ -220,12 +241,12 @@ namespace RimWorldHolsters
 
             float num2 = (float)text.height * scale;
 
-            if (IR_WeaponData.GetWeaponFlip(currentType, currentDir))
+            if (IR_WeaponData.GetWeaponFlip(currentType, currentDir, isCurModeSide))
             {
                 num2 = (float)text.height * -scale;
             }
 
-            Widgets.DrawTextureRotated(new Rect(center.x - num / 2f, center.y - num2 / 2f, num, num2), text, IR_WeaponData.GetWeaponAngle(currentType, currentDir));
+            Widgets.DrawTextureRotated(new Rect(center.x - num / 2f, center.y - num2 / 2f, num, num2), text, IR_WeaponData.GetWeaponAngle(currentType, currentDir, isCurModeSide));
 
             //Widgets.DrawTextureRotated(new Rect(center.x - num / 2f, center.y - num2 / 2f, num, num2), text, IR_WeaponData.GetWeaponAngle(currentType, currentDir));
         }
@@ -318,41 +339,41 @@ namespace RimWorldHolsters
 
             if (Widgets.ButtonText(buttonWest, "-X", true, true, Color.blue, true))
             {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir];
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetPos(currentDir, isCurModeSide);
                 tempX.x -= 0.05f;
-                IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir] = tempX;
+                IR_HolstersSettings.WeaponDataSettings[currentType].SetPos(currentDir, tempX, isCurModeSide);
             }
             if (Widgets.ButtonText(buttonEast, "+X"))
             {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir];
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetPos(currentDir, isCurModeSide);
                 tempX.x += 0.05f;
-                IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir] = tempX;
+                IR_HolstersSettings.WeaponDataSettings[currentType].SetPos(currentDir, tempX, isCurModeSide);
             }
             if (Widgets.ButtonText(buttonNorth, "+Y"))
             {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir];
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetPos(currentDir, isCurModeSide);
                 tempX.z += 0.05f;
-                IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir] = tempX;
+                IR_HolstersSettings.WeaponDataSettings[currentType].SetPos(currentDir, tempX, isCurModeSide);
             }
             if (Widgets.ButtonText(buttonSouth, "-Y"))
             {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir];
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetPos(currentDir, isCurModeSide);
                 tempX.z -= 0.05f;
-                IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir] = tempX;
+                IR_HolstersSettings.WeaponDataSettings[currentType].SetPos(currentDir, tempX, isCurModeSide);
             }
 
             if (Widgets.ButtonText(buttonLayerMinus, "Layer -"))
             {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir];
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetPos(currentDir, isCurModeSide);
                 tempX.y -= 0.1f;
-                IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir] = tempX;
+                IR_HolstersSettings.WeaponDataSettings[currentType].SetPos(currentDir, tempX, isCurModeSide);
             }
 
             if (Widgets.ButtonText(buttonLayerPlus, "Layer +"))
             {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir];
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetPos(currentDir, isCurModeSide);
                 tempX.y += 0.1f;
-                IR_HolstersSettings.WeaponDataSettings[currentType].pos[currentDir] = tempX;
+                IR_HolstersSettings.WeaponDataSettings[currentType].SetPos(currentDir, tempX, isCurModeSide);
             }
 
             if (Widgets.ButtonText(buttonLookWest, "W"))
@@ -374,28 +395,28 @@ namespace RimWorldHolsters
 
             if (Widgets.ButtonText(buttonRotateLeftPlus, "Rot --"))
             {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir];
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetAngle(currentDir, isCurModeSide);
                 tempX -= 5;
-                IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir] = tempX;
+                IR_HolstersSettings.WeaponDataSettings[currentType].SetAngle(currentDir, tempX, isCurModeSide);
             }
             if (Widgets.ButtonText(buttonRotateLeft, "Rot -"))
             {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir];
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetAngle(currentDir, isCurModeSide);
                 tempX -= 1;
-                IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir] = tempX;
+                IR_HolstersSettings.WeaponDataSettings[currentType].SetAngle(currentDir, tempX, isCurModeSide);
             }
 
             if (Widgets.ButtonText(buttonRotateRight, "Rot +"))
             {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir];
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetAngle(currentDir, isCurModeSide);
                 tempX += 1;
-                IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir] = tempX;
+                IR_HolstersSettings.WeaponDataSettings[currentType].SetAngle(currentDir, tempX, isCurModeSide);
             }
             if (Widgets.ButtonText(buttonRotateRightPlus, "Rot ++"))
             {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir];
+                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetAngle(currentDir, isCurModeSide);
                 tempX += 5;
-                IR_HolstersSettings.WeaponDataSettings[currentType].angle[currentDir] = tempX;
+                IR_HolstersSettings.WeaponDataSettings[currentType].SetAngle(currentDir, tempX, isCurModeSide);
             }
 
             if (Widgets.ButtonText(buttonFat, "Fat"))
@@ -491,6 +512,7 @@ namespace RimWorldHolsters
         private BodyType currentBody = BodyType.male;
         private WeaponType currentType = WeaponType.longRanged;
         private Rot4 currentDir = Rot4.South;
+        public bool isCurModeSide = false;
 
         private const float pixelRatio = 96;
     }

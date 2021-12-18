@@ -32,12 +32,27 @@ namespace RimWorldHolsters.HarmonyPatches
                 return;
             }*/
 
-            if (pawn.GetPosture() == PawnPosture.Standing && pawn.equipment?.Primary != null && !(bool)CarryWeaponOpenly?.Invoke(__instance, null))
+            if (pawn.GetPosture() == PawnPosture.Standing && pawn.equipment?.Primary != null)
             {
-                vector += IR_DisplayWeapon.GetWeaponPosition(rootLoc, pawnRotation, pawn);
-                float angle = IR_DisplayWeapon.GetWeaponAngle(rootLoc, pawnRotation, pawn);
+                if (!(bool)CarryWeaponOpenly?.Invoke(__instance, null))
+                {
+                    vector += IR_DisplayWeapon.GetWeaponPosition(rootLoc, pawnRotation, pawn, pawn.equipment.Primary);
+                    float angle = IR_DisplayWeapon.GetWeaponAngle(rootLoc, pawnRotation, pawn, pawn.equipment.Primary);
 
-                IR_DisplayWeapon.DrawEquipmentHolstered(pawn.equipment.Primary, vector, angle, pawnRotation);
+                    IR_DisplayWeapon.DrawEquipmentHolstered(pawn.equipment.Primary, vector, angle, pawnRotation, false);
+                }
+
+                foreach (var weapon in pawn.inventory.innerContainer)
+                {
+                    Vector3 vector2 = new Vector3(0f, 0f, 0f);
+                    if (weapon.def.IsWeapon)
+                    {
+                        vector2 += IR_DisplayWeapon.GetWeaponPosition(rootLoc, pawnRotation, pawn, (ThingWithComps)weapon, true);
+                        float angle2 = IR_DisplayWeapon.GetWeaponAngle(rootLoc, pawnRotation, pawn, (ThingWithComps)weapon, true);
+
+                        IR_DisplayWeapon.DrawEquipmentHolstered(weapon, vector2, angle2, pawnRotation, true);
+                    }
+                }
             }
         }
     }
