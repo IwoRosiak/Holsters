@@ -64,9 +64,9 @@ namespace RimWorldHolsters
                 {Rot4.West, 0}
             };
 
-            IR_HolstersSettings.WeaponDataSettings.Remove(type);
+            WeaponDataSettings.Remove(type);
 
-            IR_HolstersSettings.WeaponDataSettings.Add(type, settings);
+            WeaponDataSettings.Add(type, settings);
         }
 
         public static void InitSpecificSideSetting(WeaponType type, WeaponPos settings)
@@ -95,9 +95,9 @@ namespace RimWorldHolsters
                 {Rot4.West, 0}
             };
 
-            IR_HolstersSettings.WeaponDataSettings.Remove(type);
+            WeaponDataSettings.Remove(type);
 
-            IR_HolstersSettings.WeaponDataSettings.Add(type, settings);
+            WeaponDataSettings.Add(type, settings);
         }
 
         public static void InitWeaponDataSettings()
