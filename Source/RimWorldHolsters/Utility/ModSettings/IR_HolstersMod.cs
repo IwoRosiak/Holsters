@@ -120,6 +120,12 @@ namespace RimWorldHolsters
                 return;
             }
 
+            if (listing.ButtonText("Smart sidearms display: " + IR_HolstersSettings.smartSideDisplay))
+            {
+                IR_HolstersSettings.smartSideDisplay = !IR_HolstersSettings.smartSideDisplay;
+                return;
+            }
+
             listing.NewColumn();
 
             if (listing.ButtonText("Next weapon type") && IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType + 1))

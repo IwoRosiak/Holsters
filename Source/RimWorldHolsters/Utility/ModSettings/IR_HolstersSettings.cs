@@ -27,11 +27,14 @@ namespace RimWorldHolsters
 
         public static bool displaySide;
 
+        public static bool smartSideDisplay;
+
         public override void ExposeData()
         {
             Scribe_Collections.Look(ref WeaponDataSettings, "WeaponDataSettings", LookMode.Value, LookMode.Deep);
             Scribe_Collections.Look(ref WeaponSpecialType, "WeaponSpecialType", LookMode.Value, LookMode.Value);
             Scribe_Values.Look(ref displaySide, "displaySide", true);
+            Scribe_Values.Look(ref smartSideDisplay, "smartSideDisplay", true);
 
             base.ExposeData();
         }
