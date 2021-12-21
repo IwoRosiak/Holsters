@@ -42,15 +42,18 @@ namespace RimWorldHolsters.HarmonyPatches
                     IR_DisplayWeapon.DrawEquipmentHolstered(pawn.equipment.Primary, vector, angle, pawnRotation, false);
                 }
 
-                foreach (var weapon in pawn.inventory.innerContainer)
+                if (IR_HolstersSettings.displaySide)
                 {
-                    Vector3 vector2 = new Vector3(0f, 0f, 0f);
-                    if (weapon.def.IsWeapon)
+                    foreach (var weapon in pawn.inventory.innerContainer)
                     {
-                        vector2 += IR_DisplayWeapon.GetWeaponPosition(rootLoc, pawnRotation, pawn, (ThingWithComps)weapon, true);
-                        float angle2 = IR_DisplayWeapon.GetWeaponAngle(rootLoc, pawnRotation, pawn, (ThingWithComps)weapon, true);
+                        Vector3 vector2 = new Vector3(0f, 0f, 0f);
+                        if (weapon.def.IsWeapon)
+                        {
+                            vector2 += IR_DisplayWeapon.GetWeaponPosition(rootLoc, pawnRotation, pawn, (ThingWithComps)weapon, true);
+                            float angle2 = IR_DisplayWeapon.GetWeaponAngle(rootLoc, pawnRotation, pawn, (ThingWithComps)weapon, true);
 
-                        IR_DisplayWeapon.DrawEquipmentHolstered(weapon, vector2, angle2, pawnRotation, true);
+                            IR_DisplayWeapon.DrawEquipmentHolstered(weapon, vector2, angle2, pawnRotation, true);
+                        }
                     }
                 }
             }

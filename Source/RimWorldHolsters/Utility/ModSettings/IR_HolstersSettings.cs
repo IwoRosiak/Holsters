@@ -25,10 +25,13 @@ namespace RimWorldHolsters
         public static WeaponPos custom3Settings;
         public static WeaponPos doNotDisplaySettings;
 
+        public static bool displaySide;
+
         public override void ExposeData()
         {
             Scribe_Collections.Look(ref WeaponDataSettings, "WeaponDataSettings", LookMode.Value, LookMode.Deep);
             Scribe_Collections.Look(ref WeaponSpecialType, "WeaponSpecialType", LookMode.Value, LookMode.Value);
+            Scribe_Values.Look(ref displaySide, "displaySide", true);
 
             base.ExposeData();
         }
@@ -43,12 +46,14 @@ namespace RimWorldHolsters
                 {Rot4.West, Vector3.zero}
             };
 
+            //if (type.)
+
             settings.flip = new Dictionary<Rot4, bool>()
             {
-                {Rot4.South, false},
+                {Rot4.South, true},
                 {Rot4.North, false},
                 {Rot4.East, false},
-                {Rot4.West, false}
+                {Rot4.West, true}
             };
 
             settings.angle = new Dictionary<Rot4, float>()
@@ -77,9 +82,9 @@ namespace RimWorldHolsters
             settings.flipSide = new Dictionary<Rot4, bool>()
             {
                 {Rot4.South, false},
-                {Rot4.North, false},
+                {Rot4.North, true},
                 {Rot4.East, false},
-                {Rot4.West, false}
+                {Rot4.West, true}
             };
 
             settings.angleSide = new Dictionary<Rot4, float>()

@@ -9,17 +9,32 @@ namespace RimWorldHolsters
     {
         public static Vector3 GetWeaponPosition(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn, ThingWithComps weapon, bool isSidearm = false)
         {
-            Vector3 offset = IR_WeaponData.GetWeaponPos(IR_WeaponType.EstablishWeaponType(weapon), pawnRotation, isSidearm);
+            Vector3 offset = IR_WeaponData.GetWeaponPos(IR_WeaponType.EstablishWeaponType(weapon), pawnRotation, isSidearm) + GetBodyOffset(IR_WeaponType.EstablishWeaponType(weapon.def), isSidearm, pawnRotation, IR_PositionAdjuster.GetBodyType(pawn));
 
-            if (IR_WeaponType.EstablishWeaponSize(weapon) == true)
+            return rootLoc + offset;
+        }
+
+        public static Vector3 GetBodyOffset(WeaponType type, bool isSidearm, Rot4 pawnRotation, BodyType body)
+        {
+            Vector3 offset = Vector3.zero;
+
+            if (IR_WeaponType.EstablishWeaponSize(type) == true)
             {
-                offset += IR_PositionAdjuster.GetBodyOffsetLargeWeapons(pawnRotation, pawn);
+                offset += IR_PositionAdjuster.GetBodyOffsetLargeWeapons(pawnRotation, null, body);
             }
             else
             {
-                offset += IR_PositionAdjuster.GetBodyOffsetSmallWeapons(pawnRotation, pawn);
+                if (isSidearm)
+                {
+                    offset -= IR_PositionAdjuster.GetBodyOffsetSmallWeapons(pawnRotation, null, body);
+                }
+                else
+                {
+                    offset += IR_PositionAdjuster.GetBodyOffsetSmallWeapons(pawnRotation, null, body);
+                }
             }
-            return rootLoc + offset;
+
+            return offset;
         }
 
         public static float GetWeaponAngle(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn, ThingWithComps weapon, bool isSidearm = false)

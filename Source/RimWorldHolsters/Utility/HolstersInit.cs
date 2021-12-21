@@ -144,6 +144,14 @@ namespace RimWorldHolsters
                 {Rot4.West, 255f}
             };
 
+            IR_WeaponData.longRanged.flip = new Dictionary<Rot4, bool>()
+            {
+                {Rot4.South, false},
+                {Rot4.North, false},
+                {Rot4.East, false},
+                {Rot4.West, false}
+            };
+
             IR_WeaponData.shortRanged.pos = new Dictionary<Rot4, Vector3>()
             {
                 {Rot4.South, new Vector3(0.15f, forwardPos, -0.25f) },
@@ -154,10 +162,18 @@ namespace RimWorldHolsters
 
             IR_WeaponData.shortRanged.angle = new Dictionary<Rot4, float>()
             {
-                {Rot4.South, 40f },
-                {Rot4.North, 320f },
-                {Rot4.East, 320f },
-                {Rot4.West, 35f }
+                {Rot4.South, 140f },
+                {Rot4.North, 25f },
+                {Rot4.East, 25f },
+                {Rot4.West, 160f }
+            };
+
+            IR_WeaponData.shortRanged.flip = new Dictionary<Rot4, bool>()
+            {
+                {Rot4.South, true},
+                {Rot4.North, false},
+                {Rot4.East, false},
+                {Rot4.West, true}
             };
 
             //MELEE
@@ -178,6 +194,14 @@ namespace RimWorldHolsters
                 {Rot4.West, 75f}
             };
 
+            IR_WeaponData.longMelee.flip = new Dictionary<Rot4, bool>()
+            {
+                {Rot4.South, false},
+                {Rot4.North, false},
+                {Rot4.East, false},
+                {Rot4.West, false}
+            };
+
             IR_WeaponData.shortMelee.pos = new Dictionary<Rot4, Vector3>()
             {
                 {Rot4.South,  new Vector3(0.15f, forwardPos*2, -0.2f) },
@@ -192,6 +216,14 @@ namespace RimWorldHolsters
                 {Rot4.North, 110f},
                 {Rot4.East, 135f},
                 {Rot4.West, 50f}
+            };
+
+            IR_WeaponData.shortMelee.flip = new Dictionary<Rot4, bool>()
+            {
+                {Rot4.South, false},
+                {Rot4.North, false},
+                {Rot4.East, false},
+                {Rot4.West, false}
             };
 
             //OTHER
@@ -211,6 +243,14 @@ namespace RimWorldHolsters
                 {Rot4.West, 340f}
             };
 
+            IR_WeaponData.bow.flip = new Dictionary<Rot4, bool>()
+            {
+                {Rot4.South, false},
+                {Rot4.North, false},
+                {Rot4.East, false},
+                {Rot4.West, false}
+            };
+
             IR_WeaponData.grenades.pos = new Dictionary<Rot4, Vector3>()
             {
                 {Rot4.South, new Vector3(0.15f, forwardPos, -0.25f) },
@@ -227,47 +267,71 @@ namespace RimWorldHolsters
                 {Rot4.West, 35f }
             };
 
+            IR_WeaponData.grenades.flip = new Dictionary<Rot4, bool>()
+            {
+                {Rot4.South, false},
+                {Rot4.North, false},
+                {Rot4.East, false},
+                {Rot4.West, false}
+            };
+
             //RANGED
             IR_WeaponData.longRanged.posSide = new Dictionary<Rot4, Vector3>()
             {
-                {Rot4.South, new Vector3(-0.1f, backPos, 0.1f) },
-                {Rot4.North, new Vector3(0f, forwardPos, 0f) },
-                {Rot4.East, new Vector3(-0.2f, forwardPos, 0f) },
-                {Rot4.West, new Vector3(0.2f, backPos, 0f) }
+                {Rot4.South, new Vector3(0.15f, backPos, 0.1f) },
+                {Rot4.North, new Vector3(-0.2f, forwardPos, 0f) },
+                {Rot4.East, new Vector3(-0.2f, backPos, 0f) },
+                {Rot4.West, new Vector3(0.2f, forwardPos, 0f) }
             };
 
             IR_WeaponData.longRanged.angleSide = new Dictionary<Rot4, float>()
             {
-                {Rot4.South, 255f},
-                {Rot4.North, 310f},
-                {Rot4.East, 295f},
-                {Rot4.West, 255f}
+                {Rot4.South, 275f},
+                {Rot4.North, 275f},
+                {Rot4.East, 275f},
+                {Rot4.West, 270f}
+            };
+
+            IR_WeaponData.longRanged.flipSide = new Dictionary<Rot4, bool>()
+            {
+                {Rot4.South, false},
+                {Rot4.North, false},
+                {Rot4.East, false},
+                {Rot4.West, false}
             };
 
             IR_WeaponData.shortRanged.posSide = new Dictionary<Rot4, Vector3>()
             {
-                {Rot4.South, new Vector3(0.15f, forwardPos, -0.25f) },
-                {Rot4.North, new Vector3(-0.15f,backPos, -0.25f) },
-                {Rot4.East, new Vector3(0.10f, backPos, -0.25f) },
-                {Rot4.West, new Vector3(-0.05f, forwardPos, -0.25f)}
+                {Rot4.South, new Vector3(-0.15f, forwardPos, -0.25f) },
+                {Rot4.North, new Vector3(0.15f,backPos, -0.25f) },
+                {Rot4.East, new Vector3(0.05f, forwardPos, -0.25f) },
+                {Rot4.West, new Vector3(0f, backPos, -0.25f)}
             };
 
             IR_WeaponData.shortRanged.angleSide = new Dictionary<Rot4, float>()
             {
                 {Rot4.South, 40f },
-                {Rot4.North, 320f },
-                {Rot4.East, 320f },
-                {Rot4.West, 35f }
+                {Rot4.North, 155f },
+                {Rot4.East, 380f },
+                {Rot4.West, 145f }
+            };
+
+            IR_WeaponData.shortRanged.flipSide = new Dictionary<Rot4, bool>()
+            {
+                {Rot4.South, false},
+                {Rot4.North, true},
+                {Rot4.East, false},
+                {Rot4.West, true}
             };
 
             //MELEE
 
             IR_WeaponData.longMelee.posSide = new Dictionary<Rot4, Vector3>()
             {
-                {Rot4.South, new Vector3(-0.05f, backPos, 0.05f) },
-                {Rot4.North, new Vector3(0.05f, forwardPos, -0.05f) },
-                {Rot4.East, new Vector3(-0.25f, forwardPos, 0f) },
-                {Rot4.West, new Vector3(0.2f, backPos, 0f) }
+                {Rot4.South, new Vector3(-0.15f, backPos, -0.05f) },
+                {Rot4.North, new Vector3(0.15f, forwardPos, -0.1f) },
+                {Rot4.East, new Vector3(-0.15f, forwardPos, 0f) },
+                {Rot4.West, new Vector3(0.1f, backPos, 0.05f) }
             };
 
             IR_WeaponData.longMelee.angleSide = new Dictionary<Rot4, float>()
@@ -278,37 +342,61 @@ namespace RimWorldHolsters
                 {Rot4.West, 75f}
             };
 
+            IR_WeaponData.longMelee.flipSide = new Dictionary<Rot4, bool>()
+            {
+                {Rot4.South, false},
+                {Rot4.North, false},
+                {Rot4.East, false},
+                {Rot4.West, false}
+            };
+
             IR_WeaponData.shortMelee.posSide = new Dictionary<Rot4, Vector3>()
             {
-                {Rot4.South,  new Vector3(0.15f, forwardPos*2, -0.2f) },
-                {Rot4.North, new Vector3(-0.1f, backPos, -0.3f) },
-                {Rot4.East, new Vector3(0.05f, backPos, -0.2f) },
-                {Rot4.West,  new Vector3(-0.05f, forwardPos*2, -0.2f) }
+                {Rot4.South,  new Vector3(-0.1f, forwardPos*2, -0.2f) },
+                {Rot4.North, new Vector3(0.1f, backPos, -0.3f) },
+                {Rot4.East, new Vector3(0.05f, forwardPos*2, -0.2f) },
+                {Rot4.West,  new Vector3(-0.05f, backPos, -0.2f) }
             };
 
             IR_WeaponData.shortMelee.angleSide = new Dictionary<Rot4, float>()
             {
-                {Rot4.South, 60f},
-                {Rot4.North, 110f},
+                {Rot4.South, 115f},
+                {Rot4.North, 75f},
                 {Rot4.East, 135f},
                 {Rot4.West, 50f}
+            };
+
+            IR_WeaponData.shortMelee.flipSide = new Dictionary<Rot4, bool>()
+            {
+                {Rot4.South, false},
+                {Rot4.North, false},
+                {Rot4.East, false},
+                {Rot4.West, false}
             };
 
             //OTHER
             IR_WeaponData.bow.posSide = new Dictionary<Rot4, Vector3>()
             {
-                {Rot4.South, new Vector3(-0.1f, backPos, 0.1f) },
-                {Rot4.North, new Vector3(0f, forwardPos, 0f) },
-                {Rot4.East, new Vector3(-0.2f, forwardPos, 0f) },
-                {Rot4.West, new Vector3(0.2f,backPos , 0f) }
+                {Rot4.South, new Vector3(0f, backPos, -0.15f) },
+                {Rot4.North, new Vector3(0f, forwardPos, -0.2f) },
+                {Rot4.East, new Vector3(-0.05f, forwardPos, -0.2f) },
+                {Rot4.West, new Vector3(0f,backPos , -0.2f) }
             };
 
             IR_WeaponData.bow.angleSide = new Dictionary<Rot4, float>()
             {
-                {Rot4.South, 135},
-                {Rot4.North, 35f},
-                {Rot4.East, 20f},
-                {Rot4.West, 340f}
+                {Rot4.South, 110f},
+                {Rot4.North, 80f},
+                {Rot4.East, 80f},
+                {Rot4.West, 95f}
+            };
+
+            IR_WeaponData.bow.flipSide = new Dictionary<Rot4, bool>()
+            {
+                {Rot4.South, false},
+                {Rot4.North, false},
+                {Rot4.East, false},
+                {Rot4.West, false}
             };
 
             IR_WeaponData.grenades.posSide = new Dictionary<Rot4, Vector3>()
@@ -325,6 +413,14 @@ namespace RimWorldHolsters
                 {Rot4.North, 320f },
                 {Rot4.East, 320f },
                 {Rot4.West, 35f }
+            };
+
+            IR_WeaponData.grenades.flipSide = new Dictionary<Rot4, bool>()
+            {
+                {Rot4.South, false},
+                {Rot4.North, false},
+                {Rot4.East, false},
+                {Rot4.West, false}
             };
 
             IR_WeaponData.weaponData = new Dictionary<WeaponType, WeaponPos>() {

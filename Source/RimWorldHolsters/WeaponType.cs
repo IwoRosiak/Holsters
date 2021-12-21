@@ -44,9 +44,9 @@ namespace RimWorldHolsters
             return WeaponType.grenades;
         }
 
-        public static bool EstablishWeaponSize(ThingWithComps weapon)
+        public static bool EstablishWeaponSize(WeaponType weapon)
         {
-            switch (EstablishWeaponType(weapon))
+            switch (weapon)
             {
                 case WeaponType.longRanged:
                 case WeaponType.longMelee:

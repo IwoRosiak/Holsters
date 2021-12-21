@@ -96,7 +96,7 @@ namespace RimWorldHolsters
                 listing.Label("Current weapon: " + curWeapons[curWeaponIndex].label);
             }
 
-            listing.Label("Current coordinates: " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).x, 3) + "X " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).z, 3) + "Y " + "Angle: " + IR_WeaponData.GetWeaponAngle(currentType, currentDir, isCurModeSide));
+            listing.Label("Current coordinates: " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).x, 3) + "X " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).z, 3) + "Y " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).y, 3) + "Z " + "Angle: " + (IR_WeaponData.GetWeaponAngle(currentType, currentDir, isCurModeSide) % 360));
 
             String currentModeLabel;
             if (isCurModeSide)
@@ -108,7 +108,13 @@ namespace RimWorldHolsters
                 currentModeLabel = "primary";
             }
 
-            if (listing.ButtonText("Current mode: " + currentModeLabel))
+            if (listing.ButtonText("Display sidearms: " + IR_HolstersSettings.displaySide))
+            {
+                IR_HolstersSettings.displaySide = !IR_HolstersSettings.displaySide;
+                return;
+            }
+
+            if (listing.ButtonText("Edit mode: " + currentModeLabel))
             {
                 isCurModeSide = !isCurModeSide;
                 return;
@@ -228,7 +234,7 @@ namespace RimWorldHolsters
             }
             Vector2 offset = new Vector2(IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).x, -IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).z);
 
-            offset += GetBodySizeOffset();
+            offset += new Vector2(IR_DisplayWeapon.GetBodyOffset(currentType, isCurModeSide, currentDir, currentBody).x, IR_DisplayWeapon.GetBodyOffset(currentType, isCurModeSide, currentDir, currentBody).y); ;
 
             Texture text = curWeapons[curWeaponIndex].graphic.MatNorth.mainTexture;
             float scale = ((1 / curWeapons[curWeaponIndex].uiIconScale) / (text.width / 64)) * 1.35f * GetCurWeapon().graphic.drawSize.x;

@@ -74,6 +74,10 @@ namespace RimWorldHolsters
             {
                 isFlip = IR_HolstersSettings.WeaponDataSettings[type].GetFlip(rot, isSide);
             }
+            else if (weaponData.ContainsKey(type) == true && weaponData[type].flip?.ContainsKey(rot) == true && !weaponData[type].flip.NullOrEmpty())
+            {
+                isFlip = weaponData[type].GetFlip(rot, isSide);
+            }
 
             return isFlip;
         }
