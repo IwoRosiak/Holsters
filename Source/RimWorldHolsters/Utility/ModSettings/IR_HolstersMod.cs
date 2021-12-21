@@ -216,7 +216,7 @@ namespace RimWorldHolsters
 
         private bool DrawingMode()
         {
-            if (IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).y >= 1f)
+            if (IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).y >= 0f)
             {
                 return false;
             }
