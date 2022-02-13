@@ -9,51 +9,48 @@ namespace RimWorldHolsters
     {
         public static Vector3 GetWeaponPosition(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn, ThingWithComps weapon, bool isSidearm = false)
         {
-            Vector3 offset = IR_WeaponData.GetWeaponPos(IR_WeaponType.EstablishWeaponType(weapon), pawnRotation, isSidearm) + GetBodyOffset(IR_WeaponType.EstablishWeaponType(weapon.def), isSidearm, pawnRotation, IR_PositionAdjuster.GetBodyType(pawn));
-
-            return rootLoc + offset;
+            return IR_HolstersSettings.GetWeaponPos(weapon.def.defName, pawnRotation, isSidearm, pawn);
         }
 
-        public static Vector3 GetBodyOffset(WeaponType type, bool isSidearm, Rot4 pawnRotation, BodyType body)
+        public static BodyType GetBodyType(Pawn pawn)
         {
-            Vector3 offset = Vector3.zero;
-
-            if (IR_WeaponType.EstablishWeaponSize(type) == true)
+            if (pawn.story?.bodyType?.defName == "Fat")
             {
-                offset += IR_PositionAdjuster.GetBodyOffsetLargeWeapons(pawnRotation, null, body);
-            }
-            else
-            {
-                if (isSidearm)
-                {
-                    offset -= IR_PositionAdjuster.GetBodyOffsetSmallWeapons(pawnRotation, null, body);
-                }
-                else
-                {
-                    offset += IR_PositionAdjuster.GetBodyOffsetSmallWeapons(pawnRotation, null, body);
-                }
+                return BodyType.fat;
             }
 
-            return offset;
+            if (pawn.story?.bodyType?.defName == "Hulk")
+            {
+                return BodyType.hulk;
+            }
+
+            if (pawn.story?.bodyType?.defName == "Thin")
+            {
+                return BodyType.thin;
+            }
+            return BodyType.male;
         }
 
         public static float GetWeaponAngle(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn, ThingWithComps weapon, bool isSidearm = false)
         {
-            return IR_WeaponData.GetWeaponAngle(IR_WeaponType.EstablishWeaponType(weapon), pawnRotation, isSidearm);
+            return IR_HolstersSettings.GetWeaponAngle(weapon.def.defName, pawnRotation, isSidearm);
         }
 
-        public static void DrawEquipmentHolstered(Thing eq, Vector3 drawLoc, float aimAngle, Rot4 pawnRotation, bool isSide)
+        public static bool GetWeaponLayer(Rot4 pawnRotation, Pawn pawn, ThingWithComps weapon, bool isSidearm = false)
         {
-            if (eq.def.EstablishWeaponType() == WeaponType.doNotDisplay)
+            return IR_HolstersSettings.GetWeaponLayer(weapon.def.defName, pawnRotation, isSidearm);
+        }
+
+        public static void DrawEquipmentHolstered(Thing eq, Vector3 drawLoc, float aimAngle, Rot4 pawnRotation,bool isFront, bool isSide)
+        {
+            if (!IR_HolstersSettings.GetWeaponGroupOf(eq.def.defName).isDisplay)
             {
                 return;
             }
             float num = aimAngle;
             Mesh mesh = MeshPool.plane10;
 
-            float flip = 1;
-
-            if (IR_WeaponData.GetWeaponFlip(eq.def.EstablishWeaponType(), pawnRotation, isSide))
+            if (IR_HolstersSettings.GetWeaponFlip(eq.def.defName, pawnRotation, isSide))
             {
                 mesh = MeshPool.plane10Flip;
                 num += 180;
@@ -79,22 +76,23 @@ namespace RimWorldHolsters
             {
                 material = eq.Graphic.MatSingleFor(eq);
             }
+            //Log.Message("Drawing weapon at " + drawLoc.ToString());
 
-            Graphics.DrawMesh(mesh, Matrix4x4.TRS(drawLoc, Quaternion.AngleAxis(num, Vector3.up), Vector3.one / eq.def.uiIconScale), material, 0);
+            if (isFront)
+            {
+                drawLoc.y += forwardPos;
+            } else
+            {
+                drawLoc.y += backPos;
+            }
+
+            Graphics.DrawMesh(mesh, Matrix4x4.TRS(drawLoc, Quaternion.AngleAxis(num, Vector3.up), (Vector3.one / eq.def.uiIconScale) * IR_HolstersSettings.GetWeaponGroupOf(eq.def.defName).GetSize(pawnRotation)), material, 0);
         }
-    }
 
-    public enum WeaponType
-    {
-        grenades,
-        longRanged,
-        shortRanged,
-        longMelee,
-        shortMelee,
-        bow,
-        doNotDisplay,
-        custom1,
-        custom2,
-        custom3
+
+
+        private const float forwardPos = 0.001f;
+
+        private const float backPos = -0.0028957527f;
     }
 }

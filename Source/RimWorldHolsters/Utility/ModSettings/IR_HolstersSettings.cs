@@ -10,20 +10,9 @@ namespace RimWorldHolsters
         {
         }
 
-        public static Dictionary<WeaponType, WeaponPos> WeaponDataSettings;
+        public static bool isFirstLaunch = true;
 
-        public static Dictionary<string, WeaponType> WeaponSpecialType;
-
-        public static WeaponPos longRangedSettings;
-        public static WeaponPos shortRangedSettings;
-        public static WeaponPos longMeleeSettings;
-        public static WeaponPos shortMeleeSettings;
-        public static WeaponPos bowSettings;
-        public static WeaponPos grenadesSettings;
-        public static WeaponPos custom1Settings;
-        public static WeaponPos custom2Settings;
-        public static WeaponPos custom3Settings;
-        public static WeaponPos doNotDisplaySettings;
+        public static List<WeaponGroupCordInfo> groups;
 
         public static bool displaySide;
 
@@ -31,92 +20,134 @@ namespace RimWorldHolsters
 
         public override void ExposeData()
         {
-            Scribe_Collections.Look(ref WeaponDataSettings, "WeaponDataSettings", LookMode.Value, LookMode.Deep);
-            Scribe_Collections.Look(ref WeaponSpecialType, "WeaponSpecialType", LookMode.Value, LookMode.Value);
+            Scribe_Collections.Look(ref groups,"groupsCordSettings", LookMode.Deep);
             Scribe_Values.Look(ref displaySide, "displaySide", true);
             Scribe_Values.Look(ref smartSideDisplay, "smartSideDisplay", true);
+            Scribe_Values.Look(ref isFirstLaunch, "isFirstLaunch", false);
 
             base.ExposeData();
         }
 
-        public static void InitSpecificSetting(WeaponType type, WeaponPos settings)
+        //MANAGING GROUPS
+        public static void InitBasicGroups()
         {
-            settings.pos = new Dictionary<Rot4, Vector3>()
+            if (isFirstLaunch || groups.NullOrEmpty())
             {
-                {Rot4.South, Vector3.zero},
-                {Rot4.North, Vector3.zero},
-                {Rot4.East, Vector3.zero},
-                {Rot4.West, Vector3.zero}
-            };
+                Log.Message("Holsters: groups initialised.");
+                ResetAllGroups();
+            }
 
-            //if (type.)
-
-            settings.flip = new Dictionary<Rot4, bool>()
-            {
-                {Rot4.South, true},
-                {Rot4.North, false},
-                {Rot4.East, false},
-                {Rot4.West, true}
-            };
-
-            settings.angle = new Dictionary<Rot4, float>()
-            {
-                {Rot4.South, 0},
-                {Rot4.North, 0},
-                {Rot4.East, 0},
-                {Rot4.West, 0}
-            };
-
-            WeaponDataSettings.Remove(type);
-
-            WeaponDataSettings.Add(type, settings);
+            isFirstLaunch = false;
         }
 
-        public static void InitSpecificSideSetting(WeaponType type, WeaponPos settings)
+        public static void ResetAllGroups()
         {
-            settings.posSide = new Dictionary<Rot4, Vector3>()
-            {
-                {Rot4.South, Vector3.zero},
-                {Rot4.North, Vector3.zero},
-                {Rot4.East, Vector3.zero},
-                {Rot4.West, Vector3.zero}
-            };
+            groups.Clear();
 
-            settings.flipSide = new Dictionary<Rot4, bool>()
-            {
-                {Rot4.South, false},
-                {Rot4.North, true},
-                {Rot4.East, false},
-                {Rot4.West, true}
-            };
-
-            settings.angleSide = new Dictionary<Rot4, float>()
-            {
-                {Rot4.South, 0},
-                {Rot4.North, 0},
-                {Rot4.East, 0},
-                {Rot4.West, 0}
-            };
-
-            WeaponDataSettings.Remove(type);
-
-            WeaponDataSettings.Add(type, settings);
+            groups = IR_HolstersInit.LoadDefaultWeaponGroups();
         }
 
-        public static void InitWeaponDataSettings()
+        public static void ResetGroup(WeaponGroupCordInfo group)
         {
-            IR_HolstersSettings.WeaponDataSettings = new Dictionary<WeaponType, WeaponPos>() {
-                {WeaponType.longRanged, longRangedSettings},
-                {WeaponType.shortRanged, shortRangedSettings},
-                {WeaponType.longMelee, longMeleeSettings},
-                {WeaponType.shortMelee, shortMeleeSettings},
-                {WeaponType.bow, bowSettings},
-                {WeaponType.grenades, grenadesSettings},
-                {WeaponType.custom1,  custom1Settings},
-                {WeaponType.custom2,  custom2Settings},
-                {WeaponType.custom3,  custom3Settings},
-                {WeaponType.doNotDisplay,  doNotDisplaySettings}
-            };
+            var newGroup = group;
+
+            newGroup.Reset();
+
+            groups[groups.IndexOf(group)]= newGroup;
+        }
+        public static void ChangeGroupsName(WeaponGroupCordInfo group, string name)
+        {
+            var newGroup = group;
+
+            newGroup.Name = name;
+
+            groups[groups.IndexOf(group)] = newGroup;
+        }
+        public static void RemoveGroup(WeaponGroupCordInfo group)
+        {
+            groups.Remove(group);
+        }
+
+        public static void AddNewSettingsGroup(string name)
+        {
+            groups.Add(new WeaponGroupCordInfo(name));
+        }
+
+        public static WeaponGroupCordInfo GetWeaponGroupOf(string weaponDefName)
+        {
+            foreach (WeaponGroupCordInfo group in groups)
+            {
+                foreach (string weaponInGroup in group.weapons)
+                {
+                    if (weaponDefName.Equals(weaponInGroup))
+                    {
+                        return group;
+                    }
+                }
+            }
+
+            return new WeaponGroupCordInfo("noGroup");
+        }
+
+        //GETTING DATA
+        public static Vector3 GetWeaponPos(string weaponDefName, Rot4 rot, bool isSide, Pawn pawn)
+        {
+            BodyType bodyType = IR_DisplayWeapon.GetBodyType(pawn);
+            if (pawn != null)
+            {
+                bodyType = IR_DisplayWeapon.GetBodyType(pawn);
+            }
+            
+            WeaponGroupCordInfo group = GetWeaponGroupOf(weaponDefName);
+
+            return GetWeaponPos(group, rot, isSide, bodyType);
+        }
+
+        public static Vector3 GetWeaponPos(WeaponGroupCordInfo group, Rot4 rot, bool isSide, BodyType body)
+        {
+            Vector3 pos = group.GetPos(rot, isSide);
+
+            Vector3 offset = group.GetBodyOffset(rot, isSide) * group.GetBodyOffsetModif(body,isSide);
+
+            pos += offset;
+
+            return pos;
+        }
+
+        public static Vector3 GetWeaponPos(WeaponGroupCordInfo group, Rot4 rot, bool isSide)
+        {
+            Vector3 pos = group.GetPos(rot, isSide);
+
+            return pos;
+        }
+
+        public static bool GetWeaponLayer(string weaponDefName, Rot4 rot, bool isSide)
+        {
+            WeaponGroupCordInfo group = GetWeaponGroupOf(weaponDefName);
+
+            return group.GetLayer(rot, isSide);
+        }
+
+        public static float GetWeaponAngle(string weaponDefName, Rot4 rot, bool isSide)
+        {
+            WeaponGroupCordInfo group = GetWeaponGroupOf(weaponDefName);
+            return GetWeaponAngle(group, rot, isSide);
+        }
+
+        public static float GetWeaponAngle(WeaponGroupCordInfo group, Rot4 rot, bool isSide)
+        {
+            return group.GetAngle(rot, isSide);
+        }
+
+        public static bool GetWeaponFlip(string weaponDefName, Rot4 rot, bool isSide)
+        {
+            WeaponGroupCordInfo group = GetWeaponGroupOf(weaponDefName);
+            return GetWeaponFlip(group, rot, isSide);
+        }
+
+        public static bool GetWeaponFlip(WeaponGroupCordInfo group, Rot4 rot, bool isSide)
+        {
+            return group.GetFlip(rot, isSide);
         }
     }
 }

@@ -17,49 +17,242 @@ namespace RimWorldHolsters
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
-            InitSettingsDict();
+            IR_ModSettingsDrawer.mod = this;
 
             if (curWeapons.NullOrEmpty())
             {
                 TryLoadWeapons();
-            }
+            } 
 
-            if (!IR_HolstersSettings.WeaponDataSettings.ContainsKey(WeaponType.doNotDisplay))
-            {
-                IR_HolstersSettings.InitWeaponDataSettings();
-            }
-
-            if (IR_HolstersSettings.WeaponDataSettings[currentType].pos.NullOrEmpty() || IR_HolstersSettings.WeaponDataSettings[currentType].flip.NullOrEmpty())
-            {
-                IR_HolstersSettings.InitSpecificSetting(currentType, IR_HolstersSettings.WeaponDataSettings[currentType]);
-            }
-
-            if (IR_HolstersSettings.WeaponDataSettings[currentType].posSide.NullOrEmpty() || IR_HolstersSettings.WeaponDataSettings[currentType].flipSide.NullOrEmpty())
-            {
-                IR_HolstersSettings.InitSpecificSideSetting(currentType, IR_HolstersSettings.WeaponDataSettings[currentType]);
-            }
+            //Log.Message("Cur group pos: " + GetCurGroup().GetPos(curDir, isSidearmMode).ToString());
 
             Widgets.DrawTextureFitted(inRect, IR_Textures.background, 1);
 
-            Listing_Standard listing = new Listing_Standard();
+            Rect middleRect = new Rect(inRect.x + (0.3f * inRect.width) +10f, inRect.y, 0.4f * inRect.width -20f, 0.3f * inRect.height);
+            Listing_Standard middleListing = new Listing_Standard();
+            
 
-            listing.Begin(inRect);
+            middleListing.Begin(middleRect);
 
-            listing.ColumnWidth = inRect.width / 3.15f;
+            //middleListing.Label(instructions);
 
-            if (!IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType))
+            if (!errorLog.NullOrEmpty())
             {
-                IR_HolstersSettings.InitWeaponDataSettings();
+                middleListing.Label(errorLog);
             }
+           
+            middleListing.End();
 
-            if (listing.ButtonText("Previous weapon type") && IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType - 1))
+            Rect bodyFrameRect = new Rect(inRect.x + (0.2f * inRect.width), inRect.y + (0.34f * inRect.height), 0.6f * inRect.width, 0.6f * inRect.height);
+            IR_ModSettingsDrawer.DrawPawn(bodyFrameRect);
+
+
+            DrawWeaponsManagement(inRect);
+            DrawGroupsManagement(inRect);
+
+
+            //DANGER ZONE
+            Rect dangerZoneRect = new Rect(inRect.x + 10f, inRect.y + (0.5f * inRect.height), 0.2f * inRect.width - 20f, 0.6f * inRect.height);
+            Widgets.DrawLineHorizontal(dangerZoneRect.x, dangerZoneRect.y + 24f, dangerZoneRect.width);
+            Listing_Standard dangerZoneListing = new Listing_Standard();
+            dangerZoneListing.Begin(dangerZoneRect);
+
+            dangerZoneListing.Label("DANGER ZONE");
+            dangerZoneListing.Gap();
+
+            if (dangerZoneListing.ButtonText("Restore default settings") && restoreDefaultConfirmation)
             {
-                currentType--;
+                curGroupIndex = 0;
+                curWeaponIndex = 0;
+                IR_HolstersSettings.ResetAllGroups();
 
                 TryLoadWeapons();
                 return;
             }
-            if (listing.ButtonText("Previous weapon"))
+            dangerZoneListing.CheckboxLabeled("Confirm: ", ref restoreDefaultConfirmation, "It cannot be reversed!");
+
+            dangerZoneListing.End();
+
+            IR_ModSettingsDrawer.DrawBodyManagement(new Rect(inRect.x + (0.8f * inRect.width) + 10f, inRect.y + (0.3f * inRect.height), 0.2f * inRect.width -20f, 0.6f * inRect.height));
+
+            
+
+            //MODE MANAGEMENT
+            Rect leftSideRect = new Rect(inRect.x +10f , inRect.y+ (inRect.height*0.3f), 0.2f * inRect.width - 20f, inRect.height);
+            Widgets.DrawLineHorizontal(leftSideRect.x, leftSideRect.y + 24f, leftSideRect.width);
+
+
+            Listing_Standard leftSideListing = new Listing_Standard();
+            leftSideListing.Begin(leftSideRect);
+
+            leftSideListing.Label("Mode Settings");
+            leftSideListing.Gap();
+
+            string currentModeLabel;
+            if (isSidearmMode)
+            {
+                currentModeLabel = "sidearms";
+            }
+            else
+            {
+                currentModeLabel = "primary";
+            }
+
+            leftSideListing.CheckboxLabeled("Display sidearms: ", ref IR_HolstersSettings.displaySide);
+            leftSideListing.CheckboxLabeled("Smart sidearms: ", ref IR_HolstersSettings.smartSideDisplay);
+
+            if (leftSideListing.ButtonText("Edit mode: " + currentModeLabel, "Change to edit sidearms positions and primary positions of the weapons."))
+            {
+                isSidearmMode = !isSidearmMode;
+                return;
+            }
+
+            leftSideListing.End();
+        }
+
+        private string errorLog;
+        private bool restoreDefaultConfirmation;
+        private bool resetConfirmation;
+
+        private float receivingGroupIndex;
+        private string groupName;
+
+        private void DrawGroupsManagement(Rect rect)
+        {
+            Rect mainRect = new Rect(rect.x + (0.7f * rect.width) + 10f, rect.y, 0.3f * rect.width -20f, 0.40f * rect.height);
+
+            Rect gapLine = mainRect;
+            //gapLine.x +=15f;
+
+            gapLine.height = 30;
+
+            Widgets.Label(gapLine, "Groups");
+            Widgets.DrawLineHorizontal(gapLine.x, gapLine.y + 24f, gapLine.width);
+
+            //SECTION FOR GROUPS
+
+            mainRect.y += 30;
+
+            Rect changeGroupRect = mainRect;
+            changeGroupRect.height = 30;
+
+            changeGroupRect.width = mainRect.width * 0.2f;
+            if (Widgets.ButtonText(changeGroupRect, "<-"))
+            {
+                if (curGroupIndex == 0)
+                {
+                    curGroupIndex = IR_HolstersSettings.groups.Count - 1;
+                }
+                else
+                {
+                    curGroupIndex--;
+                }
+
+                TryLoadWeapons();
+                return;
+            }
+
+            changeGroupRect.width = mainRect.width * 0.6f;
+            changeGroupRect.x = mainRect.x + (mainRect.width * 0.2f);
+            Widgets.ButtonText(changeGroupRect, GetCurGroup().Name, true, false, false);
+
+            changeGroupRect.width = mainRect.width * 0.2f;
+            changeGroupRect.x = mainRect.x + (mainRect.width * 0.8f);
+            if (Widgets.ButtonText(changeGroupRect, "->"))
+            {
+                if (curGroupIndex == IR_HolstersSettings.groups.Count - 1)
+                {
+                    curGroupIndex = 0;
+                }
+                else
+                {
+                    curGroupIndex++;
+                }
+
+                TryLoadWeapons();
+                return;
+            }
+
+            mainRect.y += 30;
+
+            Rect changeNameRect = mainRect;
+            changeNameRect.height = 30;
+
+            groupName = Widgets.TextEntryLabeled(changeNameRect, "Group's name", groupName);
+
+            changeNameRect.y += 30;
+            changeNameRect.width = mainRect.width * 0.5f;
+
+            if (Widgets.ButtonText(changeNameRect, "Change name"))
+            {
+                if (groupName.Equals(""))
+                {
+                    errorLog = "Name needs at least one letter!";
+                    return;
+                }
+
+                errorLog = GetCurGroup().Name + " changed to " + groupName + ".";
+                IR_HolstersSettings.ChangeGroupsName(GetCurGroup(), groupName);
+                groupName = "";
+            }
+
+            changeNameRect.x = mainRect.x + (mainRect.width * 0.5f);
+
+            if (Widgets.ButtonText(changeNameRect, "Create group"))
+            {
+                if (groupName.Equals(""))
+                {
+                    errorLog = "Name needs at least one letter!";
+                    return;
+                }
+
+                errorLog = groupName + " created!";
+                IR_HolstersSettings.AddNewSettingsGroup(groupName);
+            }
+
+            mainRect.y += 60;
+
+            mainRect.height = 30;
+            if (Widgets.ButtonText(mainRect ,"Delete group"))
+            {
+                if (!GetCurGroup().isDisplay)
+                {
+                    errorLog = "This group cannot be deleted.";
+
+                } else if (GetCurWeapon() == null)
+                {
+                    errorLog = GetCurGroup().Name + " deleted!";
+                    IR_HolstersSettings.RemoveGroup(GetCurGroup());
+                    
+                    curGroupIndex = 0;
+                    return;
+
+                }
+                else
+                {
+                    errorLog = "The group can be only deleted if it has no weapons assigned (move weapons to another group to resolve that issue)";
+                }
+            }
+        }
+
+        private void DrawWeaponsManagement(Rect rect)
+        {
+            Rect mainRect = new Rect(rect.x + 10f, rect.y, 0.3f * rect.width -20f, 0.4f * rect.height);
+
+            Rect gapLine = mainRect;
+
+            gapLine.height = 30;
+
+            Widgets.Label(gapLine, "Weapons");
+            Widgets.DrawLineHorizontal(gapLine.x, gapLine.y + 24f, gapLine.width);
+
+            mainRect.y += 30;
+
+            Rect changeWeapons = mainRect;
+            changeWeapons.height = 30;
+
+            changeWeapons.width = mainRect.width * 0.2f;
+            if (Widgets.ButtonText(changeWeapons, "<-"))
             {
                 if (curWeaponIndex == 0)
                 {
@@ -71,71 +264,21 @@ namespace RimWorldHolsters
                 }
             }
 
-            if (listing.ButtonText("Reset every type"))
-            {
-                IR_HolstersSettings.InitWeaponDataSettings();
-
-                return;
-            }
-
-            if (listing.ButtonText("Flip"))
-            {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetFlip(currentDir, isCurModeSide);
-                tempX = !tempX;
-                IR_HolstersSettings.WeaponDataSettings[currentType].SetFlip(currentDir, tempX, isCurModeSide);
-                return;
-            }
-            listing.NewColumn();
-            listing.Label("Current weapon type: " + currentType.ToString());
+            changeWeapons.width = mainRect.width * 0.6f;
+            changeWeapons.x = mainRect.x + (mainRect.width * 0.2f);
+            
             if (curWeapons.NullOrEmpty())
             {
-                listing.Label("Current weapon: NONE");
+                Widgets.ButtonText(changeWeapons, "Empty group", true, false, false);
             }
             else
             {
-                listing.Label("Current weapon: " + curWeapons[curWeaponIndex].label);
+                Widgets.ButtonText(changeWeapons, curWeapons[curWeaponIndex].label, true, false, false);
             }
 
-            listing.Label("Current coordinates: " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).x, 3) + "X " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).z, 3) + "Y " + Math.Round(IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).y, 3) + "Z " + "Angle: " + (IR_WeaponData.GetWeaponAngle(currentType, currentDir, isCurModeSide) % 360));
-
-            String currentModeLabel;
-            if (isCurModeSide)
-            {
-                currentModeLabel = "sidearms";
-            }
-            else
-            {
-                currentModeLabel = "primary";
-            }
-
-            if (listing.ButtonText("Display sidearms: " + IR_HolstersSettings.displaySide))
-            {
-                IR_HolstersSettings.displaySide = !IR_HolstersSettings.displaySide;
-                return;
-            }
-
-            if (listing.ButtonText("Edit mode: " + currentModeLabel))
-            {
-                isCurModeSide = !isCurModeSide;
-                return;
-            }
-
-            if (listing.ButtonText("Smart sidearms display: " + IR_HolstersSettings.smartSideDisplay))
-            {
-                IR_HolstersSettings.smartSideDisplay = !IR_HolstersSettings.smartSideDisplay;
-                return;
-            }
-
-            listing.NewColumn();
-
-            if (listing.ButtonText("Next weapon type") && IR_HolstersSettings.WeaponDataSettings.ContainsKey(currentType + 1))
-            {
-                currentType++;
-                TryLoadWeapons();
-                return;
-            }
-
-            if (listing.ButtonText("Next weapon"))
+            changeWeapons.width = mainRect.width * 0.2f;
+            changeWeapons.x = mainRect.x + (mainRect.width * 0.8f);
+            if (Widgets.ButtonText(changeWeapons, "->"))
             {
                 if (curWeaponIndex == curWeapons.Count - 1)
                 {
@@ -147,55 +290,40 @@ namespace RimWorldHolsters
                 }
             }
 
-            if (listing.ButtonText("Reset current type"))
+            mainRect.y+=30;
+            mainRect.height = 30;
+
+            if (Widgets.ButtonText(mainRect ,"Send to: " + IR_HolstersSettings.groups[(int)receivingGroupIndex].Name))
             {
-                IR_HolstersSettings.InitSpecificSetting(currentType, IR_HolstersSettings.WeaponDataSettings[currentType]);
+                if (GetCurWeapon() != null)
+                {
+                    errorLog = GetCurWeapon().defName + " moved to " + IR_HolstersSettings.groups[(int)receivingGroupIndex].Name;
+                    ChangeCurWeaponsGroup(GetCurGroup(), (int)receivingGroupIndex);
+                    TryLoadWeapons();
+                    return;
+                }
             }
 
-            if (listing.ButtonText("Change type to: " + sendToCat))
-            {
-                ChangeWeaponType(sendToCat);
-            }
-            sendToCat = (WeaponType)listing.Slider((float)sendToCat, 0, 9);
+            mainRect.y+=30;
+            receivingGroupIndex = (int)Widgets.HorizontalSlider(mainRect, receivingGroupIndex, 0, IR_HolstersSettings.groups.Count - 1);
 
-            listing.End();
 
-            Rect bodyFrameRect = new Rect(inRect.x + (0.2f * inRect.width), inRect.y + (0.3f * inRect.height), 0.6f * inRect.width, 0.6f * inRect.height);
-
-            Widgets.DrawTextureFitted(bodyFrameRect, IR_Textures.backgroundPawn, 1);
-
-            if (DrawingMode())
-            {
-                DrawWeapon(bodyFrameRect);
-                DrawBody(bodyFrameRect);
-
-                DrawHead(bodyFrameRect);
-            }
-            else
-            {
-                DrawBody(bodyFrameRect);
-
-                DrawHead(bodyFrameRect);
-
-                DrawWeapon(bodyFrameRect);
-            }
-
-            DrawBodyButton(bodyFrameRect);
+            mainRect.y += 30;
         }
-
-        private WeaponType sendToCat;
 
         private bool TryLoadWeapons()
         {
             curWeaponIndex = 0;
             curWeapons.Clear();
+
             foreach (ThingDef weapon in GenDefDatabase.GetAllDefsInDatabaseForDef(typeof(ThingDef)))
             {
-                if (weapon.IsWeapon && weapon.equipmentType == EquipmentType.Primary && IR_WeaponType.EstablishWeaponType(weapon) == currentType && weapon.tradeability != Tradeability.None)
+                if (weapon.IsWeapon && weapon.equipmentType == EquipmentType.Primary && GetCurGroup().weapons.Contains(weapon.defName) && weapon.tradeability != Tradeability.None)
                 {
                     curWeapons.Add(weapon);
                 }
             }
+            
             if (curWeapons.NullOrEmpty())
             {
                 return false;
@@ -203,330 +331,47 @@ namespace RimWorldHolsters
             return true;
         }
 
-        private void ChangeWeaponType(WeaponType cat)
+        private void ChangeCurWeaponsGroup(WeaponGroupCordInfo fromGroup, int toGroupIndex)
+        {
+            ThingDef weapon = GetCurWeapon();
+
+            fromGroup.weapons.Remove(weapon.defName);
+            IR_HolstersSettings.groups[toGroupIndex].weapons.Add(weapon.defName);
+        }
+
+        internal ThingDef GetCurWeapon()
         {
             if (curWeapons.NullOrEmpty())
             {
-                return;
-            }
-            var weapon = GetCurWeapon();
-            if (IR_HolstersSettings.WeaponSpecialType.ContainsKey(weapon.defName))
-            {
-                IR_HolstersSettings.WeaponSpecialType.Remove(weapon.defName);
+                return null;
             }
 
-            IR_HolstersSettings.WeaponSpecialType.Add(weapon.defName, cat);
-
-            TryLoadWeapons();
-        }
-
-        private bool DrawingMode()
-        {
-            if (IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).y >= 0f)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        private List<ThingDef> curWeapons = new List<ThingDef>();
-        private int curWeaponIndex = 0;
-
-        private void DrawWeapon(Rect rect)
-        {
-            if (curWeapons.NullOrEmpty() || currentType == WeaponType.doNotDisplay)
-            {
-                return;
-            }
-            Vector2 offset = new Vector2(IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).x, -IR_WeaponData.GetWeaponPos(currentType, currentDir, isCurModeSide).z);
-
-            offset += new Vector2(IR_DisplayWeapon.GetBodyOffset(currentType, isCurModeSide, currentDir, currentBody).x, IR_DisplayWeapon.GetBodyOffset(currentType, isCurModeSide, currentDir, currentBody).y); ;
-
-            Texture text = curWeapons[curWeaponIndex].graphic.MatNorth.mainTexture;
-            float scale = ((1 / curWeapons[curWeaponIndex].uiIconScale) / (text.width / 64)) * 1.35f * GetCurWeapon().graphic.drawSize.x;
-
-            //Widgets.DrawTextureRotated(rect.center + (offset * pixelRatio), text, IR_WeaponData.GetWeaponAngle(currentType, currentDir), scale);
-
-            Vector2 center = rect.center + (offset * pixelRatio);
-
-            float num = (float)text.width * scale;
-
-            float num2 = (float)text.height * scale;
-
-            if (IR_WeaponData.GetWeaponFlip(currentType, currentDir, isCurModeSide))
-            {
-                num2 = (float)text.height * -scale;
-            }
-
-            Widgets.DrawTextureRotated(new Rect(center.x - num / 2f, center.y - num2 / 2f, num, num2), text, IR_WeaponData.GetWeaponAngle(currentType, currentDir, isCurModeSide));
-
-            //Widgets.DrawTextureRotated(new Rect(center.x - num / 2f, center.y - num2 / 2f, num, num2), text, IR_WeaponData.GetWeaponAngle(currentType, currentDir));
-        }
-
-        private ThingDef GetCurWeapon()
-        {
             return curWeapons[curWeaponIndex];
         }
 
-        private Vector2 GetBodySizeOffset()
+        internal WeaponGroupCordInfo GetCurGroup()
         {
-            switch (currentType)
-            {
-                case WeaponType.bow:
-
-                case WeaponType.longRanged:
-
-                case WeaponType.longMelee:
-                    return IR_PositionAdjuster.GetBodyOffsetLargeWeapons(currentDir, null, currentBody);
-                    break;
-
-                case WeaponType.shortRanged:
-
-                case WeaponType.shortMelee:
-
-                case WeaponType.grenades:
-                    return IR_PositionAdjuster.GetBodyOffsetSmallWeapons(currentDir, null, currentBody);
-                    break;
-
-                default:
-                    return Vector2.zero;
-                    break;
-            }
+            return IR_HolstersSettings.groups[curGroupIndex];
         }
 
-        private void DrawBody(Rect rect)
-        {
-            Rect bodyRect = new Rect(rect.x + (0.2f * rect.width), rect.y + (0.3f * rect.height), 0.6f * rect.width, 0.6f * rect.width);
+        internal BodyType currentBody = BodyType.male;
+        internal List<ThingDef> curWeapons = new List<ThingDef>();
+        internal int curGroupIndex = 0;
 
-            var texture = ChooseBodyTexture();
 
-            Widgets.DrawTextureRotated(rect.center, texture, 0);
-        }
+        internal Rot4 curDir = Rot4.South;
+        internal bool isSidearmMode = false;
+        internal bool isPrimaryMode = true;
 
-        private void DrawHead(Rect rect)
-        {
-            Rect headRect = new Rect(rect.x + (0.2f * rect.width), rect.y + (0.3f * rect.height), 0.6f * rect.width, 0.6f * rect.width);
+        internal const float pixelRatio = 96;
 
-            var texture = ChooseHeadTexture();
+        internal int curWeaponIndex = 0;
 
-            float offset = 0;
-
-            if (currentDir == Rot4.East)
-            {
-                offset = -ChooseHeadOffset();
-            }
-            else if (currentDir == Rot4.West)
-            {
-                offset = ChooseHeadOffset();
-            }
-
-            Widgets.DrawTextureRotated(rect.center - new Vector2(offset * pixelRatio, 34), texture, 0);
-        }
-
-        private void DrawBodyButton(Rect rect)
-        {
-            Rect buttonWest = new Rect(rect.x, rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonEast = new Rect(rect.x + (0.9f * rect.width), rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonNorth = new Rect(rect.x + (0.45f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonSouth = new Rect(rect.x + (0.45f * rect.width), rect.y + (0.9f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-
-            Rect buttonLayerMinus = new Rect(rect.x + (0.35f * rect.width), rect.y + (0.9f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonLayerPlus = new Rect(rect.x + (0.55f * rect.width), rect.y + (0.9f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-
-            Rect buttonLookWest = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonLookEast = new Rect(rect.x + (0.8f * rect.width), rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonLookNorth = new Rect(rect.x + (0.45f * rect.width), rect.y + (0.1f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonLookSouth = new Rect(rect.x + (0.45f * rect.width), rect.y + (0.8f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-
-            Rect buttonRotateLeft = new Rect(rect.x + (0.1f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonRotateRight = new Rect(rect.x + (0.8f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonRotateLeftPlus = new Rect(rect.x, rect.y, 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonRotateRightPlus = new Rect(rect.x + (0.9f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
-
-            Rect buttonHulk = new Rect(rect.x, rect.y + rect.height, 0.2f * rect.width, 0.1f * rect.height);
-            Rect buttonThin = new Rect(rect.x + (0.2f * rect.width), rect.y + rect.height, 0.2f * rect.width, 0.1f * rect.height);
-            Rect buttonFat = new Rect(rect.x + (0.4f * rect.width), rect.y + rect.height, 0.2f * rect.width, 0.1f * rect.height);
-            Rect buttonMale = new Rect(rect.x + (0.6f * rect.width), rect.y + rect.height, 0.2f * rect.width, 0.1f * rect.height);
-            Rect buttonFemale = new Rect(rect.x + (0.8f * rect.width), rect.y + rect.height, 0.2f * rect.width, 0.1f * rect.height);
-
-            if (Widgets.ButtonText(buttonWest, "-X", true, true, Color.blue, true))
-            {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetPos(currentDir, isCurModeSide);
-                tempX.x -= 0.05f;
-                IR_HolstersSettings.WeaponDataSettings[currentType].SetPos(currentDir, tempX, isCurModeSide);
-            }
-            if (Widgets.ButtonText(buttonEast, "+X"))
-            {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetPos(currentDir, isCurModeSide);
-                tempX.x += 0.05f;
-                IR_HolstersSettings.WeaponDataSettings[currentType].SetPos(currentDir, tempX, isCurModeSide);
-            }
-            if (Widgets.ButtonText(buttonNorth, "+Y"))
-            {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetPos(currentDir, isCurModeSide);
-                tempX.z += 0.05f;
-                IR_HolstersSettings.WeaponDataSettings[currentType].SetPos(currentDir, tempX, isCurModeSide);
-            }
-            if (Widgets.ButtonText(buttonSouth, "-Y"))
-            {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetPos(currentDir, isCurModeSide);
-                tempX.z -= 0.05f;
-                IR_HolstersSettings.WeaponDataSettings[currentType].SetPos(currentDir, tempX, isCurModeSide);
-            }
-
-            if (Widgets.ButtonText(buttonLayerMinus, "Layer -"))
-            {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetPos(currentDir, isCurModeSide);
-                tempX.y -= 0.1f;
-                IR_HolstersSettings.WeaponDataSettings[currentType].SetPos(currentDir, tempX, isCurModeSide);
-            }
-
-            if (Widgets.ButtonText(buttonLayerPlus, "Layer +"))
-            {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetPos(currentDir, isCurModeSide);
-                tempX.y += 0.1f;
-                IR_HolstersSettings.WeaponDataSettings[currentType].SetPos(currentDir, tempX, isCurModeSide);
-            }
-
-            if (Widgets.ButtonText(buttonLookWest, "W"))
-            {
-                currentDir = Rot4.West;
-            }
-            if (Widgets.ButtonText(buttonLookEast, "E"))
-            {
-                currentDir = Rot4.East;
-            }
-            if (Widgets.ButtonText(buttonLookNorth, "N"))
-            {
-                currentDir = Rot4.North;
-            }
-            if (Widgets.ButtonText(buttonLookSouth, "S"))
-            {
-                currentDir = Rot4.South;
-            }
-
-            if (Widgets.ButtonText(buttonRotateLeftPlus, "Rot --"))
-            {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetAngle(currentDir, isCurModeSide);
-                tempX -= 5;
-                IR_HolstersSettings.WeaponDataSettings[currentType].SetAngle(currentDir, tempX, isCurModeSide);
-            }
-            if (Widgets.ButtonText(buttonRotateLeft, "Rot -"))
-            {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetAngle(currentDir, isCurModeSide);
-                tempX -= 1;
-                IR_HolstersSettings.WeaponDataSettings[currentType].SetAngle(currentDir, tempX, isCurModeSide);
-            }
-
-            if (Widgets.ButtonText(buttonRotateRight, "Rot +"))
-            {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetAngle(currentDir, isCurModeSide);
-                tempX += 1;
-                IR_HolstersSettings.WeaponDataSettings[currentType].SetAngle(currentDir, tempX, isCurModeSide);
-            }
-            if (Widgets.ButtonText(buttonRotateRightPlus, "Rot ++"))
-            {
-                var tempX = IR_HolstersSettings.WeaponDataSettings[currentType].GetAngle(currentDir, isCurModeSide);
-                tempX += 5;
-                IR_HolstersSettings.WeaponDataSettings[currentType].SetAngle(currentDir, tempX, isCurModeSide);
-            }
-
-            if (Widgets.ButtonText(buttonFat, "Fat"))
-            {
-                currentBody = BodyType.fat;
-            }
-            if (Widgets.ButtonText(buttonThin, "Thin"))
-            {
-                currentBody = BodyType.thin;
-            }
-            if (Widgets.ButtonText(buttonHulk, "Hulk"))
-            {
-                currentBody = BodyType.hulk;
-            }
-            if (Widgets.ButtonText(buttonMale, "Male"))
-            {
-                currentBody = BodyType.male;
-            }
-            if (Widgets.ButtonText(buttonFemale, "Female"))
-            {
-                currentBody = BodyType.female;
-            }
-        }
-
-        private Texture ChooseBodyTexture()
-        {
-            return IR_Textures.bodies[currentBody][currentDir];
-        }
-
-        private Texture ChooseHeadTexture()
-        {
-            switch (currentBody)
-            {
-                default:
-                case BodyType.hulk:
-                case BodyType.fat:
-                case BodyType.male:
-                    return IR_Textures.maleHead[currentDir];
-                    break;
-
-                case BodyType.thin:
-                case BodyType.female:
-                    return IR_Textures.femaleHead[currentDir];
-                    break;
-            }
-        }
-
-        private float ChooseHeadOffset()
-        {
-            switch (currentBody)
-            {
-                default:
-                case BodyType.hulk:
-                    return BodyTypeDefOf.Hulk.headOffset.x;
-                    break;
-
-                case BodyType.fat:
-                    return BodyTypeDefOf.Fat.headOffset.x;
-                    break;
-
-                case BodyType.male:
-                    return BodyTypeDefOf.Male.headOffset.x;
-                    break;
-
-                case BodyType.thin:
-                    return BodyTypeDefOf.Thin.headOffset.x;
-                    break;
-
-                case BodyType.female:
-                    return BodyTypeDefOf.Female.headOffset.x;
-                    break;
-            }
-        }
-
-        private void InitSettingsDict()
-        {
-            if (IR_HolstersSettings.WeaponDataSettings.NullOrEmpty())
-            {
-                IR_HolstersSettings.InitWeaponDataSettings();
-            }
-
-            if (IR_HolstersSettings.WeaponSpecialType.NullOrEmpty())
-            {
-                IR_HolstersSettings.WeaponSpecialType = new Dictionary<string, WeaponType>();
-            }
-        }
-
+        private string instructions = "Guide: \nAll placement settings are group specific, not weapon specific. \nIf you use any sidearm mod you can also edit position for those seperately. \nPositions have to be manually adjusted for each side the pawn is looking at. \nBody offsets are there since some bodies have different dimensions. The position offsets are shared for all bodies but can be modified using impacts (impact 0 means body offsets do not affect this body type.)\n";
         public override string SettingsCategory()
         {
             return "Holsters";
         }
-
-        private BodyType currentBody = BodyType.male;
-        private WeaponType currentType = WeaponType.longRanged;
-        private Rot4 currentDir = Rot4.South;
-        public bool isCurModeSide = false;
-
-        private const float pixelRatio = 96;
     }
 
     public enum BodyType

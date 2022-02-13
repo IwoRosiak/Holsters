@@ -32,7 +32,7 @@ namespace RimWorldHolsters.HarmonyPatches
             {
                 return;
             }*/
-            List<WeaponType> filledSlots = new List<WeaponType>();
+            List<WeaponGroupCordInfo> filledSlots = new List<WeaponGroupCordInfo>();
 
             if (pawn.GetPosture() == PawnPosture.Standing && pawn.equipment?.Primary != null)
             {
@@ -40,13 +40,16 @@ namespace RimWorldHolsters.HarmonyPatches
                 if (!(bool)CarryWeaponOpenly?.Invoke(__instance, null))
                 {
                     vector += IR_DisplayWeapon.GetWeaponPosition(rootLoc, pawnRotation, pawn, pawn.equipment.Primary);
+                    vector += rootLoc;
                     float angle = IR_DisplayWeapon.GetWeaponAngle(rootLoc, pawnRotation, pawn, pawn.equipment.Primary);
 
-                    IR_DisplayWeapon.DrawEquipmentHolstered(pawn.equipment.Primary, vector, angle, pawnRotation, false);
+                    bool isFrontLayer = IR_DisplayWeapon.GetWeaponLayer(pawnRotation, pawn, pawn.equipment.Primary);
+
+                    IR_DisplayWeapon.DrawEquipmentHolstered(pawn.equipment.Primary, vector, angle, pawnRotation, isFrontLayer, false);
                 }
 
-                filledSlots.Add(IR_WeaponType.EstablishWeaponType(pawn.equipment.Primary));
-
+                filledSlots.Add(IR_HolstersSettings.GetWeaponGroupOf(pawn.equipment.Primary.def.defName));
+                
                 if (IR_HolstersSettings.displaySide)
                 {
                     foreach (var weapon in pawn.inventory.innerContainer)
@@ -56,7 +59,7 @@ namespace RimWorldHolsters.HarmonyPatches
                         {
                             bool isSide = true;
 
-                            if (IR_HolstersSettings.smartSideDisplay && !filledSlots.Contains(IR_WeaponType.EstablishWeaponType(weapon.def)))
+                            if (IR_HolstersSettings.smartSideDisplay && !filledSlots.Contains(IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName)))
                             {
                                 isSide = false;
                             }
@@ -64,12 +67,15 @@ namespace RimWorldHolsters.HarmonyPatches
                             vector2 += IR_DisplayWeapon.GetWeaponPosition(rootLoc, pawnRotation, pawn, (ThingWithComps)weapon, isSide);
                             float angle2 = IR_DisplayWeapon.GetWeaponAngle(rootLoc, pawnRotation, pawn, (ThingWithComps)weapon, isSide);
 
-                            IR_DisplayWeapon.DrawEquipmentHolstered(weapon, vector2, angle2, pawnRotation, isSide);
+                            bool isFrontLayer = IR_DisplayWeapon.GetWeaponLayer(pawnRotation, pawn, (ThingWithComps)weapon, isSide);
 
-                            filledSlots.Add(IR_WeaponType.EstablishWeaponType(weapon.def));
+                            IR_DisplayWeapon.DrawEquipmentHolstered(weapon, vector2, angle2, pawnRotation, isFrontLayer, isSide);
+
+                            IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName);
                         }
                     }
                 }
+                
             }
         }
     }
