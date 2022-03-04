@@ -142,8 +142,8 @@ namespace RimWorldHolsters
 
             Vector2 pos = new Vector2(IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode).x, -IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode).z);
             //+Math.Round(IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode).x, 4) + ", " + Math.Round(IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode).z, 4)
-            Widgets.Label(textPosition, "Position: " + pos.x + " and " + -pos.y);
-            
+            Widgets.Label(textPosition, "Position: " + Math.Round(pos.x, 3) + " and " + -Math.Round(pos.y, 3));
+
             Vector3 bodyOffset = mod.GetCurGroup().GetBodyOffset(mod.curDir, mod.isSidearmMode) * mod.GetCurGroup().GetBodyOffsetModif(mod.currentBody, mod.isSidearmMode);
 
 

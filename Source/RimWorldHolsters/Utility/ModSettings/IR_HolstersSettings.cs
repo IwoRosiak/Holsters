@@ -10,7 +10,7 @@ namespace RimWorldHolsters
         {
         }
 
-        public static bool isFirstLaunch = true;
+        public static bool isFirstLaunch;
 
         public static List<WeaponGroupCordInfo> groups;
 
@@ -20,10 +20,10 @@ namespace RimWorldHolsters
 
         public override void ExposeData()
         {
-            Scribe_Collections.Look(ref groups,"groupsCordSettings", LookMode.Deep);
+            Scribe_Collections.Look(ref groups,"groupsCordSettings3", LookMode.Deep);
             Scribe_Values.Look(ref displaySide, "displaySide", true);
             Scribe_Values.Look(ref smartSideDisplay, "smartSideDisplay", true);
-            Scribe_Values.Look(ref isFirstLaunch, "isFirstLaunch", false);
+            Scribe_Values.Look(ref isFirstLaunch, "isFirstLaunch7", true);
 
             base.ExposeData();
         }
@@ -33,7 +33,7 @@ namespace RimWorldHolsters
         {
             if (isFirstLaunch || groups.NullOrEmpty())
             {
-                Log.Message("Holsters: groups initialised.");
+                Log.Message("[Holsters] Groups initialised.");
                 ResetAllGroups();
             }
 
@@ -42,8 +42,6 @@ namespace RimWorldHolsters
 
         public static void ResetAllGroups()
         {
-            groups.Clear();
-
             groups = IR_HolstersInit.LoadDefaultWeaponGroups();
         }
 

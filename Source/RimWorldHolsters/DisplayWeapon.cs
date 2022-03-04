@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
@@ -7,8 +8,19 @@ namespace RimWorldHolsters
     [StaticConstructorOnStartup]
     public static class IR_DisplayWeapon
     {
+       // private static List<WeaponGroupCordInfo> defaultGroups = new List<WeaponGroupCordInfo>();
+        static IR_DisplayWeapon()
+        {
+           // defaultGroups = IR_HolstersInit.LoadDefaultWeaponGroups();
+        }
+
         public static Vector3 GetWeaponPosition(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn, ThingWithComps weapon, bool isSidearm = false)
         {
+           // if (IR_HolstersSettings.groups.NullOrEmpty())
+            //{
+            //    return defaultGroups[IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName)].GetPos(pawnRotation, isSidearm);
+            //}
+
             return IR_HolstersSettings.GetWeaponPos(weapon.def.defName, pawnRotation, isSidearm, pawn);
         }
 
@@ -88,8 +100,6 @@ namespace RimWorldHolsters
 
             Graphics.DrawMesh(mesh, Matrix4x4.TRS(drawLoc, Quaternion.AngleAxis(num, Vector3.up), (Vector3.one / eq.def.uiIconScale) * IR_HolstersSettings.GetWeaponGroupOf(eq.def.defName).GetSize(pawnRotation)), material, 0);
         }
-
-
 
         private const float forwardPos = 0.0028957527f;
 

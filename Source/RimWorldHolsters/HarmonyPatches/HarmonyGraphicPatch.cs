@@ -66,13 +66,15 @@ namespace RimWorldHolsters.HarmonyPatches
                             }
 
                             vector2 += IR_DisplayWeapon.GetWeaponPosition(rootLoc, pawnRotation, pawn, (ThingWithComps)weapon, isSide);
+                            vector2+= rootLoc;
                             float angle2 = IR_DisplayWeapon.GetWeaponAngle(rootLoc, pawnRotation, pawn, (ThingWithComps)weapon, isSide);
 
                             bool isFrontLayer = IR_DisplayWeapon.GetWeaponLayer(pawnRotation, pawn, (ThingWithComps)weapon, isSide);
 
                             IR_DisplayWeapon.DrawEquipmentHolstered(weapon, vector2, angle2, pawnRotation, isFrontLayer, isSide);
 
-                            IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName);
+                            filledSlots.Add(IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName));
+                            
                         }
                     }
                 }

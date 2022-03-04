@@ -24,8 +24,6 @@ namespace RimWorldHolsters
                 TryLoadWeapons();
             } 
 
-            //Log.Message("Cur group pos: " + GetCurGroup().GetPos(curDir, isSidearmMode).ToString());
-
             Widgets.DrawTextureFitted(inRect, IR_Textures.background, 1);
 
             Rect middleRect = new Rect(inRect.x + (0.3f * inRect.width) +10f, inRect.y, 0.4f * inRect.width -20f, 0.3f * inRect.height);
@@ -351,6 +349,11 @@ namespace RimWorldHolsters
 
         internal WeaponGroupCordInfo GetCurGroup()
         {
+            if (IR_HolstersSettings.groups.NullOrEmpty())
+            {
+                IR_HolstersSettings.InitBasicGroups();
+            }
+
             return IR_HolstersSettings.groups[curGroupIndex];
         }
 
@@ -363,7 +366,7 @@ namespace RimWorldHolsters
         internal bool isSidearmMode = false;
         internal bool isPrimaryMode = true;
 
-        internal const float pixelRatio = 96;
+        internal static float pixelRatio = 96;
 
         internal int curWeaponIndex = 0;
 
