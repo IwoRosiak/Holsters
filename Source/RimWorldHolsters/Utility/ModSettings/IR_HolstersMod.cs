@@ -21,7 +21,7 @@ namespace RimWorldHolsters
 
             if (curWeapons.NullOrEmpty())
             {
-                TryLoadWeapons();
+                TryLoadWeapons(true);
             } 
 
             Widgets.DrawTextureFitted(inRect, IR_Textures.background, 1);
@@ -64,7 +64,7 @@ namespace RimWorldHolsters
                 curWeaponIndex = 0;
                 IR_HolstersSettings.ResetAllGroups();
 
-                TryLoadWeapons();
+                TryLoadWeapons(true);
                 return;
             }
             dangerZoneListing.CheckboxLabeled("Confirm: ", ref restoreDefaultConfirmation, "It cannot be reversed!");
@@ -146,7 +146,7 @@ namespace RimWorldHolsters
                     curGroupIndex--;
                 }
 
-                TryLoadWeapons();
+                TryLoadWeapons(true);
                 return;
             }
 
@@ -167,7 +167,7 @@ namespace RimWorldHolsters
                     curGroupIndex++;
                 }
 
-                TryLoadWeapons();
+                TryLoadWeapons(true);
                 return;
             }
 
@@ -297,7 +297,7 @@ namespace RimWorldHolsters
                 {
                     errorLog = GetCurWeapon().defName + " moved to " + IR_HolstersSettings.groups[(int)receivingGroupIndex].Name;
                     ChangeCurWeaponsGroup(GetCurGroup(), (int)receivingGroupIndex);
-                    TryLoadWeapons();
+                    TryLoadWeapons(false);
                     return;
                 }
             }
@@ -309,9 +309,12 @@ namespace RimWorldHolsters
             mainRect.y += 30;
         }
 
-        private bool TryLoadWeapons()
+        private bool TryLoadWeapons(bool resetIndex)
         {
-            curWeaponIndex = 0;
+            if (resetIndex)
+            {
+                curWeaponIndex = 0;
+            } else AdjustWeaponIndex();
             curWeapons.Clear();
 
             foreach (ThingDef weapon in GenDefDatabase.GetAllDefsInDatabaseForDef(typeof(ThingDef)))
@@ -327,6 +330,14 @@ namespace RimWorldHolsters
                 return false;
             }
             return true;
+        }
+
+        private void AdjustWeaponIndex()
+        {
+            if (curWeaponIndex != 0)
+            {
+                curWeaponIndex--;
+            }
         }
 
         private void ChangeCurWeaponsGroup(WeaponGroupCordInfo fromGroup, int toGroupIndex)
