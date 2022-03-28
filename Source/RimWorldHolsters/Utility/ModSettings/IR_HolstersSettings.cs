@@ -75,20 +75,25 @@ namespace RimWorldHolsters
         {
             foreach (WeaponGroupCordInfo group in groups)
             {
+                if (group.weapons.Contains(weaponDefName))
+                {
+                    return group;
+                }
+                /* Really inefficient method 
                 foreach (string weaponInGroup in group.weapons)
                 {
                     if (weaponDefName.Equals(weaponInGroup))
                     {
                         return group;
                     }
-                }
+                }*/
             }
 
             return new WeaponGroupCordInfo("noGroup");
         }
 
         //GETTING DATA
-        public static Vector3 GetWeaponPos(string weaponDefName, Rot4 rot, bool isSide, Pawn pawn)
+        public static Vector3 GetWeaponPos(string weaponDefName, Rot4 rot, bool isSide, Pawn pawn, WeaponGroupCordInfo group)
         {
             BodyType bodyType = IR_DisplayWeapon.GetBodyType(pawn);
             if (pawn != null)
@@ -96,7 +101,7 @@ namespace RimWorldHolsters
                 bodyType = IR_DisplayWeapon.GetBodyType(pawn);
             }
             
-            WeaponGroupCordInfo group = GetWeaponGroupOf(weaponDefName);
+           
 
             return GetWeaponPos(group, rot, isSide, bodyType);
         }
@@ -119,10 +124,8 @@ namespace RimWorldHolsters
             return pos;
         }
 
-        public static bool GetWeaponLayer(string weaponDefName, Rot4 rot, bool isSide)
+        public static bool GetWeaponLayer(WeaponGroupCordInfo group, Rot4 rot, bool isSide)
         {
-            WeaponGroupCordInfo group = GetWeaponGroupOf(weaponDefName);
-
             return group.GetLayer(rot, isSide);
         }
 
@@ -136,12 +139,12 @@ namespace RimWorldHolsters
         {
             return group.GetAngle(rot, isSide);
         }
-
+        /*
         public static bool GetWeaponFlip(string weaponDefName, Rot4 rot, bool isSide)
         {
             WeaponGroupCordInfo group = GetWeaponGroupOf(weaponDefName);
             return GetWeaponFlip(group, rot, isSide);
-        }
+        }*/
 
         public static bool GetWeaponFlip(WeaponGroupCordInfo group, Rot4 rot, bool isSide)
         {

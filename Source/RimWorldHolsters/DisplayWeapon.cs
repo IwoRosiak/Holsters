@@ -14,14 +14,14 @@ namespace RimWorldHolsters
            // defaultGroups = IR_HolstersInit.LoadDefaultWeaponGroups();
         }
 
-        public static Vector3 GetWeaponPosition(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn, ThingWithComps weapon, bool isSidearm = false)
+        public static Vector3 GetWeaponPosition(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn, ThingWithComps weapon, WeaponGroupCordInfo group, bool isSidearm = false)
         {
            // if (IR_HolstersSettings.groups.NullOrEmpty())
             //{
             //    return defaultGroups[IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName)].GetPos(pawnRotation, isSidearm);
             //}
 
-            return IR_HolstersSettings.GetWeaponPos(weapon.def.defName, pawnRotation, isSidearm, pawn);
+            return IR_HolstersSettings.GetWeaponPos(weapon.def.defName, pawnRotation, isSidearm, pawn, group);
         }
 
         public static BodyType GetBodyType(Pawn pawn)
@@ -43,26 +43,16 @@ namespace RimWorldHolsters
             return BodyType.male;
         }
 
-        public static float GetWeaponAngle(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn, ThingWithComps weapon, bool isSidearm = false)
+        public static void DrawEquipmentHolstered(WeaponGroupCordInfo curGroup, Thing eq, Vector3 drawLoc, float aimAngle, Rot4 pawnRotation,bool isFront, bool isSide)
         {
-            return IR_HolstersSettings.GetWeaponAngle(weapon.def.defName, pawnRotation, isSidearm);
-        }
-
-        public static bool GetWeaponLayer(Rot4 pawnRotation, Pawn pawn, ThingWithComps weapon, bool isSidearm = false)
-        {
-            return IR_HolstersSettings.GetWeaponLayer(weapon.def.defName, pawnRotation, isSidearm);
-        }
-
-        public static void DrawEquipmentHolstered(Thing eq, Vector3 drawLoc, float aimAngle, Rot4 pawnRotation,bool isFront, bool isSide)
-        {
-            if (!IR_HolstersSettings.GetWeaponGroupOf(eq.def.defName).isDisplay)
+            if (!curGroup.isDisplay)
             {
                 return;
             }
             float num = aimAngle;
             Mesh mesh = MeshPool.plane10;
 
-            if (IR_HolstersSettings.GetWeaponFlip(eq.def.defName, pawnRotation, isSide))
+            if (IR_HolstersSettings.GetWeaponFlip(curGroup, pawnRotation, isSide))
             {
                 mesh = MeshPool.plane10Flip;
                 num += 180;
@@ -88,7 +78,6 @@ namespace RimWorldHolsters
             {
                 material = eq.Graphic.MatSingleFor(eq);
             }
-            //Log.Message("Drawing weapon at " + drawLoc.ToString());
 
             if (isFront)
             {
@@ -98,7 +87,7 @@ namespace RimWorldHolsters
                 drawLoc.y += backPos;
             }
 
-            Graphics.DrawMesh(mesh, Matrix4x4.TRS(drawLoc, Quaternion.AngleAxis(num, Vector3.up), (Vector3.one / eq.def.uiIconScale) * IR_HolstersSettings.GetWeaponGroupOf(eq.def.defName).GetSize(pawnRotation)), material, 0);
+            Graphics.DrawMesh(mesh, Matrix4x4.TRS(drawLoc, Quaternion.AngleAxis(num, Vector3.up), (Vector3.one / eq.def.uiIconScale) * curGroup.GetSize(pawnRotation)), material, 0);
         }
 
         private const float forwardPos = 0.0028957527f;
