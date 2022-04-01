@@ -81,17 +81,13 @@ namespace RimWorldHolsters
 
             if (isFront)
             {
-                drawLoc.y += forwardPos;
+                drawLoc.y += IR_HolstersSettings.FrontPos;
             } else
             {
-                drawLoc.y += backPos;
+                drawLoc.y += IR_HolstersSettings.BackPos;
             }
 
             Graphics.DrawMesh(mesh, Matrix4x4.TRS(drawLoc, Quaternion.AngleAxis(num, Vector3.up), (Vector3.one / eq.def.uiIconScale) * curGroup.GetSize(pawnRotation)), material, 0);
         }
-
-        private const float forwardPos = 0.0028957527f;
-
-        private const float backPos = -0.0028957527f;
     }
 }

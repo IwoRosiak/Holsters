@@ -10,6 +10,10 @@ namespace RimWorldHolsters
         {
         }
 
+        private const float forwardPos = 0.0028957527f;
+
+        private const float backPos = -0.0028957527f;
+
         public static bool isFirstLaunch;
 
         public static List<WeaponGroupCordInfo> groups;
@@ -18,12 +22,18 @@ namespace RimWorldHolsters
 
         public static bool smartSideDisplay;
 
+        public static float backLayerOffset = 0;
+        public static float frontLayerOffset = 0;
+
         public override void ExposeData()
         {
             Scribe_Collections.Look(ref groups,"groupsCordSettings3", LookMode.Deep);
             Scribe_Values.Look(ref displaySide, "displaySide", true);
             Scribe_Values.Look(ref smartSideDisplay, "smartSideDisplay", true);
             Scribe_Values.Look(ref isFirstLaunch, "isFirstLaunch7", true);
+
+            Scribe_Values.Look(ref backLayerOffset, "backLayerOffset", 0);
+            Scribe_Values.Look(ref frontLayerOffset, "frontLayerOffset", 0);
 
             base.ExposeData();
         }
@@ -149,6 +159,16 @@ namespace RimWorldHolsters
         public static bool GetWeaponFlip(WeaponGroupCordInfo group, Rot4 rot, bool isSide)
         {
             return group.GetFlip(rot, isSide);
+        }
+
+        public static float FrontPos
+        {
+            get { return forwardPos + frontLayerOffset; }
+        }
+
+        public static float BackPos
+        {
+            get { return backPos + backLayerOffset; }
         }
     }
 }

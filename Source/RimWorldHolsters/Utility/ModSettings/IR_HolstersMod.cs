@@ -71,6 +71,9 @@ namespace RimWorldHolsters
 
             dangerZoneListing.End();
 
+            //Rect layerOffsetsRect= new Rect(inRect.x + 10f, inRect.y + (0.5f * inRect.height), 0.2f * inRect.width - 20f, 0.6f * inRect.height);
+
+
             IR_ModSettingsDrawer.DrawBodyManagement(new Rect(inRect.x + (0.8f * inRect.width) + 10f, inRect.y + (0.3f * inRect.height), 0.2f * inRect.width -20f, 0.6f * inRect.height));
 
             

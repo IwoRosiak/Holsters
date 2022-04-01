@@ -104,33 +104,15 @@ namespace RimWorldHolsters
             DrawAngleButtons(rect);
             DrawPositionButtons(rect);
             DrawPresetsButtons(rect);
-            
+            DrawLayerButtons(rect);
 
-            Rect buttonLayer = new Rect(rect.x, rect.y + (rect.height), 0.2f * rect.width, 0.1f * rect.height);
 
             Rect buttonFlip = new Rect(rect.x + (0.2f * rect.width), rect.y +(rect.height), 0.15f * rect.width, 0.1f * rect.height);
 
             Rect textPosition = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.02f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
             Rect textBodyPos = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.12f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
             //LAYER
-            string layerLabel;
-            
-            if (!IsWeaponInFrontLayer())
-            {
-                layerLabel = "back";
-            }
-            else
-            {
-                layerLabel = "front";
-            }
-
-
-            if (Widgets.ButtonText(buttonLayer, "Layer: " + layerLabel))
-            {
-                var temp = mod.GetCurGroup().GetLayer(mod.curDir, mod.isSidearmMode);
-                temp = !temp;
-                mod.GetCurGroup().SetLayer(mod.curDir, temp, mod.isSidearmMode);
-            }
+           
 
             //FLIP
             if (Widgets.ButtonText(buttonFlip, "Flip"))
@@ -149,6 +131,65 @@ namespace RimWorldHolsters
 
             Widgets.Label(textBodyPos, "Body offset: " + Math.Round(bodyOffset.x, 3) + ", " + Math.Round(bodyOffset.z, 3));
             //Widgets.Label(textPosition, "Total: " + Math.Round(mod.GetCurGroup().GetBodyOffset(mod.curDir, mod.isSidearmMode).x, 3) + ", " + Math.Round(mod.GetCurGroup().GetBodyOffset(mod.curDir, mod.isSidearmMode).z, 3));
+        }
+
+        private static void DrawLayerButtons(Rect rect)
+        {
+            Rect buttonLayer = new Rect(rect.x, rect.y + (rect.height), 0.2f * rect.width, 0.1f * rect.height);
+
+            string layerLabel;
+
+            if (!IsWeaponInFrontLayer())
+            {
+                layerLabel = "back";
+            }
+            else
+            {
+                layerLabel = "front";
+            }
+            if (Prefs.DevMode)
+            {
+                Rect buttonLayerMinusOffset = new Rect(rect.x, rect.y + (rect.height), 0.025f * rect.width, 0.1f * rect.height);
+                buttonLayer = new Rect(rect.x + 0.025f * rect.width, rect.y + (rect.height), 0.15f * rect.width, 0.1f * rect.height);
+                Rect buttonLayerPlusOffset = new Rect(rect.x + 0.175f * rect.width, rect.y + (rect.height), 0.025f * rect.width, 0.1f * rect.height);
+
+                if (Widgets.ButtonText(buttonLayerMinusOffset, "<"))
+                {
+                    if (IsWeaponInFrontLayer())
+                    {
+                        IR_HolstersSettings.frontLayerOffset -= 0.001f;
+                    }
+
+                    if (!IsWeaponInFrontLayer())
+                    {
+                        IR_HolstersSettings.backLayerOffset -= 0.001f;
+                    }
+                }
+
+
+
+                if (Widgets.ButtonText(buttonLayerPlusOffset, ">"))
+                {
+                    if (IsWeaponInFrontLayer())
+                    {
+                        IR_HolstersSettings.frontLayerOffset += 0.001f;
+                    }
+
+                    if (!IsWeaponInFrontLayer())
+                    {
+                        IR_HolstersSettings.backLayerOffset += 0.001f;
+                    }
+                }
+            }
+
+            
+
+            if (Widgets.ButtonText(buttonLayer, "Layer: " + layerLabel))
+            {
+                var temp = mod.GetCurGroup().GetLayer(mod.curDir, mod.isSidearmMode);
+                temp = !temp;
+                mod.GetCurGroup().SetLayer(mod.curDir, temp, mod.isSidearmMode);
+            }
         }
 
         private static void DrawPresetsButtons(Rect rect)
