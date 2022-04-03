@@ -21,7 +21,14 @@ namespace RimWorldHolsters.HarmonyPatches
 
             Pawn pawn = (Pawn)tempPawn.GetValue(__instance);
 
+            
+
             if (pawn.Dead)
+            {
+                return;
+            }
+
+            if (!IR_HolstersSettings.displayIndoors && pawn.GetRoom()?.ProperRoom == true)
             {
                 return;
             }

@@ -25,6 +25,8 @@ namespace RimWorldHolsters
         public static float backLayerOffset = 0;
         public static float frontLayerOffset = 0;
 
+        public static bool displayIndoors = true;
+
         public override void ExposeData()
         {
             Scribe_Collections.Look(ref groups,"groupsCordSettings3", LookMode.Deep);
@@ -34,6 +36,7 @@ namespace RimWorldHolsters
 
             Scribe_Values.Look(ref backLayerOffset, "backLayerOffset", 0);
             Scribe_Values.Look(ref frontLayerOffset, "frontLayerOffset", 0);
+            Scribe_Values.Look(ref displayIndoors, "displayIndoors", true);
 
             base.ExposeData();
         }

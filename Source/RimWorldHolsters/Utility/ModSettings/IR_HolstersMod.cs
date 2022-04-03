@@ -50,7 +50,7 @@ namespace RimWorldHolsters
 
 
             //DANGER ZONE
-            Rect dangerZoneRect = new Rect(inRect.x + 10f, inRect.y + (0.5f * inRect.height), 0.2f * inRect.width - 20f, 0.6f * inRect.height);
+            Rect dangerZoneRect = new Rect(inRect.x + 10f, inRect.y + (0.55f * inRect.height), 0.2f * inRect.width - 20f, 0.6f * inRect.height);
             Widgets.DrawLineHorizontal(dangerZoneRect.x, dangerZoneRect.y + 24f, dangerZoneRect.width);
             Listing_Standard dangerZoneListing = new Listing_Standard();
             dangerZoneListing.Begin(dangerZoneRect);
@@ -86,7 +86,7 @@ namespace RimWorldHolsters
             Listing_Standard leftSideListing = new Listing_Standard();
             leftSideListing.Begin(leftSideRect);
 
-            leftSideListing.Label("Mode Settings");
+            leftSideListing.Label("Display Settings");
             leftSideListing.Gap();
 
             string currentModeLabel;
@@ -99,6 +99,7 @@ namespace RimWorldHolsters
                 currentModeLabel = "primary";
             }
 
+            leftSideListing.CheckboxLabeled("Display indoors: ", ref IR_HolstersSettings.displayIndoors);
             leftSideListing.CheckboxLabeled("Display sidearms: ", ref IR_HolstersSettings.displaySide);
             leftSideListing.CheckboxLabeled("Smart sidearms: ", ref IR_HolstersSettings.smartSideDisplay);
 
