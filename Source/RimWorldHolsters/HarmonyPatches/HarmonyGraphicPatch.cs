@@ -21,8 +21,6 @@ namespace RimWorldHolsters.HarmonyPatches
 
             Pawn pawn = (Pawn)tempPawn.GetValue(__instance);
 
-            
-
             if (pawn.Dead)
             {
                 return;

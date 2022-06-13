@@ -600,11 +600,12 @@ namespace RimWorldHolsters
         {
             foreach (ThingDef thing in GenDefDatabase.GetAllDefsInDatabaseForDef(typeof(ThingDef)))
             {
+                //Log.Message(thing.defName);
                 if (!thing.IsWeapon)
                 {
                     continue;
                 }
-
+                //Log.Message(thing.defName + "is a weapon!");
                 if (thing.defName.Equals("WoodLog") && thing.defName.Equals("Beer"))
                 {
                     groups[6].weapons.Add(thing.defName);
@@ -613,6 +614,7 @@ namespace RimWorldHolsters
 
                 if (thing.IsRangedWeapon)
                 {
+                    //Log.Message(thing.defName + "is a ranged weapon!");
                     if (thing.defName.StartsWith("Bow_"))
                     {
                         groups[2].weapons.Add(thing.defName);
@@ -626,6 +628,7 @@ namespace RimWorldHolsters
                     else if (thing.uiIconScale > 1.1f)
                     {
                         groups[1].weapons.Add(thing.defName);
+                        
                         continue;
                     } 
                     else groups[0].weapons.Add(thing.defName);
@@ -640,6 +643,103 @@ namespace RimWorldHolsters
                     } else groups[3].weapons.Add(thing.defName);
                     continue;
                 } else groups[6].weapons.Add(thing.defName);
+                continue;
+            }
+        }
+
+        public static void SortWeaponsIntoGroups(ref List<WeaponGroupCordInfo> groups, List<ThingDef> weapons)
+        {
+            foreach (ThingDef thing in weapons)
+            {
+
+                //Log.Message(thing.defName);
+                if (!thing.IsWeapon)
+                {
+                    continue;
+                }
+                //Log.Message(thing.defName + "is a weapon!");
+                if (thing.defName.Equals("WoodLog") && thing.defName.Equals("Beer"))
+                {
+                    if (groups.Count < 7)
+                    {
+                        groups[0].weapons.Add(thing.defName);
+                        continue;
+                    }
+
+                    groups[6].weapons.Add(thing.defName);
+                    continue;
+                }
+
+                if (thing.IsRangedWeapon)
+                {
+                    //Log.Message(thing.defName + "is a ranged weapon!");
+                    if (thing.defName.StartsWith("Bow_"))
+                    {
+                        if (groups.Count < 7)
+                        {
+                            groups[0].weapons.Add(thing.defName);
+                            continue;
+                        }
+                        groups[2].weapons.Add(thing.defName);
+                        continue;
+                    }
+                    else if (thing.defName.StartsWith("Weapon_Grenade"))
+                    {
+                        if (groups.Count < 7)
+                        {
+                            groups[0].weapons.Add(thing.defName);
+                            continue;
+                        }
+                        groups[5].weapons.Add(thing.defName);
+                        continue;
+                    }
+                    else if (thing.uiIconScale > 1.1f)
+                    {
+                        if (groups.Count < 7)
+                        {
+                            groups[0].weapons.Add(thing.defName);
+                            continue;
+                        }
+                        groups[1].weapons.Add(thing.defName);
+
+                        continue;
+                    }
+                    else groups[0].weapons.Add(thing.defName);
+                    continue;
+                }
+                if (thing.IsMeleeWeapon)
+                {
+                    if (thing.uiIconScale > 1.1f)
+                    {
+                        if (groups.Count < 7)
+                        {
+                            groups[0].weapons.Add(thing.defName);
+                            continue;
+                        }
+                        groups[4].weapons.Add(thing.defName);
+                        continue;
+                    }
+                    else 
+                    {
+                        if (groups.Count < 7)
+                        {
+                            groups[0].weapons.Add(thing.defName);
+                            continue;
+                        }
+                        groups[3].weapons.Add(thing.defName); 
+                    }
+                    continue;
+                }
+                else 
+                {
+                    if (groups.Count < 7)
+                    {
+                        groups[0].weapons.Add(thing.defName);
+                        continue;
+                    }
+                    groups[6].weapons.Add(thing.defName); 
+                    
+                }
                 continue;
             }
         }

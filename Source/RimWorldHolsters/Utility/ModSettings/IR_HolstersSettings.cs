@@ -48,9 +48,28 @@ namespace RimWorldHolsters
             {
                 Log.Message("[Holsters] Groups initialised.");
                 ResetAllGroups();
+            } else
+            {
+                CheckIfAllWeaponsBelongToAGroup();
             }
 
             isFirstLaunch = false;
+        }
+
+        public static void CheckIfAllWeaponsBelongToAGroup()
+        {
+            List<ThingDef> weaponsWithoutGroup = new List<ThingDef>();
+
+            foreach (ThingDef thing in GenDefDatabase.GetAllDefsInDatabaseForDef(typeof(ThingDef)))
+            {
+                if (GetWeaponGroupOf(thing.defName).Name.Equals("noGroup") )
+                {
+                    weaponsWithoutGroup.Add(thing);
+                }
+            } 
+
+            IR_HolstersInit.SortWeaponsIntoGroups(ref groups, weaponsWithoutGroup);
+            
         }
 
         public static void ResetAllGroups()
