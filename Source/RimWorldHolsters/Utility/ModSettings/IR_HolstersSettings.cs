@@ -10,7 +10,9 @@ namespace RimWorldHolsters
         {
         }
 
-        private const float forwardPos = 0.0128957527f;
+        private const float forwardPos = 0.026f;
+
+        private const float middlePos = 0.0128957527f;
 
         private const float backPos = -0.0128957527f;
 
