@@ -65,13 +65,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\DisplayWeapon.cs" />
+    <Compile Include="Core\WeaponDrawingProperties.cs" />
     <Compile Include="Core\WeaponDrawing\WeaponDrawingConditionChecker.cs" />
     <Compile Include="Core\WeaponDrawing\WeaponDrawingManager.cs" />
     <Compile Include="HarmonyPatches\HarmonyGraphicPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyInitialise.cs" />
-    <Compile Include="Utility\IR_HolstersPresets.cs" />
+    <Compile Include="Utility\ModSettings\IR_HolstersPresets.cs" />
     <Compile Include="Utility\ModSettings\IR_ModSettingsDrawer.cs" />
-    <Compile Include="Utility\WeaponGroupCordInfo.cs" />
+    <Compile Include="Core\WeaponGroupCordInfo.cs" />
     <Compile Include="Utility\IR_Textures.cs" />
     <Compile Include="Utility\ModSettings\IR_HolstersMod.cs" />
     <Compile Include="Utility\ModSettings\IR_HolstersSettings.cs" />

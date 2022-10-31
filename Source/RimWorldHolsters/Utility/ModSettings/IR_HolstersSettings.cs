@@ -1,4 +1,5 @@
 ﻿using RimWorldHolsters.Core;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -130,13 +131,7 @@ namespace RimWorldHolsters
         //GETTING DATA
         public static Vector3 GetWeaponPos(string weaponDefName, Rot4 rot, bool isSide, Pawn pawn, WeaponGroupCordInfo group)
         {
-            BodyType bodyType = IR_DisplayWeapon.GetBodyType(pawn);
-            if (pawn != null)
-            {
-                bodyType = IR_DisplayWeapon.GetBodyType(pawn);
-            }
-            
-           
+            BodyType bodyType = (BodyType)Enum.Parse(typeof(BodyType), pawn.story?.bodyType?.defName.ToLower());
 
             return GetWeaponPos(group, rot, isSide, bodyType);
         }

@@ -17,7 +17,6 @@ namespace RimWorldHolsters.Core
                 return false ;
             }
 
-
             if (pawn.GetPosture() != PawnPosture.Standing )
             {
                 return false;
@@ -28,19 +27,10 @@ namespace RimWorldHolsters.Core
                 return false;
             }
 
-            /*
-            Stance_Busy stance_Busy = pawn.stances?.curStance as Stance_Busy;
-
-            if (stance_Busy != null && !stance_Busy.neverAimWeapon && stance_Busy.focusTarg.IsValid && (flags & PawnRenderFlags.NeverAimWeapon) == PawnRenderFlags.None)
-            {
-                return;
-            }*/
-
             if (IsNaked(pawn))
             {
                 return false;
             }
-
 
             return true;
         }

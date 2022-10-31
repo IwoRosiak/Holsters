@@ -21,61 +21,46 @@ namespace RimWorldHolsters.Core
 
         public void DrawEquipment(bool isCarryingWeapon)
         {
-            WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(_pawn.equipment.Primary.def.defName);
-
-            _filledSlots.Add(curGroup);
 
             if (!isCarryingWeapon)
             {
-                DrawPrimary(curGroup);
-                
+                DrawWeapon(_pawn.equipment.Primary);
+            } else
+            {
+                WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(_pawn.equipment.Primary.def.defName);
+                _filledSlots.Add(curGroup);
+
             }
 
             if (IR_HolstersSettings.displaySide)
             {
-                DrawSides();
+                foreach (Thing thing in _pawn.inventory.innerContainer)
+                {
+                    if (thing.def.IsWeapon == false) continue;
+
+                    DrawWeapon((ThingWithComps)thing);
+                }
             }
         }
 
-        private void DrawPrimary(WeaponGroupCordInfo curGroup)
-        {
-            Vector3 positionOnPawn = Vector3.zero;
-
-            positionOnPawn += IR_DisplayWeapon.GetWeaponPosition(_rootLoc, _pawnRotation, _pawn, _pawn.equipment.Primary, curGroup);
-            positionOnPawn.y = 0;
-            positionOnPawn += _rootLoc;
-            float angle = IR_HolstersSettings.GetWeaponAngle(curGroup, _pawnRotation, false);
-            bool isFrontLayer = IR_HolstersSettings.GetWeaponLayer(curGroup, _pawnRotation, false);
-
-            IR_DisplayWeapon.DrawEquipmentHolstered(curGroup, _pawn.equipment.Primary, positionOnPawn, angle, _pawnRotation, isFrontLayer, false);
-            
-        }
-
-        private void DrawSides()
-        {
-            foreach (Thing thing in _pawn.inventory.innerContainer)
-            {
-                if (thing.def.IsWeapon == false) continue;
-                
-
-                DrawSide(thing);
-            }
-        }
-
-        private void DrawSide(Thing weapon)
+        private void DrawWeapon(ThingWithComps weapon)
         {
             WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName);
 
+            if (!curGroup.isDisplay)
+            {
+                return;
+            }
+
             bool isSide = IsSide(curGroup);
 
-            Vector3 positionOnPawn = IR_DisplayWeapon.GetWeaponPosition(_rootLoc, _pawnRotation, _pawn, (ThingWithComps)weapon, curGroup, isSide);
+            Vector3 positionOnPawn = IR_HolstersSettings.GetWeaponPos(weapon.def.defName, _pawnRotation, isSide, _pawn, curGroup); 
             positionOnPawn += _rootLoc;
 
-            float weaponRotation = IR_HolstersSettings.GetWeaponAngle(curGroup, _pawnRotation, isSide);
 
-            bool isFrontLayer = IR_HolstersSettings.GetWeaponLayer(curGroup, _pawnRotation, isSide);
+            WeaponDrawingProperties drawingProperties = new WeaponDrawingProperties(weapon, curGroup, positionOnPawn, _pawnRotation, isSide);
 
-            IR_DisplayWeapon.DrawEquipmentHolstered(curGroup, weapon, positionOnPawn, weaponRotation, _pawnRotation, isFrontLayer, isSide);
+            IR_DisplayWeapon.DrawEquipmentHolstered(drawingProperties);
 
             _filledSlots.Add(curGroup);
         }
