@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
-namespace RimWorldHolsters
+namespace RimWorldHolsters.Core
 {
     [StaticConstructorOnStartup]
     public static class IR_DisplayWeapon
     {
-       // private static List<WeaponGroupCordInfo> defaultGroups = new List<WeaponGroupCordInfo>();
+        // private static List<WeaponGroupCordInfo> defaultGroups = new List<WeaponGroupCordInfo>();
         static IR_DisplayWeapon()
         {
-           // defaultGroups = IR_HolstersInit.LoadDefaultWeaponGroups();
+            // defaultGroups = IR_HolstersInit.LoadDefaultWeaponGroups();
         }
 
         public static Vector3 GetWeaponPosition(Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn, ThingWithComps weapon, WeaponGroupCordInfo group, bool isSidearm = false)
         {
-           // if (IR_HolstersSettings.groups.NullOrEmpty())
+            // if (IR_HolstersSettings.groups.NullOrEmpty())
             //{
             //    return defaultGroups[IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName)].GetPos(pawnRotation, isSidearm);
             //}
@@ -43,7 +43,7 @@ namespace RimWorldHolsters
             return BodyType.male;
         }
 
-        public static void DrawEquipmentHolstered(WeaponGroupCordInfo curGroup, Thing eq, Vector3 drawLoc, float aimAngle, Rot4 pawnRotation,bool isFront, bool isSide)
+        public static void DrawEquipmentHolstered(WeaponGroupCordInfo curGroup, Thing eq, Vector3 drawLoc, float aimAngle, Rot4 pawnRotation, bool isFront, bool isSide)
         {
             if (!curGroup.isDisplay)
             {
@@ -82,12 +82,13 @@ namespace RimWorldHolsters
             if (isFront)
             {
                 drawLoc.y += IR_HolstersSettings.FrontPos;
-            } else
+            }
+            else
             {
                 drawLoc.y += IR_HolstersSettings.BackPos;
             }
 
-            Graphics.DrawMesh(mesh, Matrix4x4.TRS(drawLoc, Quaternion.AngleAxis(num, Vector3.up), (Vector3.one / eq.def.uiIconScale) * curGroup.GetSize(pawnRotation)), material, 0);
+            Graphics.DrawMesh(mesh, Matrix4x4.TRS(drawLoc, Quaternion.AngleAxis(num, Vector3.up), Vector3.one / eq.def.uiIconScale * curGroup.GetSize(pawnRotation)), material, 0);
         }
     }
 }
