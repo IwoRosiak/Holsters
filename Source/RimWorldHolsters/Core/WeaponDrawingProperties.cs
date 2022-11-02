@@ -47,8 +47,6 @@ namespace RimWorldHolsters.Core
 
         }
 
-
-
         public ThingWithComps Item => _item;
         public Vector3 Location => _location;
         public float Rotation => _rotation;
