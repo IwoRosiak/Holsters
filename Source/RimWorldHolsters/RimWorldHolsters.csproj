@@ -64,6 +64,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Comps\HolstersComp.cs" />
+    <Compile Include="Core\Comps\HolstersCompProperties.cs" />
     <Compile Include="Core\DisplayWeapon.cs" />
     <Compile Include="Core\WeaponDrawingProperties.cs" />
     <Compile Include="Core\WeaponDrawing\WeaponDrawingConditionChecker.cs" />
