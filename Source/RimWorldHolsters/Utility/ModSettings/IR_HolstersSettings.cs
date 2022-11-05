@@ -18,8 +18,6 @@ namespace RimWorldHolsters
         private const float backPos = -0.0128957527f;
 
         public static bool isFirstLaunch;
-        public static bool displaySide;
-
         public static float backLayerOffset = 0;
         public static float frontLayerOffset = 0;
 
@@ -27,7 +25,6 @@ namespace RimWorldHolsters
 
         public override void ExposeData()
         {
-            Scribe_Values.Look(ref displaySide, "displaySide", true);
             Scribe_Values.Look(ref isFirstLaunch, "isFirstLaunch7", true);
 
             Scribe_Values.Look(ref backLayerOffset, "backLayerOffset", 0);
@@ -40,10 +37,6 @@ namespace RimWorldHolsters
 
         private static HolsterPresetDef GetConfiguration(ThingDef def)
         {
-            //foreach (HolsterPresetDef def in GenDefDatabase.GetAllDefsInDatabaseForDef(typeof(HolsterPresetDef)))
-            //{
-            //    return def;
-            //}
 
             return CategorySorter.SortWeaponsIntoGroups(def);
         }

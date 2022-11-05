@@ -32,7 +32,7 @@ namespace RimWorldHolsters.Core
 
             }
 
-            if (IR_HolstersSettings.displaySide)
+            if (true)//IR_HolstersSettings.displaySide)
             {
                 foreach (Thing thing in _pawn.inventory.innerContainer)
                 {
@@ -52,18 +52,6 @@ namespace RimWorldHolsters.Core
 
             //_filledSlots.Add(curGroup); //Holster points!
         }
-        /*
-        private bool IsSide(WeaponGroupCordInfo curGroup)
-        {
-            bool isSide = true;
-
-            if (IR_HolstersSettings.smartSideDisplay && !_filledSlots.Contains(curGroup))
-            {
-                isSide = false;
-            }
-
-            return isSide;
-        }*/
     }
 }
 
