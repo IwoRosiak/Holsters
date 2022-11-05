@@ -4,9 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RimWorldHolsters.Utility
+namespace RimWorldHolsters.Core
 {
-    internal class IR_HolstersPresets
+    public enum BodyType
     {
+        hulk,
+        fat,
+        thin,
+        male,
+        female
     }
 }

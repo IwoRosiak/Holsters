@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using Holsters;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,24 +20,26 @@ namespace RimWorldHolsters.Core
 
         private float _size;
 
-        public WeaponDrawingProperties(ThingWithComps item, WeaponGroupCordInfo groupSettings, Vector3 drawLoc,Rot4 pawnRotation, bool isSide)
+        public WeaponDrawingProperties(ThingWithComps item, Vector3 drawLoc,Rot4 pawnRotation)
         {
             _item = item;
-            _location = drawLoc;
+            _mesh = MeshPool.plane10; //that can be changed
 
-            _rotation = IR_HolstersSettings.GetWeaponAngle(groupSettings, pawnRotation, isSide);
-            _mesh = MeshPool.plane10;
 
-            _size = groupSettings.GetSize(pawnRotation);
+            HolsterConfiguration configuration = IR_HolstersSettings.GetHolsterConfigurationFor(item.def, pawnRotation);
 
-            if (IR_HolstersSettings.GetWeaponFlip(groupSettings, pawnRotation, isSide))
+            _location = drawLoc + (configuration.Position/10);
+            _rotation = configuration.Rotation;
+            _size = configuration.Size;
+
+            if (configuration.IsFlipped)
             {
                 _rotation += 180;
                 _mesh = MeshPool.plane10Flip;
             }
             _rotation %= 360f;
 
-            if (IR_HolstersSettings.GetWeaponLayer(groupSettings, pawnRotation, isSide))
+            if (configuration.IsAtFront)
             {
                 _location.y += IR_HolstersSettings.FrontPos;
 

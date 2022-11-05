@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+	<Holsters.HolsterPresetDef>
+		<defName>Holster_SheathedOnBackPreset</defName>
+		<label>Sheathed on Back</label>
+		<Configuration>
+			<li>
+				<key>North</key>
+				<value>
+					<Position>(-1.5,0, -2.5)</Position>
+					<Rotation>25</Rotation>
+					<Size>1</Size>
+					<IsFlipped>false</IsFlipped>
+					<IsAtFront>false</IsAtFront>
+					<BodyOffset>(-2, 0, -0.5)</BodyOffset>
+				</value>
+			</li>
+			<li>
+				<key>South</key>
+				<value>
+					<Position>(1.5, 0, -2.5)</Position>
+					<Rotation>140</Rotation>
+					<Size>1</Size>
+					<IsFlipped>true</IsFlipped>
+					<IsAtFront>true</IsAtFront>
+					<BodyOffset>(2, 0, -0.5)</BodyOffset>
+				</value>
+			</li>
+			<li>
+				<key>East</key>
+				<value>
+					<Position>(1, 0, -2.5)</Position>
+					<Rotation>25</Rotation>
+					<Size>1</Size>
+					<IsFlipped>false</IsFlipped>
+					<IsAtFront>false</IsAtFront>
+					<BodyOffset>(-2, 0, 0)</BodyOffset>
+				</value>
+			</li>
+			<li>
+				<key>West</key>
+				<value>
+					<Position>(-0.5, 0, -2.5)</Position>
+					<Rotation>145</Rotation>
+					<Size>1</Size>
+					<IsFlipped>true</IsFlipped>
+					<IsAtFront>true</IsAtFront>
+					<BodyOffset>(2, 0, 0)</BodyOffset>
+				</value>
+			</li>
+		</Configuration>
+		<BodyOffsetsModifs>
+			<li>
+				<key>male</key>
+				<value>0</value>
+			</li>
+			<li>
+				<key>female</key>
+				<value>0</value>
+			</li>
+			<li>
+				<key>fat</key>
+				<value>1</value>
+			</li>
+			<li>
+				<key>hulk</key>
+				<value>0.8</value>
+			</li>
+			<li>
+				<key>thin</key>
+				<value>-0.2</value>
+			</li>
+		</BodyOffsetsModifs>
+	</Holsters.HolsterPresetDef>
+	<Holsters.HolsterPresetDef>
+		<defName>Holster_SheathedOnBackAltPreset</defName>
+		<label>Sheathed on Back Shifted</label>
+		<Configuration>
+			<li>
+				<key>North</key>
+				<value>
+					<Position>(1.5,0, -2.5)</Position>
+					<Rotation>155</Rotation>
+					<Size>1</Size>
+					<IsFlipped>true</IsFlipped>
+					<IsAtFront>false</IsAtFront>
+					<BodyOffset>(2, 0, -0.5)</BodyOffset>
+				</value>
+			</li>
+			<li>
+				<key>South</key>
+				<value>
+					<Position>(-1.5, 0, -2.5)</Position>
+					<Rotation>40</Rotation>
+					<Size>1</Size>
+					<IsFlipped>false</IsFlipped>
+					<IsAtFront>true</IsAtFront>
+					<BodyOffset>(-2, 0, -0.5)</BodyOffset>
+				</value>
+			</li>
+			<li>
+				<key>East</key>
+				<value>
+					<Position>(0.5, 0, -2.5)</Position>
+					<Rotation>380</Rotation>
+					<Size>1</Size>
+					<IsFlipped>false</IsFlipped>
+					<IsAtFront>true</IsAtFront>
+					<BodyOffset>(-2, 0, 0)</BodyOffset>
+				</value>
+			</li>
+			<li>
+				<key>West</key>
+				<value>
+					<Position>(0, 0, -2.5)</Position>
+					<Rotation>145</Rotation>
+					<Size>1</Size>
+					<IsFlipped>true</IsFlipped>
+					<IsAtFront>false</IsAtFront>
+					<BodyOffset>(2, 0, 0)</BodyOffset>
+				</value>
+			</li>
+		</Configuration>
+		<BodyOffsetsModifs>
+			<li>
+				<key>male</key>
+				<value>0</value>
+			</li>
+			<li>
+				<key>female</key>
+				<value>0</value>
+			</li>
+			<li>
+				<key>fat</key>
+				<value>1</value>
+			</li>
+			<li>
+				<key>hulk</key>
+				<value>0.8</value>
+			</li>
+			<li>
+				<key>thin</key>
+				<value>-0.2</value>
+			</li>
+		</BodyOffsetsModifs>
+	</Holsters.HolsterPresetDef>
+</Defs>
