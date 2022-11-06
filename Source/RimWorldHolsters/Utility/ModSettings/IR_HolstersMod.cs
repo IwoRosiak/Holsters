@@ -28,17 +28,8 @@ namespace RimWorldHolsters
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
-            IR_ModSettingsDrawer.mod = this;
-
-            //Rect middleRect = new Rect(inRect.x + (0.3f * inRect.width) + 10f, inRect.y, 0.4f * inRect.width - 20f, 0.3f * inRect.height);
             _tabsManager.DrawTabs(inRect);
-
-            DrawErrorLogger();
         }
 
-        private void DrawErrorLogger()
-        {
-
-        }
     }
 }

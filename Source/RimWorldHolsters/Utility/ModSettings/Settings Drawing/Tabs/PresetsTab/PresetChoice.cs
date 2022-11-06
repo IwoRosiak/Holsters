@@ -14,7 +14,7 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
         ScrollListSelector<HolsterPresetDef> _listSelector;
 
 
-        internal PresetChoice(RectInt area) : base(area)
+        internal PresetChoice(Rect area) : base(area)
         {
             _listSelector = new HorizontalSpreadListSelector<HolsterPresetDef>(buttonWidth, 4);
         }
@@ -25,6 +25,8 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
 
             _listSelector.DrawSelection(area, _allDefs);
         }
+
+        public HolsterPresetDef GetCurrent => _listSelector.GetSelected();
 
         private void FindAllPresets()
         {

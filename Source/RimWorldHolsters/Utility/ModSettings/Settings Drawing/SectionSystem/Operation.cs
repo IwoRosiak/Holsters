@@ -13,20 +13,29 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing
         protected const int sliderWidth = 16;
 
 
-        private RectInt _sectionArea;
+        private Rect _sectionArea;
         private Rect _area;
 
-        internal Operation(RectInt area)
+        internal Operation(Rect area)
         {
             _sectionArea = area;
+
+            
         }
 
         protected Rect area => _area;
-        public RectInt SectionArea => _sectionArea;
+        public Rect SectionArea => _sectionArea;
 
         public void AllocateSpace(Rect area)
         {
             _area = area;
+
+            Initialise();
+        }
+
+        public virtual void Initialise()
+        {
+
         }
 
         public abstract void ExecuteOperation();

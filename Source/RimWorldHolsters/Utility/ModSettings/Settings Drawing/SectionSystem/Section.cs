@@ -8,10 +8,20 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing
     {
         private Vector2 _spacePerSegment;
 
+        private Vector2 _start;
+
         private List<Operation> _operations = new List<Operation>();
+
+        internal Section(Rect sectionArea)
+        {
+            _start = sectionArea.position;
+            _spacePerSegment = new Vector2(sectionArea.width, sectionArea.height);
+        }
+
 
         internal Section(Rect sectionArea, int divisionsX, int divisionsY)
         {
+            _start = sectionArea.position;
             _spacePerSegment = new Vector2(sectionArea.width / divisionsX, sectionArea.height / divisionsY);
         }
 
@@ -19,9 +29,9 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing
         {
             _operations.Add(operation);
 
-            RectInt sectionArea = operation.SectionArea;
+            Rect sectionArea = operation.SectionArea;
 
-            Rect area = new Rect(sectionArea.position * _spacePerSegment, sectionArea.size * _spacePerSegment);
+            Rect area = new Rect(_start +  (sectionArea.position * _spacePerSegment), sectionArea.size * _spacePerSegment);
 
             operation.AllocateSpace(area);
         }
