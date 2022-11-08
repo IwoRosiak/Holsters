@@ -1,7 +1,9 @@
 ﻿using Holsters;
 using RimWorldHolsters.Core.Defs;
+using RimWorldHolsters.Utility.ModSettings.PresetsLoading;
 using RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -9,33 +11,20 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
 {
     internal class PresetChoice : Operation
     {
-        private List<HolsterPresetDef> _allDefs;
-
-        ScrollListSelector<HolsterPresetDef> _listSelector;
+        private ScrollListSelector<HolsterPresetSetting> _listSelector;
 
 
         internal PresetChoice(Rect area) : base(area)
         {
-            _listSelector = new HorizontalSpreadListSelector<HolsterPresetDef>(buttonWidth, 4);
+            _listSelector = new HorizontalSpreadListSelector<HolsterPresetSetting>(buttonWidth, 4);
         }
+
+        public IPresetable GetCurrent => _listSelector.GetSelected() ?? PresetDefLoader.LoadPresets().ToList()[0];
 
         public override void ExecuteOperation()
         {
-            FindAllPresets();
-
-            _listSelector.DrawSelection(area, _allDefs);
-        }
-
-        public HolsterPresetDef GetCurrent => _listSelector.GetSelected();
-
-        private void FindAllPresets()
-        {
-            _allDefs = new List<HolsterPresetDef>();
-
-            foreach (HolsterPresetDef def in GenDefDatabase.GetAllDefsInDatabaseForDef(typeof(HolsterPresetDef)))
-            {
-                _allDefs.Add(def);
-            }
+           
+            _listSelector.DrawSelection(area, IR_HolstersSettings.Holsters().ToList());
         }
 
     }

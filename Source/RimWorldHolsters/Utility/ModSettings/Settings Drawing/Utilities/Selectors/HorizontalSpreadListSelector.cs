@@ -1,15 +1,13 @@
-﻿using RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie;
+﻿using RimWorldHolsters.Utility.ModSettings.PresetsLoading;
+using RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
 namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
 {
-    internal class HorizontalSpreadListSelector<T> : ScrollListSelector<T> where T : Def
+    internal class HorizontalSpreadListSelector<T> : ScrollListSelector<T> where T : IPresetable
     {
         private int _elementsPerRow;
 

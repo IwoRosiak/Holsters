@@ -1,7 +1,10 @@
 ﻿using Holsters;
 using RimWorldHolsters.Core;
+using RimWorldHolsters.Utility.ModSettings;
+using RimWorldHolsters.Utility.ModSettings.PresetsLoading;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -13,23 +16,44 @@ namespace RimWorldHolsters
         {
         }
 
+        private static PresetsContainer _presets;
+
+        
         private const float forwardPos = 0.026f;
         private const float middlePos = 0.0128957527f;
         private const float backPos = -0.0128957527f;
 
-        public static bool isFirstLaunch;
         public static float backLayerOffset = 0;
         public static float frontLayerOffset = 0;
 
         public static bool displayIndoors = true;
 
+        public static void Initialise()
+        {
+            List<IPresetable> presetables = PresetDefLoader.LoadPresets().ToList();
+
+            _presets = new PresetsContainer(presetables);
+        }
+
+        public static void CreateOverwrite(IPresetable presetable)
+        {
+
+        }
+
+        public static IEnumerable<HolsterPresetSetting> Holsters()
+        {
+            foreach(HolsterPresetSetting configuration in _presets.Presets())
+            {
+                yield return configuration;
+            }
+        }  
+
         public override void ExposeData()
         {
-            Scribe_Values.Look(ref isFirstLaunch, "isFirstLaunch7", true);
-
             Scribe_Values.Look(ref backLayerOffset, "backLayerOffset", 0);
             Scribe_Values.Look(ref frontLayerOffset, "frontLayerOffset", 0);
             Scribe_Values.Look(ref displayIndoors, "displayIndoors", true);
+            //Scribe_Deep.Look(ref _presets, "presets");
 
             base.ExposeData();
         }
@@ -37,7 +61,6 @@ namespace RimWorldHolsters
 
         private static HolsterPresetDef GetConfiguration(ThingDef def)
         {
-
             return CategorySorter.SortWeaponsIntoGroups(def);
         }
 
@@ -57,3 +80,6 @@ namespace RimWorldHolsters
         }
     }
 }
+
+
+

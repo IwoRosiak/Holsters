@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using static UnityEngine.Scripting.GarbageCollector;
 
 namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
 {
@@ -24,42 +25,22 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
             Rect north = new Rect(4.5f, 1, 1, 1);
             Rect south = new Rect(4.5f, 8, 1, 1);
 
-            section.AddOperation(new Button(west, "-X", () => Log.Message("Up!")));
-            section.AddOperation(new Button(east, "+X", () => Log.Message("Up!")));
-            section.AddOperation(new Button(north, "+Y", () => Log.Message("Up!")));
-            section.AddOperation(new Button(south, "-Y", () => Log.Message("Up!")));
+            float currentIncrement = 0.05f;
+
+            section.AddOperation(new Button(west, "-X", () => AddPosition(new Vector2(-currentIncrement, 0))));
+            section.AddOperation(new Button(east, "+X", () => AddPosition(new Vector2(+currentIncrement, 0))));
+            section.AddOperation(new Button(north, "+Y", () => AddPosition(new Vector2(0, currentIncrement))));
+            section.AddOperation(new Button(south, "-Y", () => AddPosition(new Vector2(0, -currentIncrement))));
 
             section.DrawOperations();
         }
 
-        private void DrawPositionButtons(Rect rect)
+
+        private void AddPosition(Vector2 position)
         {
-           
-            /*
-            if (Widgets.ButtonText(buttonWest, "-X", true, true, Color.blue, true))
-            {
-                var temp = mod.GetCurGroup().GetPos(mod.curDir, mod.isSidearmMode);
-                temp.x -= 0.05f;
-                mod.GetCurGroup().SetPos(mod.curDir, temp, mod.isSidearmMode);
-            }
-            if (Widgets.ButtonText(buttonEast, "+X"))
-            {
-                var tempX = mod.GetCurGroup().GetPos(mod.curDir, mod.isSidearmMode);
-                tempX.x += 0.05f;
-                mod.GetCurGroup().SetPos(mod.curDir, tempX, mod.isSidearmMode);
-            }
-            if (Widgets.ButtonText(buttonNorth, "+Y"))
-            {
-                var tempX = mod.GetCurGroup().GetPos(mod.curDir, mod.isSidearmMode);
-                tempX.z += 0.05f;
-                mod.GetCurGroup().SetPos(mod.curDir, tempX, mod.isSidearmMode);
-            }
-            if (Widgets.ButtonText(buttonSouth, "-Y"))
-            {
-                var tempX = mod.GetCurGroup().GetPos(mod.curDir, mod.isSidearmMode);
-                tempX.z -= 0.05f;
-                mod.GetCurGroup().SetPos(mod.curDir, tempX, mod.isSidearmMode);
-            }*/
+            //Vector2 positionOverwrite = //mod.GetCurGroup().GetPos(mod.curDir, mod.isSidearmMode);
+            //positionOverwrite += position;
+            //mod.GetCurGroup().SetPos(mod.curDir, positionOverwrite, mod.isSidearmMode);
         }
     }
 }

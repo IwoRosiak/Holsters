@@ -10,7 +10,7 @@ namespace RimWorldHolsters
     {
         static IR_HolstersInit()
         {
-            
+            IR_HolstersSettings.Initialise();
         }
         /*
         public static List<WeaponGroupCordInfo> LoadDefaultWeaponGroups()

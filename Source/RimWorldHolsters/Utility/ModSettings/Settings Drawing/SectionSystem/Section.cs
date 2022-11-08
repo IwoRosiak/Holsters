@@ -12,12 +12,11 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing
 
         private List<Operation> _operations = new List<Operation>();
 
-        internal Section(Rect sectionArea)
+        internal Section(Rect sectionArea, Vector2Int divisions, bool ensureMargins, bool ensureMarginsInBetweenElements) //TODO
         {
             _start = sectionArea.position;
-            _spacePerSegment = new Vector2(sectionArea.width, sectionArea.height);
+            _spacePerSegment = sectionArea.size / divisions;
         }
-
 
         internal Section(Rect sectionArea, int divisionsX, int divisionsY)
         {

@@ -1,17 +1,12 @@
-﻿using Holsters;
-using Mono.Collections.Generic;
-using System;
+﻿using RimWorldHolsters.Utility.ModSettings.PresetsLoading;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
 namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
 {
-    internal class ScrollListSelector<T> : Selector where T : Def
+    internal class ScrollListSelector<T> : Selector where T : IPresetable
     {
         private Vector2 _scrollVector = new Vector2();
 
@@ -50,7 +45,7 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtili
                 int positionInSelection = selection.ToList().IndexOf(selectionElement);
                 Rect selectorPosition = new Rect(CalculatePosition(viewRect, positionInSelection), new Vector2(_elementWidth, buttonHeight));
 
-                ModSettingsUtilities.DrawButton(selectorPosition, selectionElement.label.ToString(), () =>
+                ModSettingsUtilities.DrawButton(selectorPosition, selectionElement.Name.ToString(), () =>
                 {
                     _selected = selectionElement;
                 });
