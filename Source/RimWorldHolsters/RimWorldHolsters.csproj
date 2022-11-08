@@ -86,10 +86,10 @@
     <Compile Include="Utility\ModSettings\PresetsLoading\IPresetable.cs" />
     <Compile Include="Utility\ModSettings\PresetsLoading\PresetDefLoader.cs" />
     <Compile Include="Utility\ModSettings\PresetsLoading\HolsterPresetSetting.cs" />
-    <Compile Include="Utility\ModSettings\PresetsLoading\IDefineable.cs" />
     <Compile Include="Utility\ModSettings\Settings Drawing\TableDrawer\PawnDrawer.cs" />
     <Compile Include="Utility\ModSettings\Settings Drawing\TableDrawer\PositionButtons.cs" />
     <Compile Include="Utility\ModSettings\Settings Drawing\TableDrawer\RotationButtons.cs" />
+    <Compile Include="Utility\ModSettings\Settings Drawing\TableDrawer\TEMPDEFOF.cs" />
     <Compile Include="Utility\ModSettings\Settings Drawing\TableDrawer\WeaponDrawer.cs" />
     <Compile Include="Utility\ModSettings\Settings Drawing\Utilities\Selectors\HorizontalSpreadListSelector.cs" />
     <Compile Include="Utility\ModSettings\Settings Drawing\Utilities\ModSettingsUtilities.cs" />

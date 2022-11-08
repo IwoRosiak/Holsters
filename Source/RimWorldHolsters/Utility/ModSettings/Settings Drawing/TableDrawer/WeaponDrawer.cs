@@ -1,4 +1,6 @@
 ﻿using Holsters;
+using RimWorldHolsters.Core.Presets;
+using RimWorldHolsters.Utility.ModSettings.PresetsLoading;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +18,20 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
         private Rot4 _rotation;
 
 
-        public WeaponDrawer(Rect area, Rot4 rotation,ThingDef weaponDef) : base(area)
+        private HolsterPreset _tempConfig;
+
+        public WeaponDrawer(Rect area, Rot4 rotation,ThingDef weaponDef, HolsterPreset config) : base(area)
         {
             _rotation = rotation;
             _weaponDef = weaponDef;
+            _tempConfig = config;
         }
 
         public override void ExecuteOperation()
         {
-            HolsterConfiguration config = IR_HolstersSettings.GetHolsterConfigurationFor(_weaponDef, _rotation);
+            HolsterConfiguration config = _tempConfig.Configuration[_rotation];//IR_HolstersSettings.GetHolsterConfigurationFor(_weaponDef, _rotation);
 
-            Vector2 offset = new Vector2(config.Position.x, -config.Position.z);
+            Vector2 offset = new Vector2(config.Position.x, -config.Position.z)/10;
 
             Texture text = _weaponDef.graphic.MatNorth.mainTexture;
             float scale = (((1 / _weaponDef.uiIconScale) / (text.width / 64)) * 1.35f * _weaponDef.graphic.drawSize.x) * config.Size;

@@ -29,7 +29,7 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
             DrawHead(area);
         }
 
-        private  void DrawBody(Rect rect)
+        private void DrawBody(Rect rect)
         {
             Rect bodyRect = new Rect(rect.x + (0.2f * rect.width), rect.y + (0.3f * rect.height), 0.6f * rect.width, 0.6f * rect.width);
 

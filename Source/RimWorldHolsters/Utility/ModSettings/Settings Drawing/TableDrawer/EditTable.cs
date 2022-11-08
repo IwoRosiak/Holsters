@@ -1,4 +1,7 @@
-﻿using RimWorldHolsters.Core;
+﻿using Holsters;
+using RimWorldHolsters.Core;
+using RimWorldHolsters.Core.Presets;
+using RimWorldHolsters.Utility.ModSettings.PresetsLoading;
 using RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
 using RimWorldHolsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab;
 using System;
@@ -14,6 +17,8 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
     internal class EditTable : Operation
     {
         private RotationButtons _buttons;
+
+        private HolsterPreset _currentlySelected;
 
         public EditTable(Rect area) : base(area)
         {
@@ -38,8 +43,14 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
             section.AddOperation(_buttons);
             section.AddOperation(new PawnDrawer(new Rect(0, 0, 10, 10), _buttons.Rotation, BodyType.male));
             section.AddOperation(new PositionButtons(new Rect(0, 0, 10, 10)));
+            section.AddOperation(new WeaponDrawer(new Rect(0, 0, 10, 10), _buttons.Rotation, TEMPDEFOF.Gun_BoltActionRifle, _currentlySelected));
 
             section.DrawOperations();
+        }
+
+        public void UpdateSelection(HolsterPresetSetting currentlySelected)
+        {
+            _currentlySelected = currentlySelected.Configuration;
         }
 
         /*

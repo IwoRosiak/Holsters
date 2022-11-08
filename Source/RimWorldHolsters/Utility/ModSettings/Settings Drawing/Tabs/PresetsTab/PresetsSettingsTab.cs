@@ -46,8 +46,8 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.Tabs
         {
             Section section = new Section(rect, 20, 20);
 
-            if (_presetChoice.GetCurrent != null)
-                section.AddOperation(new Label(new Rect(0, 1, 8, 1), _presetChoice.GetCurrent.Name));
+            if (_presetChoice.Current != null)
+                section.AddOperation(new Label(new Rect(0, 1, 8, 1), _presetChoice.Current.Name));
 
             section.AddOperation(_presetChoice);
             section.AddOperation(_presetNameChange);
@@ -55,7 +55,13 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.Tabs
             section.AddOperation(new PresetDelete(new Rect(0, 5, 8, 1)));
             section.AddOperation(_presetCopy);
 
-            section.AddOperation(new Label(new Rect(0, 6, 8, 1), _presetChoice.GetCurrent.Configuration.Configuration[Rot4.South].Position.ToString()));
+
+
+
+            section.AddOperation(new Label(new Rect(0, 6, 8, 1), _presetChoice.Current.Configuration.Configuration[Rot4.South].Position.ToString()));
+
+
+            _table.UpdateSelection((PresetsLoading.HolsterPresetSetting)_presetChoice.Current);
 
             section.AddOperation(_table);
 

@@ -19,7 +19,7 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
             _listSelector = new HorizontalSpreadListSelector<HolsterPresetSetting>(buttonWidth, 4);
         }
 
-        public IPresetable GetCurrent => _listSelector.GetSelected() ?? PresetDefLoader.LoadPresets().ToList()[0];
+        public IPresetable Current => _listSelector.GetSelected() ?? PresetDefLoader.LoadPresets().ToList()[0];
 
         public override void ExecuteOperation()
         {
