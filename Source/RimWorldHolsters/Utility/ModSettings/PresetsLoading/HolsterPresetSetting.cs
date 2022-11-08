@@ -1,5 +1,6 @@
 ﻿using Holsters;
 using RimWorldHolsters.Core.Presets;
+using System;
 
 namespace RimWorldHolsters.Utility.ModSettings.PresetsLoading
 {
@@ -24,5 +25,9 @@ namespace RimWorldHolsters.Utility.ModSettings.PresetsLoading
 
         public string Name => _presetName;
 
+        public void ModifyProperty(Action<HolsterConfiguration> procedure)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

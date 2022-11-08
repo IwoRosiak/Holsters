@@ -17,6 +17,8 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
     internal class EditTable : Operation
     {
         private RotationButtons _buttons;
+        private PositionButtons _positionButtons;
+
 
         private HolsterPreset _currentlySelected;
 
@@ -31,6 +33,7 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
             if (_buttons == null)
             {
                 _buttons = new RotationButtons(new Rect(0, 0, 10, 10));
+                _positionButtons = new PositionButtons(new Rect(0, 0, 10, 10));
             }
 
         }
@@ -42,7 +45,11 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
             section.AddOperation(new Image(new Rect(0, 0, 10, 10), IR_Textures.backgroundPawn));
             section.AddOperation(_buttons);
             section.AddOperation(new PawnDrawer(new Rect(0, 0, 10, 10), _buttons.Rotation, BodyType.male));
-            section.AddOperation(new PositionButtons(new Rect(0, 0, 10, 10)));
+
+            _currentlySelected.Configuration[_buttons.Rotation].Position += new Vector3(_positionButtons.ApplyProperty().x, 0, _positionButtons.ApplyProperty().y);
+
+            section.AddOperation(_positionButtons);
+
             section.AddOperation(new WeaponDrawer(new Rect(0, 0, 10, 10), _buttons.Rotation, TEMPDEFOF.Gun_BoltActionRifle, _currentlySelected));
 
             section.DrawOperations();

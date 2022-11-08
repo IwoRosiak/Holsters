@@ -1,4 +1,6 @@
-﻿using RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
+﻿using Holsters;
+using RimWorldHolsters.Utility.ModSettings.PresetsLoading;
+using RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +14,16 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
 {
     internal class PositionButtons : Operation
     {
+        private Vector2 _modif;
+
         public PositionButtons(Rect area) : base(area)
         {
         }
 
         public override void ExecuteOperation()
         {
+            _modif = default(Vector2);
+
             Section section = new Section(area, 10, 10);
 
             Rect west = new Rect(1, 4.5f, 1, 1);
@@ -36,11 +42,14 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
         }
 
 
+        public Vector2 ApplyProperty()
+        {
+            return _modif;
+        }
+
         private void AddPosition(Vector2 position)
         {
-            //Vector2 positionOverwrite = //mod.GetCurGroup().GetPos(mod.curDir, mod.isSidearmMode);
-            //positionOverwrite += position;
-            //mod.GetCurGroup().SetPos(mod.curDir, positionOverwrite, mod.isSidearmMode);
+            _modif = position;
         }
     }
 }
