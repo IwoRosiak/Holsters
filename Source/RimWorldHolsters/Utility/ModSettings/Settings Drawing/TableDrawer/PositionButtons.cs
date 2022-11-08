@@ -1,14 +1,6 @@
-﻿using Holsters;
-using RimWorldHolsters.Utility.ModSettings.PresetsLoading;
-using RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
 using UnityEngine;
-using Verse;
-using static UnityEngine.Scripting.GarbageCollector;
+
 
 namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
 {

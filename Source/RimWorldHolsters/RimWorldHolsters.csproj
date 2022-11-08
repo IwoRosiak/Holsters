@@ -84,8 +84,6 @@
     <Compile Include="Core\WeaponDrawing\WeaponDrawingHandler.cs" />
     <Compile Include="Utility\ModSettings\PresetsContainer.cs" />
     <Compile Include="Utility\ModSettings\PresetsLoading\IPresetable.cs" />
-    <Compile Include="Utility\ModSettings\PresetsLoading\NonDisplayPresetSetting.cs" />
-    <Compile Include="Utility\ModSettings\PresetsLoading\OverwritingPresetSetting.cs" />
     <Compile Include="Utility\ModSettings\PresetsLoading\PresetDefLoader.cs" />
     <Compile Include="Utility\ModSettings\PresetsLoading\HolsterPresetSetting.cs" />
     <Compile Include="Utility\ModSettings\Settings Drawing\TableDrawer\PawnDrawer.cs" />
