@@ -11,8 +11,11 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtili
     {
         private int _elementsPerRow;
 
-        internal HorizontalSpreadListSelector(T defaultSelection, float elementSize) : base(defaultSelection, elementSize)
+        internal HorizontalSpreadListSelector(T defaultSelection, int elementsPerRow, float elementSize) : base(defaultSelection, elementSize)
         {
+            _elementsPerRow = (int)elementSize;
+            _selected = defaultSelection;
+            _elementsPerRow = elementsPerRow;
         }
 
         internal HorizontalSpreadListSelector(float elementSize, int elementsPerRow) : base(elementSize)

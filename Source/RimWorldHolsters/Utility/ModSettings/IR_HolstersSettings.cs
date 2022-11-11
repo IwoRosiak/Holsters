@@ -15,6 +15,8 @@ namespace RimWorldHolsters
         public IR_HolstersSettings()
         {
         }
+        private bool _isFirstLoad = true;
+
 
         private static PresetsContainer _presets;
 
@@ -30,19 +32,26 @@ namespace RimWorldHolsters
 
         public static void Initialise()
         {
-            List<IPresetable> presetables = PresetDefLoader.LoadPresets().ToList();
 
-            _presets = new PresetsContainer(presetables);
+            if (_presets == null)
+            {
+                Log.Message("Holsters: initialised presets");
+                List<IPresetable> presetables = PresetDefLoader.LoadPresets().ToList();
+
+                _presets = new PresetsContainer(presetables);
+            } else
+            {
+                List<HolsterDefPresetSetting> presetables = PresetDefLoader.LoadPresets().Cast<HolsterDefPresetSetting>().ToList();
+
+                _presets.AddLoadedDefs(presetables);
+            }
+
+
         }
 
-        public static void CreateOverwrite(IPresetable presetable)
+        public static IEnumerable<IPresetable> Holsters()
         {
-
-        }
-
-        public static IEnumerable<HolsterPresetSetting> Holsters()
-        {
-            foreach(HolsterPresetSetting configuration in _presets.Presets())
+            foreach(IPresetable configuration in _presets.Presets())
             {
                 yield return configuration;
             }
@@ -50,10 +59,11 @@ namespace RimWorldHolsters
 
         public override void ExposeData()
         {
+
             Scribe_Values.Look(ref backLayerOffset, "backLayerOffset", 0);
             Scribe_Values.Look(ref frontLayerOffset, "frontLayerOffset", 0);
             Scribe_Values.Look(ref displayIndoors, "displayIndoors", true);
-            //Scribe_Deep.Look(ref _presets, "presets");
+            Scribe_Deep.Look(ref _presets, "presets2");
 
             base.ExposeData();
         }

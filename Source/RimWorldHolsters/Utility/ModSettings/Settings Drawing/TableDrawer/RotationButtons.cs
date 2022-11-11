@@ -43,10 +43,7 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
 
         private void ChangeE()
         {
-            Log.Message("luj");
             _rotation = Rot4.East;
-
-            Log.Message(_rotation.ToStringWord());
         }
         private void ChangeW()
         {

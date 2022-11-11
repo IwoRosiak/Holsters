@@ -58,7 +58,7 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.Tabs
             section.AddOperation(new Label(new Rect(0, 6, 8, 1), _presetChoice.Current.Configuration.Configuration[Rot4.South].Position.ToString()));
 
 
-            _table.UpdateSelection((PresetsLoading.HolsterPresetSetting)_presetChoice.Current);
+            _table.UpdateSelection(_presetChoice.Current);
 
             section.AddOperation(_table);
 

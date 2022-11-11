@@ -1,4 +1,5 @@
 ﻿using RimWorldHolsters.Utility.ModSettings.PresetsLoading;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtili
     {
         private Vector2 _scrollVector = new Vector2();
 
-        private T _selected;
+        protected T _selected;
 
         protected float _elementWidth;
 
@@ -33,13 +34,16 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtili
             DrawSelection(drawRect, selection);
         }
 
+        
+
         internal void DrawSelection(Rect drawRect, ICollection<T> selection)
         {
             Rect viewRect = GetViewRectSize(drawRect, selection);
             Rect scrollRect = GetScrollRectSize(drawRect, viewRect);
-
+            
+  
             Widgets.BeginScrollView(scrollRect, ref _scrollVector, viewRect);
-
+            
             foreach (T selectionElement in selection)
             {
                 int positionInSelection = selection.ToList().IndexOf(selectionElement);
@@ -51,6 +55,9 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtili
                 });
             }
             Widgets.EndScrollView();
+            
+             
+
 
         }
 

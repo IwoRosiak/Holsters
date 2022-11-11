@@ -9,7 +9,7 @@ using Verse;
 namespace Holsters
 {
     [DefOf]
-    public class HolsterPresetDef : Def
+    public class HolsterPresetDef : Def, IExposable
     {
         public Dictionary<Rot4, HolsterConfiguration> Configuration = new Dictionary<Rot4, HolsterConfiguration>();
 
@@ -20,5 +20,11 @@ namespace Holsters
             Configuration = Configuration,
             BodyOffsetsModifs = BodyOffsetsModifs
         };
+
+        public void ExposeData()
+        {
+            Scribe_Collections.Look(ref Configuration, "configuration", LookMode.Value, LookMode.Deep);
+            Scribe_Collections.Look(ref BodyOffsetsModifs, "bodyOffsets", LookMode.Value, LookMode.Value);
+        }
     }
 }

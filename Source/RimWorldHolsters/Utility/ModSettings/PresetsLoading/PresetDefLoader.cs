@@ -26,9 +26,9 @@ namespace RimWorldHolsters.Utility.ModSettings.PresetsLoading
             return allDefs;
         }
 
-        private static HolsterPresetSetting Wrap(HolsterPresetDef def)
+        private static IPresetable Wrap(HolsterPresetDef def)
         {
-            HolsterPresetSetting setting = new HolsterPresetSetting(def);
+            HolsterDefPresetSetting setting = new HolsterDefPresetSetting(def);
 
             return setting;
         }

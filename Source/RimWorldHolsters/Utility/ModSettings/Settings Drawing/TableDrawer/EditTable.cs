@@ -20,7 +20,7 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
         private PositionButtons _positionButtons;
 
 
-        private HolsterPresetSetting _currentlySelected;
+        private IPresetable _currentlySelected;
 
         public EditTable(Rect area) : base(area)
         {
@@ -47,7 +47,7 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
             section.AddOperation(new PawnDrawer(new Rect(0, 0, 10, 10), _buttons.Rotation, BodyType.male));
 
 
-            HandlePositionButtons(); //Different classes for overwrites and for defs deratives
+            HandlePositionButtons();
             section.AddOperation(_positionButtons);
 
             section.AddOperation(new WeaponDrawer(new Rect(0, 0, 10, 10), _buttons.Rotation, TEMPDEFOF.Gun_BoltActionRifle, _currentlySelected.Configuration));
@@ -55,7 +55,7 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
             section.DrawOperations();
         }
 
-        public void UpdateSelection(HolsterPresetSetting currentlySelected)
+        public void UpdateSelection(IPresetable currentlySelected)
         {
             _currentlySelected = currentlySelected;
         }
@@ -63,7 +63,6 @@ namespace RimWorldHolsters.Utility.ModSettings.Settings_Drawing.TableDrawer
         private void HandlePositionButtons()
         {
             _currentlySelected.ModifyProperty((holster => holster.Position += new Vector3(_positionButtons.ApplyProperty().x, 0, _positionButtons.ApplyProperty().y)), _buttons.Rotation);
-
         }
 
         /*

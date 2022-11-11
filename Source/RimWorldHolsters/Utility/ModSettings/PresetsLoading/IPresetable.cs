@@ -9,12 +9,14 @@ using Verse;
 
 namespace RimWorldHolsters.Utility.ModSettings.PresetsLoading
 {
-    public interface IPresetable
+    public interface IPresetable : IExposable
     {
         string Name { get; }
 
         HolsterPreset Configuration { get; }
 
         void ModifyProperty(Action<HolsterConfiguration> modification, Rot4 rotation);
+
+        bool IsAcceptable(IPresetable preset);
     }
 }

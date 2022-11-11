@@ -9,22 +9,39 @@ namespace RimWorldHolsters.Utility.ModSettings.PresetsLoading
     {
         private HolsterPreset _configuration;
 
-        private HolsterPresetDef _basedOn;
-
         private string _presetName;
 
-        public HolsterPresetSetting(HolsterPresetDef presetDef)
+
+        public HolsterPresetSetting()
         {
-            _configuration = presetDef.Preset;
-            _presetName = presetDef.label;
+
         }
 
+        public HolsterPresetSetting(HolsterPresetDef def)
+        {
+            _configuration = def.Preset;
+            _presetName = def.label;
+        }
+
+        public HolsterPresetSetting(string presetName)
+        {
+            _presetName = presetName;
+        }
 
         public HolsterPreset Configuration => _configuration;
 
-        public HolsterPresetDef BasedOnDef => _basedOn;
-
         public string Name => _presetName;
+
+        public void ExposeData()
+        {
+            Scribe_Values.Look(ref _presetName, "presetName", "noName");
+            Scribe_Deep.Look(ref _configuration, "customPreset");
+        }
+
+        public bool IsAcceptable(IPresetable preset)
+        {
+            return true;
+        }
 
         public void ModifyProperty(Action<HolsterConfiguration> modification, Rot4 rotation)
         {
