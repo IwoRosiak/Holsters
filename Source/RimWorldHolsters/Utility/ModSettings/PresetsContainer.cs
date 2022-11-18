@@ -28,6 +28,8 @@ namespace RimWorldHolsters.Utility.ModSettings
 
             List<IPresetable> presetsToAdd = new List<IPresetable>();
 
+            
+
             presetables.ForEach(presetDef =>
             {
                 if (_presetSettings.All(preset => preset.IsAcceptable(presetDef)))
