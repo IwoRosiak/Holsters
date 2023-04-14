@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Verse;
+
+namespace Holsters.Utility.ModSettings.PresetsLoading
+{
+    public interface IPresetable : IExposable
+    {
+        string Name { get; }
+
+        HolsterPreset Configuration { get; }
+
+        void ModifyProperty(Action<HolsterConfiguration> modification, Rot4 rotation);
+
+        bool IsAcceptable(IPresetable preset);
+    }
+}
