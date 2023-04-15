@@ -10,7 +10,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing
 {
     internal static class ModSettingsUtilities
     {
-        internal static float pixelRatio = 96;
+        internal static float PixelRatio = 96;
 
         public static void DrawLine(ref Rect rect, string lineName)
         {

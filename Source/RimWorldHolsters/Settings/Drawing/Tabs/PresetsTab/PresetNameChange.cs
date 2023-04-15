@@ -44,9 +44,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
         private void ButtonClick()
         {
             if (_groupName.Equals(""))
-            {
                 return;
-            }
 
             _groupName = "";
             _isCleared = true;

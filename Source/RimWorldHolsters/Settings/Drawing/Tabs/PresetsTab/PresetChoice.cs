@@ -14,7 +14,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
 
         internal PresetChoice(Rect area) : base(area)
         {
-            _listSelector = new HorizontalSpreadListSelector<IPresetable>(IR_HolstersSettings.Holsters().ToList()[0], 4, buttonWidth);
+            _listSelector = new HorizontalSpreadListSelector<IPresetable>(IR_HolstersSettings.Holsters().ToList()[0], 4, BUTTON_WIDTH);
         }
 
         public IPresetable Current => _listSelector.GetSelected();

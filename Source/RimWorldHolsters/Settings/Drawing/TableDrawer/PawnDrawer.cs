@@ -56,7 +56,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
                 offset = ChooseHeadOffset();
             }
 
-            Widgets.DrawTextureRotated(rect.center - new Vector2(offset * ModSettingsUtilities.pixelRatio, 34), texture, 0);
+            Widgets.DrawTextureRotated(rect.center - new Vector2(offset * ModSettingsUtilities.PixelRatio, 34), texture, 0);
         }
 
 

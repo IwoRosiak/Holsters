@@ -4,23 +4,21 @@ namespace SettingsDrawer.Sections
 {
     internal abstract class Operation
     {
-        protected const int buttonHeight = 40;
-        protected const int buttonWidth = 180;
-        protected const int mediumButtonWidth = 120;
-        protected const int smallButtonWidth = 90;
-        protected const int tinyButtonWidth = 45;
-        protected const int weaponScale = 3;
-        protected const int sliderWidth = 16;
+        protected const int BUTTON_HEIGHT = 40;
+        protected const int BUTTON_WIDTH = 180;
+        protected const int MEDIUM_BUTTON_WIDTH = 120;
+        protected const int SMALL_BUTTON_WIDTH = 90;
+        protected const int TINY_BUTTON_WIDTH = 45;
+        protected const int WEAPON_SCALE = 3;
+        protected const int SLIDER_WIDTH = 16;
 
 
         private Rect _sectionArea;
         private Rect _area;
 
-        internal Operation(Rect area)
+        public Operation(Rect area)
         {
             _sectionArea = area;
-
-
         }
 
         protected Rect area => _area;
@@ -33,10 +31,7 @@ namespace SettingsDrawer.Sections
             Initialise();
         }
 
-        public virtual void Initialise()
-        {
-
-        }
+        public virtual void Initialise() { }
 
         public abstract void ExecuteOperation();
     }

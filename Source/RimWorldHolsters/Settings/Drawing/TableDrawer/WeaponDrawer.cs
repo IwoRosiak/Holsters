@@ -37,7 +37,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
 
             //Widgets.DrawTextureRotated(rect.center + (offset * pixelRatio), text, IR_WeaponData.GetWeaponAngle(GetCurGroup()sIndex, currentDir), scale);
 
-            Vector2 center = area.center + (offset * ModSettingsUtilities.pixelRatio);
+            Vector2 center = area.center + (offset * ModSettingsUtilities.PixelRatio);
             float num = (float)text.width * scale;
             float num2 = (float)text.height * scale;
             if (config.IsFlipped)
