@@ -1,4 +1,6 @@
-﻿using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
+﻿using Holsters.Settings;
+using Holsters.Settings.PresetsLoading;
+using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
 using SettingsDrawer.Sections;
 using System;
 using System.Collections.Generic;
@@ -13,9 +15,12 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
     {
         private string _groupName;
         private bool _isCleared;
+        private readonly PresetChoice _presetChoice;
 
-        public PresetCopy(Rect area) : base(area)
+
+        public PresetCopy(Rect area, PresetChoice choice) : base(area)
         {
+            _presetChoice = choice;
         }
 
         public override void ExecuteOperation()
@@ -42,9 +47,11 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
         private void ButtonClick()
         {
             if (_groupName.Equals(""))
-            {
                 return;
-            }
+
+            HolsterCustomPresetSetting newCustomPreset = new HolsterCustomPresetSetting(_presetChoice.Current, _groupName);
+
+            IR_HolstersSettings.AddNewSetting(newCustomPreset);
 
             _groupName = "";
             _isCleared = true;

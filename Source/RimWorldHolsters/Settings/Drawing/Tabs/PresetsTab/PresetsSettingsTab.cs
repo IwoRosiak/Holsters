@@ -32,7 +32,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs
                 _presetChoice = new PresetChoice(new Rect(3, 12, 14, 6));
                 _presetNameChange = new PresetNameChange(new Rect(0, 2, 8, 1));
                 _presetCreateNew = new PresetCreateNew(new Rect(0, 3, 8, 1));
-                _presetCopy = new PresetCopy(new Rect(0, 4, 8, 1));
+                _presetCopy = new PresetCopy(new Rect(0, 4, 8, 1), _presetChoice);
 
             }
         }

@@ -1,5 +1,4 @@
-﻿using Holsters.Settings;
-using System;
+﻿using System;
 using Verse;
 
 namespace Holsters.Settings.PresetsLoading
@@ -16,6 +15,12 @@ namespace Holsters.Settings.PresetsLoading
         {
             _preset = def.Preset;
             _presetName = def.label;
+        }
+
+        public HolsterCustomPresetSetting(IPresetable defPreset, string presetName)
+        {
+            _preset = new HolsterPreset(defPreset.Preset);
+            _presetName = presetName;
         }
 
         public HolsterCustomPresetSetting(string presetName)

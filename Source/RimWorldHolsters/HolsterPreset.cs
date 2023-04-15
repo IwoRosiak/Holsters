@@ -14,6 +14,12 @@ namespace Holsters
             
         }
 
+        public HolsterPreset(HolsterPreset copy)
+        {
+            Configuration = new Dictionary<Rot4, HolsterConfiguration>(copy.Configuration);
+            BodyOffsetsModifs = new Dictionary<BodyType, float>(copy.BodyOffsetsModifs);
+        }
+
         public void FillWithEmptyEntries()
         {
             Configuration.Add(Rot4.North, HolsterConfiguration.EmptyConfiguration);
