@@ -1,13 +1,11 @@
-﻿using System;
+﻿using Holsters.Utility.ModSettings.PresetsLoading;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
-namespace Holsters.Utility.ModSettings.PresetsLoading
+namespace Holsters.Settings.PresetsLoading
 {
-    internal class HolsterDefPresetSetting : IPresetable, IExposable
+    internal sealed class HolsterDefPresetSetting : IPresetable
     {
         private HolsterPreset _customPreset;
 
@@ -15,30 +13,28 @@ namespace Holsters.Utility.ModSettings.PresetsLoading
 
         private string _presetName;
 
-        private HolsterPresetDef Def => (HolsterPresetDef)GenDefDatabase.GetDef(typeof(HolsterPresetDef), _basedOn); 
+        public HolsterDefPresetSetting() { }
 
-        public HolsterDefPresetSetting()
+        public HolsterDefPresetSetting(HolsterPresetDef presetToBaseOn)
         {
-
+            _basedOn = presetToBaseOn.defName;
+            _presetName = presetToBaseOn.label;
         }
 
-        public HolsterDefPresetSetting(HolsterPresetDef presetDef)
-        {
-            _basedOn = presetDef.defName;
-            _presetName = presetDef.label;
-        }
-
-        public HolsterPreset Configuration
+        public HolsterPreset Preset
         {
             get
             {
                 if (_customPreset == null || _customPreset.Configuration.NullOrEmpty())
-                {
                     return Def.Preset;
-                }
-                else return _customPreset;
+
+
+                return _customPreset;
             }
-        } 
+        }
+
+        private HolsterPresetDef Def => (HolsterPresetDef)GenDefDatabase.GetDef(typeof(HolsterPresetDef), _basedOn);
+
 
         public string Name => _presetName;
 

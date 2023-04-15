@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Holsters.Settings.PresetsLoading;
+using System.Collections.Generic;
 using Verse;
 
 namespace Holsters.Utility.ModSettings.PresetsLoading
@@ -9,7 +10,7 @@ namespace Holsters.Utility.ModSettings.PresetsLoading
         {
             foreach(HolsterPresetDef presetDef in LoadDefs())
             {
-                yield return Wrap(presetDef);
+                yield return ConvertPresetToSettings(presetDef);
             }
         }
 
@@ -17,7 +18,7 @@ namespace Holsters.Utility.ModSettings.PresetsLoading
         {
             List<HolsterPresetDef> allDefs = new List<HolsterPresetDef>();
 
-            foreach (HolsterPresetDef def in GenDefDatabase.GetAllDefsInDatabaseForDef(typeof(HolsterPresetDef)))
+            foreach (HolsterPresetDef def in GenDefDatabase.GetAllDefsInDatabaseForDef(typeof(HolsterPresetDef))) // TODO: Convert in a simple LINQ
             {
                 allDefs.Add(def);
             }
@@ -25,7 +26,7 @@ namespace Holsters.Utility.ModSettings.PresetsLoading
             return allDefs;
         }
 
-        private static IPresetable Wrap(HolsterPresetDef def)
+        private static IPresetable ConvertPresetToSettings(HolsterPresetDef def)
         {
             HolsterDefPresetSetting setting = new HolsterDefPresetSetting(def);
 

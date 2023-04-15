@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using Holsters.Settings;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,7 +88,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
 
         private Texture ChooseBodyTexture()
         {
-            return IR_Textures.bodies[_body][_rotation];
+            return IR_Textures.Bodies[_body][_rotation];
         }
 
         private Texture ChooseHeadTexture()
@@ -98,12 +99,12 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
                 case BodyType.hulk:
                 case BodyType.fat:
                 case BodyType.male:
-                    return IR_Textures.maleHead[_rotation];
+                    return IR_Textures.MaleHead[_rotation];
                     break;
 
                 case BodyType.thin:
                 case BodyType.female:
-                    return IR_Textures.femaleHead[_rotation];
+                    return IR_Textures.FemaleHead[_rotation];
                     break;
             }
         }

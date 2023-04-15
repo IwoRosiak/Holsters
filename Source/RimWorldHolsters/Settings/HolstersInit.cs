@@ -1,9 +1,8 @@
-﻿using Holsters;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
-namespace Holsters
+namespace Holsters.Settings
 {
     [StaticConstructorOnStartup]
     public static class IR_HolstersInit
@@ -12,6 +11,7 @@ namespace Holsters
         {
             IR_HolstersSettings.Initialise();
         }
+
         /*
         public static List<WeaponGroupCordInfo> LoadDefaultWeaponGroups()
         {

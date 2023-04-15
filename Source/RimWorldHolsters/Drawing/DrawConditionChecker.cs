@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using Holsters.Settings;
+using RimWorld;
 using System;
 using UnityEngine;
 using Verse;
@@ -12,7 +13,7 @@ namespace Holsters.Drawing
             if (pawn.Dead)
                 return false;
 
-            if (!IR_HolstersSettings.displayIndoors && pawn.GetRoom()?.ProperRoom == true)
+            if (!IR_HolstersSettings.DisplayIndoors && pawn.GetRoom()?.ProperRoom == true)
                 return false;
 
             if (pawn.GetPosture() != PawnPosture.Standing)

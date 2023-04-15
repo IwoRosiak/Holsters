@@ -1,20 +1,16 @@
-﻿using Holsters;
+﻿using Holsters.Settings.PresetsLoading;
 using Holsters.Utility.ModSettings.PresetsLoading;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
-namespace Holsters.Utility.ModSettings
+namespace Holsters.Settings
 {
     internal class PresetsContainer : IExposable
     {
-
         private List<IPresetable> _presetSettings;
 
-        public PresetsContainer()
-        {
-           
-        }
+        public PresetsContainer() { }
 
         public PresetsContainer(List<IPresetable> presetSettings)
         {
@@ -27,8 +23,6 @@ namespace Holsters.Utility.ModSettings
                 _presetSettings = new List<IPresetable>();
 
             List<IPresetable> presetsToAdd = new List<IPresetable>();
-
-            
 
             presetables.ForEach(presetDef =>
             {
@@ -46,13 +40,12 @@ namespace Holsters.Utility.ModSettings
             Scribe_Collections.Look(ref _presetSettings, "presetSettings", LookMode.Deep);
         }
 
-        public IEnumerable<IPresetable> Presets()
+        public IEnumerable<IPresetable> GetPresets()
         {
-            foreach(IPresetable presetSetting in _presetSettings)
+            foreach (IPresetable presetSetting in _presetSettings)
             {
                 yield return presetSetting;
             }
         }
-
     }
 }

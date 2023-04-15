@@ -2,7 +2,7 @@
 using UnityEngine;
 using Verse;
 
-namespace Holsters
+namespace Holsters.Settings
 {
     [StaticConstructorOnStartup]
     internal static class IR_Textures
@@ -10,7 +10,7 @@ namespace Holsters
         public static Texture2D background = ContentFinder<Texture2D>.Get("Background", true);
         public static Texture2D backgroundPawn = ContentFinder<Texture2D>.Get("BackgroundPawn", true);
 
-        public static Dictionary<Rot4, Texture2D> femaleHead = new Dictionary<Rot4, Texture2D>()
+        public static Dictionary<Rot4, Texture2D> FemaleHead = new Dictionary<Rot4, Texture2D>()
         {
             {Rot4.North, ContentFinder<Texture2D>.Get("BodyType/FemaleHead/North", true)},
             {Rot4.South, ContentFinder<Texture2D>.Get("BodyType/FemaleHead/South", true) },
@@ -18,7 +18,7 @@ namespace Holsters
             {Rot4.East, ContentFinder<Texture2D>.Get("BodyType/FemaleHead/East", true)}
         };
 
-        public static Dictionary<Rot4, Texture2D> maleHead = new Dictionary<Rot4, Texture2D>()
+        public static Dictionary<Rot4, Texture2D> MaleHead = new Dictionary<Rot4, Texture2D>()
         {
             {Rot4.North, ContentFinder<Texture2D>.Get("BodyType/MaleHead/North", true)},
             {Rot4.South, ContentFinder<Texture2D>.Get("BodyType/MaleHead/South", true) },
@@ -26,7 +26,7 @@ namespace Holsters
             {Rot4.East, ContentFinder<Texture2D>.Get("BodyType/MaleHead/East", true)}
         };
 
-        public static Dictionary<Rot4, Texture2D> fatBody = new Dictionary<Rot4, Texture2D>()
+        public static Dictionary<Rot4, Texture2D> FatBody = new Dictionary<Rot4, Texture2D>()
         {
             {Rot4.North, ContentFinder<Texture2D>.Get("BodyType/Fat/North", true)},
             {Rot4.South, ContentFinder<Texture2D>.Get("BodyType/Fat/South", true) },
@@ -34,7 +34,7 @@ namespace Holsters
             {Rot4.East, ContentFinder<Texture2D>.Get("BodyType/Fat/East", true)}
         };
 
-        public static Dictionary<Rot4, Texture2D> thinBody = new Dictionary<Rot4, Texture2D>()
+        public static Dictionary<Rot4, Texture2D> ThinBody = new Dictionary<Rot4, Texture2D>()
         {
             {Rot4.North, ContentFinder<Texture2D>.Get("BodyType/Thin/North", true)},
             {Rot4.South, ContentFinder<Texture2D>.Get("BodyType/Thin/South", true) },
@@ -42,7 +42,7 @@ namespace Holsters
             {Rot4.East, ContentFinder<Texture2D>.Get("BodyType/Thin/East", true)}
         };
 
-        public static Dictionary<Rot4, Texture2D> hulkBody = new Dictionary<Rot4, Texture2D>()
+        public static Dictionary<Rot4, Texture2D> HulkBody = new Dictionary<Rot4, Texture2D>()
         {
             {Rot4.North, ContentFinder<Texture2D>.Get("BodyType/Hulk/North", true)},
             {Rot4.South, ContentFinder<Texture2D>.Get("BodyType/Hulk/South", true) },
@@ -50,7 +50,7 @@ namespace Holsters
             {Rot4.East, ContentFinder<Texture2D>.Get("BodyType/Hulk/East", true)}
         };
 
-        public static Dictionary<Rot4, Texture2D> femaleBody = new Dictionary<Rot4, Texture2D>()
+        public static Dictionary<Rot4, Texture2D> FemaleBody = new Dictionary<Rot4, Texture2D>()
         {
             {Rot4.North, ContentFinder<Texture2D>.Get("BodyType/Female/North", true)},
             {Rot4.South, ContentFinder<Texture2D>.Get("BodyType/Female/South", true)},
@@ -58,7 +58,7 @@ namespace Holsters
             {Rot4.East, ContentFinder<Texture2D>.Get("BodyType/Female/East", true)}
         };
 
-        public static Dictionary<Rot4, Texture2D> maleBody = new Dictionary<Rot4, Texture2D>()
+        public static Dictionary<Rot4, Texture2D> MaleBody = new Dictionary<Rot4, Texture2D>()
         {
             {Rot4.North, ContentFinder<Texture2D>.Get("BodyType/Male/North", true)},
             {Rot4.South, ContentFinder<Texture2D>.Get("BodyType/Male/South", true) },
@@ -66,13 +66,13 @@ namespace Holsters
             {Rot4.East, ContentFinder<Texture2D>.Get("BodyType/Male/East", true)}
         };
 
-        public static Dictionary<BodyType, Dictionary<Rot4, Texture2D>> bodies = new Dictionary<BodyType, Dictionary<Rot4, Texture2D>>()
+        public static Dictionary<BodyType, Dictionary<Rot4, Texture2D>> Bodies = new Dictionary<BodyType, Dictionary<Rot4, Texture2D>>()
         {
-            {BodyType.fat,fatBody },
-            {BodyType.male, maleBody},
-            {BodyType.female,femaleBody },
-            {BodyType.hulk,hulkBody },
-            {BodyType.thin, thinBody}
+            {BodyType.fat,FatBody},
+            {BodyType.male, MaleBody},
+            {BodyType.female,FemaleBody},
+            {BodyType.hulk, HulkBody},
+            {BodyType.thin, ThinBody}
         };
     }
 }

@@ -3,37 +3,33 @@ using Verse;
 
 namespace Holsters.Utility.ModSettings.PresetsLoading
 {
-    public class HolsterPresetSetting :  IPresetable
+    public sealed class HolsterCustomPresetSetting : IPresetable
     {
-        private HolsterPreset _configuration;
+        private HolsterPreset _preset;
 
         private string _presetName;
 
+        public HolsterCustomPresetSetting() { }
 
-        public HolsterPresetSetting()
+        public HolsterCustomPresetSetting(HolsterPresetDef def)
         {
-
-        }
-
-        public HolsterPresetSetting(HolsterPresetDef def)
-        {
-            _configuration = def.Preset;
+            _preset = def.Preset;
             _presetName = def.label;
         }
 
-        public HolsterPresetSetting(string presetName)
+        public HolsterCustomPresetSetting(string presetName)
         {
             _presetName = presetName;
         }
 
-        public HolsterPreset Configuration => _configuration;
+        public HolsterPreset Preset => _preset;
 
         public string Name => _presetName;
 
         public void ExposeData()
         {
             Scribe_Values.Look(ref _presetName, "presetName", "noName");
-            Scribe_Deep.Look(ref _configuration, "customPreset");
+            Scribe_Deep.Look(ref _preset, "customPreset");
         }
 
         public bool IsAcceptable(IPresetable preset)
@@ -43,7 +39,7 @@ namespace Holsters.Utility.ModSettings.PresetsLoading
 
         public void ModifyProperty(Action<HolsterConfiguration> modification, Rot4 rotation)
         {
-            HolsterConfiguration holster = _configuration.Configuration[rotation];
+            HolsterConfiguration holster = _preset.Configuration[rotation];
 
             modification.Invoke(holster);
         }

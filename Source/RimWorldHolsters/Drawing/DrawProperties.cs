@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Holsters.Settings;
+using UnityEngine;
 using Verse;
 
 namespace Holsters.Drawing
@@ -34,12 +35,12 @@ namespace Holsters.Drawing
 
             if (configuration.IsAtFront)
             {
-                _location.y += IR_HolstersSettings.FrontPos;
+                _location.y += IR_HolstersSettings.FrontDrawPosition;
 
             }
             else
             {
-                _location.y += IR_HolstersSettings.BackPos;
+                _location.y += IR_HolstersSettings.BackDrawPosition;
             }
 
         }

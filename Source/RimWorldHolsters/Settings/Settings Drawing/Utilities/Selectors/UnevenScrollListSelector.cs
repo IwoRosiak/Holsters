@@ -1,4 +1,5 @@
-﻿using Holsters.Utility.ModSettings.PresetsLoading;
+﻿using Holsters.Settings.PresetsLoading;
+using Holsters.Utility.ModSettings.PresetsLoading;
 using System;
 using UnityEngine;
 using Verse;
