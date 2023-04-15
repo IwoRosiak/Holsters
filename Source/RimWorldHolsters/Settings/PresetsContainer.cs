@@ -17,20 +17,20 @@ namespace Holsters.Settings
             _presetSettings = presetSettings;
         }
 
-        public void AddLoadedDefs(List<HolsterDefPresetSetting> presetables)
+        public void AddLoadedDefs(List<IPresetable> presetables)
         {
-            if (_presetSettings.NullOrEmpty())
+            if (_presetSettings.NullOrEmpty() == true)
                 _presetSettings = new List<IPresetable>();
 
             List<IPresetable> presetsToAdd = new List<IPresetable>();
 
-            presetables.ForEach(presetDef =>
+            foreach (IPresetable presetDef in presetables)
             {
-                if (_presetSettings.All(preset => preset.IsAcceptable(presetDef)))
-                {
+                bool allExistingPresetsAccept = _presetSettings.All(presetSetting => presetSetting.IsAcceptable(presetDef));
+
+                if (allExistingPresetsAccept == true)
                     presetsToAdd.Add(presetDef);
-                }
-            });
+            }
 
             _presetSettings.AddRange(presetsToAdd);
         }

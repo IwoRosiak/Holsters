@@ -8,7 +8,7 @@ using Verse;
 
 namespace Holsters
 {
-    public static class EquipmentCategorySorter
+    public static class EquipmentPresetSorter
     {
         public static HolsterPresetDef SortWeaponsIntoGroups(ThingDef thing)
         {

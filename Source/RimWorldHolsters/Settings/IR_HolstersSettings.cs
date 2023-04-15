@@ -1,5 +1,4 @@
-﻿using Holsters.Settings.PresetsLoading;
-using Holsters.Utility.ModSettings.PresetsLoading;
+﻿using Holsters.Utility.ModSettings.PresetsLoading;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -27,20 +26,17 @@ namespace Holsters.Settings
 
         public static void Initialise()
         {
-            bool presetsNeverInitialised = _presets == null;
+            List<IPresetable> presetables = PresetDefLoader.LoadPresets().ToList();
 
-            if (presetsNeverInitialised == true)
+            if (_presets == null)
             {
-                Log.Message("Holsters: initialised presets");
-                List<IPresetable> presetables = PresetDefLoader.LoadPresets().ToList();
-
                 _presets = new PresetsContainer(presetables);
+                Log.Message("Holsters: initialised presets");
             }
             else
             {
-                List<HolsterDefPresetSetting> presetables = PresetDefLoader.LoadPresets().Cast<HolsterDefPresetSetting>().ToList();
-
                 _presets.AddLoadedDefs(presetables);
+                Log.Message("Holsters: loaded presets");
             }
         }
 
@@ -62,15 +58,14 @@ namespace Holsters.Settings
             base.ExposeData();
         }
 
-
-        private static HolsterPresetDef GetConfiguration(ThingDef def)
-        {
-            return EquipmentCategorySorter.SortWeaponsIntoGroups(def);
-        }
-
         public static HolsterConfiguration GetHolsterConfigurationFor(ThingDef def, Rot4 rot)
         {
             return GetConfiguration(def).Configuration[rot];
+        }
+
+        private static HolsterPresetDef GetConfiguration(ThingDef def)
+        {
+            return EquipmentPresetSorter.SortWeaponsIntoGroups(def);
         }
 
 

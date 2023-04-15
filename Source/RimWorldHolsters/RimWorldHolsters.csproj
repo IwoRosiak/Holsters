@@ -65,7 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BodyType.cs" />
-    <Compile Include="Settings\EquipmentCategorySorter.cs" />
+    <Compile Include="Settings\EquipmentPresetSorter.cs" />
     <Compile Include="Drawing\Comps\DrawEquipmentComp.cs" />
     <Compile Include="Drawing\Comps\DrawEquipmentCompProperties.cs" />
     <Compile Include="Defs\HolsterPresetDef.cs" />
@@ -86,7 +86,7 @@
     <Compile Include="Settings\PresetsLoading\HolsterDefPresetSetting.cs" />
     <Compile Include="Settings\IPresetable.cs" />
     <Compile Include="Settings\PresetDefLoader.cs" />
-    <Compile Include="Settings\PresetsLoading\HolsterPresetSetting.cs" />
+    <Compile Include="Settings\PresetsLoading\HolsterCustomPresetSetting.cs" />
     <Compile Include="Settings\Settings Drawing\TableDrawer\PawnDrawer.cs" />
     <Compile Include="Settings\Settings Drawing\TableDrawer\PositionButtons.cs" />
     <Compile Include="Settings\Settings Drawing\TableDrawer\RotationButtons.cs" />
