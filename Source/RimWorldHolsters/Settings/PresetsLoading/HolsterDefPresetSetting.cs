@@ -1,5 +1,4 @@
-﻿using Holsters.Utility.ModSettings.PresetsLoading;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Verse;
 
@@ -61,7 +60,7 @@ namespace Holsters.Settings.PresetsLoading
             modification.Invoke(holster);
         }
 
-        public bool IsAcceptable(IPresetable preset)
+        public bool IsNotTheSameAs(IPresetable preset)
         {
             if (preset is HolsterDefPresetSetting defPreset)
             {

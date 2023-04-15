@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Holsters.Utility.ModSettings.Settings_Drawing
+namespace SettingsDrawer.Sections
 {
     internal abstract class Operation
     {
@@ -20,7 +20,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing
         {
             _sectionArea = area;
 
-            
+
         }
 
         protected Rect area => _area;

@@ -1,7 +1,7 @@
 ﻿using System;
 using Verse;
 
-namespace Holsters.Utility.ModSettings.PresetsLoading
+namespace Holsters.Settings
 {
     public interface IPresetable : IExposable
     {
@@ -11,6 +11,6 @@ namespace Holsters.Utility.ModSettings.PresetsLoading
 
         void ModifyProperty(Action<HolsterConfiguration> modification, Rot4 rotation);
 
-        bool IsAcceptable(IPresetable preset);
+        bool IsNotTheSameAs(IPresetable preset);
     }
 }

@@ -1,6 +1,4 @@
-﻿using Holsters.Settings.PresetsLoading;
-using Holsters.Utility.ModSettings.PresetsLoading;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
@@ -22,15 +20,9 @@ namespace Holsters.Settings
             if (_presetSettings.NullOrEmpty() == true)
                 _presetSettings = new List<IPresetable>();
 
-            List<IPresetable> presetsToAdd = new List<IPresetable>();
-
-            foreach (IPresetable presetDef in presetables)
-            {
-                bool allExistingPresetsAccept = _presetSettings.All(presetSetting => presetSetting.IsAcceptable(presetDef));
-
-                if (allExistingPresetsAccept == true)
-                    presetsToAdd.Add(presetDef);
-            }
+            List<IPresetable> presetsToAdd = presetables
+                .Where(presetable => _presetSettings.All(presetSetting => presetSetting.IsNotTheSameAs(presetable)))
+                .ToList();
 
             _presetSettings.AddRange(presetsToAdd);
         }

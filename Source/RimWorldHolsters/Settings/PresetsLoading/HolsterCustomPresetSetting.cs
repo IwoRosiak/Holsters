@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Holsters.Settings;
+using System;
 using Verse;
 
-namespace Holsters.Utility.ModSettings.PresetsLoading
+namespace Holsters.Settings.PresetsLoading
 {
-    public sealed class HolsterCustomPresetSetting : IPresetable
+    internal sealed class HolsterCustomPresetSetting : IPresetable
     {
         private HolsterPreset _preset;
 
@@ -32,7 +33,7 @@ namespace Holsters.Utility.ModSettings.PresetsLoading
             Scribe_Deep.Look(ref _preset, "customPreset");
         }
 
-        public bool IsAcceptable(IPresetable preset)
+        public bool IsNotTheSameAs(IPresetable preset)
         {
             return true;
         }
