@@ -5,7 +5,7 @@ namespace Holsters.Settings
 {
     public interface IPresetable : IExposable
     {
-        string Name { get; }
+        string Name { get; set; }
 
         HolsterPreset Preset { get; }
 

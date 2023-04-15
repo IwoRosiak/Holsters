@@ -32,7 +32,7 @@ namespace Holsters.Settings.PresetsLoading
 
         public HolsterPreset Preset => _preset;
 
-        public string Name => _presetName;
+        public string Name { get => _presetName; set => _presetName = value; }
 
         public void ExposeData()
         {

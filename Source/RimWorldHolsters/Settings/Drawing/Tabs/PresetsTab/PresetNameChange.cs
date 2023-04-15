@@ -14,10 +14,11 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
     {
         private string _groupName;
         private bool _isCleared;
+        private readonly PresetChoice _presetChoice;
 
-
-        public PresetNameChange(Rect area) : base(area)
+        public PresetNameChange(Rect area, PresetChoice choice) : base(area)
         {
+            _presetChoice = choice;
         }
 
         public override void ExecuteOperation()
@@ -45,6 +46,9 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
         {
             if (_groupName.Equals(""))
                 return;
+
+            _presetChoice.Current.Name = _groupName;
+
 
             _groupName = "";
             _isCleared = true;

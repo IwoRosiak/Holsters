@@ -34,8 +34,7 @@ namespace Holsters.Settings.PresetsLoading
 
         private HolsterPresetDef Def => (HolsterPresetDef)GenDefDatabase.GetDef(typeof(HolsterPresetDef), _basedOn);
 
-
-        public string Name => _presetName;
+        public string Name { get => _presetName; set => _presetName = value; }
 
         public void ExposeData()
         {

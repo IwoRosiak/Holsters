@@ -2,11 +2,6 @@
 using Holsters.Settings.PresetsLoading;
 using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
 using SettingsDrawer.Sections;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
