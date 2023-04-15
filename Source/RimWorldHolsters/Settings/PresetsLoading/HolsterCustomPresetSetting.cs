@@ -21,6 +21,8 @@ namespace Holsters.Settings.PresetsLoading
         public HolsterCustomPresetSetting(string presetName)
         {
             _presetName = presetName;
+            _preset = new HolsterPreset();
+            _preset.FillWithEmptyEntries();
         }
 
         public HolsterPreset Preset => _preset;

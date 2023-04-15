@@ -27,6 +27,11 @@ namespace Holsters.Settings
             _presetSettings.AddRange(presetsToAdd);
         }
 
+        public void AddNewPreset(IPresetable preset)
+        {
+            _presetSettings.Add(preset);
+        }
+
         public void ExposeData()
         {
             Scribe_Collections.Look(ref _presetSettings, "presetSettings", LookMode.Deep);

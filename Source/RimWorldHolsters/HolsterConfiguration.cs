@@ -22,5 +22,15 @@ namespace Holsters
             Scribe_Values.Look(ref BodyOffset, "bodyOffset");
 
         }
+
+        public static HolsterConfiguration EmptyConfiguration => new HolsterConfiguration
+        {
+            Position = Vector3.zero,
+            Rotation = 0,
+            Size = 1,
+            IsFlipped = false,
+            IsAtFront = true,
+            BodyOffset = Vector3.zero
+        };
     }
 }

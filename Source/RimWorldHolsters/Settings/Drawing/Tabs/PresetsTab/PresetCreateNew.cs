@@ -1,4 +1,6 @@
-﻿using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
+﻿using Holsters.Settings;
+using Holsters.Settings.PresetsLoading;
+using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
 using SettingsDrawer.Sections;
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
 {
     internal class PresetCreateNew : Operation
     {
-        private string _groupName;
+        private string _presetName;
         private bool _isCleared;
 
         public PresetCreateNew(Rect area) : base(area)
@@ -23,12 +25,12 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
             if (_isCleared)
             {
                 _isCleared = false;
-                _groupName = "";
+                _presetName = "";
             }
 
             Section section = new Section(area, 4, 1);
 
-            TextEntry textEntry = new TextEntry(new Rect(0, 0, 3, 1), "New preset's name: ", _groupName);
+            TextEntry textEntry = new TextEntry(new Rect(0, 0, 3, 1), "New preset's name: ", _presetName);
             section.AddOperation(textEntry);
 
             Button button = new Button(new Rect(3, 0, 1, 1), "Create new", ButtonClick);
@@ -36,17 +38,19 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
 
             section.DrawOperations();
 
-            _groupName = textEntry.GetFieldText();
+            _presetName = textEntry.GetFieldText();
         }
 
         private void ButtonClick()
         {
-            if (_groupName.Equals(""))
-            {
+            if (_presetName.Equals(""))
                 return;
-            }
 
-            _groupName = "";
+            HolsterCustomPresetSetting newCustomPreset = new HolsterCustomPresetSetting(_presetName);
+
+            IR_HolstersSettings.AddNewSetting(newCustomPreset);
+
+            _presetName = "";
             _isCleared = true;
         }
     }

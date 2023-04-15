@@ -1,13 +1,6 @@
-﻿using Holsters.Utility.ModSettings.PresetsLoading;
-using SettingsDrawer.Sections;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SettingsDrawer.Sections;
 using UnityEngine;
 using Verse;
-using static UnityEngine.Scripting.GarbageCollector;
 
 namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
 {
@@ -28,7 +21,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
 
         public override void ExecuteOperation()
         {
-            HolsterConfiguration config = _tempConfig.Configuration[_rotation];//IR_HolstersSettings.GetHolsterConfigurationFor(_weaponDef, _rotation);
+            HolsterConfiguration config = _tempConfig.Configuration[_rotation];
 
             Vector2 offset = new Vector2(config.Position.x, -config.Position.z)/10;
 

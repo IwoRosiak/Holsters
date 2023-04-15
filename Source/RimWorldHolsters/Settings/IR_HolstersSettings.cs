@@ -57,6 +57,11 @@ namespace Holsters.Settings
             base.ExposeData();
         }
 
+        public static void AddNewSetting(IPresetable newSetting)
+        {
+            _presets.AddNewPreset(newSetting);
+        }
+
         public static HolsterConfiguration GetHolsterConfigurationFor(ThingDef def, Rot4 rot)
         {
             return GetConfiguration(def).Configuration[rot];
