@@ -2,7 +2,7 @@
 
 namespace SettingsDrawer.Sections
 {
-    internal abstract class Operation
+    public abstract class Operation
     {
         protected const int BUTTON_HEIGHT = 40;
         protected const int BUTTON_WIDTH = 180;

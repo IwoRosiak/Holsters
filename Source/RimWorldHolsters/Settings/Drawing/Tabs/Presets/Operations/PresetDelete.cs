@@ -1,10 +1,5 @@
 ﻿using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
 using SettingsDrawer.Sections;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
@@ -18,7 +13,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
         {
             Section section = new Section(area, 1, 1);
 
-            Button button = new Button(new Rect(0, 0, 1, 1), "Create new", ButtonClick);
+            Button button = new Button(new Rect(0, 0, 1, 1), "Delete", ButtonClick);
             section.AddOperation(button);
 
             section.DrawOperations();

@@ -1,7 +1,9 @@
 ﻿using Holsters.Settings;
 using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
+using RimWorldHolsters.Settings.Drawing;
 using SettingsDrawer.Sections;
 using UnityEngine;
+using Verse;
 
 namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
 {
@@ -41,7 +43,10 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
             HandlePositionButtons();
             section.AddOperation(_positionButtons);
 
-            section.AddOperation(new WeaponDrawer(new Rect(0, 0, 10, 10), _buttons.Rotation, TEMPDEFOF.Gun_BoltActionRifle, _currentlySelected.Preset));
+            ThingDef currentWeapon = SelectedEquipmentManager.CurrentlySelected;
+
+            if (currentWeapon != null)
+                section.AddOperation(new WeaponDrawer(new Rect(0, 0, 10, 10), _buttons.Rotation, currentWeapon, _currentlySelected.Preset));
 
             section.DrawOperations();
         }

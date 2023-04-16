@@ -1,4 +1,5 @@
 ﻿using Holsters.Settings;
+using Holsters.Settings.Drawing.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using Verse;
 
 namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
 {
-    internal class ScrollListSelector<T> : Selector where T : IPresetable
+    internal class ScrollListSelector<T> : Selector
     {
         private Vector2 _scrollVector = new Vector2();
 
@@ -26,7 +27,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
             _elementWidth = elementSize;
         }
 
-        internal void DrawSelection(Rect drawRect, ICollection<T> selection, string labelName) 
+        internal void DrawSelection(Rect drawRect, ICollection<SelectorPair<T>> selection, string labelName) 
         {
             Widgets.LabelFit(new Rect(drawRect.x, drawRect.y, drawRect.width, buttonHeight), labelName);
             Widgets.DrawLineHorizontal(drawRect.x, drawRect.y + (buttonHeight * 0.8f), smallButtonWidth + tinyButtonWidth);
@@ -34,9 +35,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
             DrawSelection(drawRect, selection);
         }
 
-        
-
-        internal void DrawSelection(Rect drawRect, ICollection<T> selection)
+        internal void DrawSelection(Rect drawRect, ICollection<SelectorPair<T>> selection)
         {
             Rect viewRect = GetViewRectSize(drawRect, selection);
             Rect scrollRect = GetScrollRectSize(drawRect, viewRect);
@@ -44,14 +43,14 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
   
             Widgets.BeginScrollView(scrollRect, ref _scrollVector, viewRect);
             
-            foreach (T selectionElement in selection)
+            foreach (SelectorPair<T> selectionElement in selection)
             {
                 int positionInSelection = selection.ToList().IndexOf(selectionElement);
                 Rect selectorPosition = new Rect(CalculatePosition(viewRect, positionInSelection), new Vector2(_elementWidth, buttonHeight));
 
                 ModSettingsUtilities.DrawButton(selectorPosition, selectionElement.Name.ToString(), () =>
                 {
-                    _selected = selectionElement;
+                    _selected = selectionElement.Selected;
                 });
             }
             Widgets.EndScrollView();
@@ -66,7 +65,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
             return _selected;
         }
 
-        protected virtual Rect GetViewRectSize(Rect drawRect, ICollection<T> selection)
+        protected virtual Rect GetViewRectSize(Rect drawRect, ICollection<SelectorPair<T>> selection)
         {
             return new Rect(drawRect.x, drawRect.y, smallButtonWidth + tinyButtonWidth * 2, buttonHeight * selection.Count);
         }

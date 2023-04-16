@@ -1,4 +1,5 @@
-﻿using Holsters.Utility.ModSettings.Settings_Drawing.Tabs;
+﻿using Holsters.Settings.Drawing.Tabs;
+using Holsters.Utility.ModSettings.Settings_Drawing.Tabs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,7 +1,9 @@
 ﻿using Holsters.Settings;
+using Holsters.Settings.Drawing.Utilities;
 using Holsters.Settings.PresetsLoading;
 using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie;
 using SettingsDrawer.Sections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -21,7 +23,11 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
 
         public override void ExecuteOperation()
         {
-            _listSelector.DrawSelection(area, IR_HolstersSettings.Holsters().ToList());
+            List<SelectorPair<IPresetable>> selectorPairs = IR_HolstersSettings.Holsters()
+                .Select(preset => new SelectorPair<IPresetable>(preset, preset.Name))
+                .ToList();
+
+            _listSelector.DrawSelection(area, selectorPairs);
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using Holsters.Settings;
+using Holsters.Settings.Drawing.Utilities;
 using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie;
 using System;
 using System.Collections.Generic;
@@ -7,9 +8,9 @@ using Verse;
 
 namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
 {
-    internal class HorizontalSpreadListSelector<T> : ScrollListSelector<T> where T : IPresetable
+    internal class HorizontalSpreadListSelector<T> : ScrollListSelector<T> 
     {
-        private int _elementsPerRow;
+        private readonly int _elementsPerRow;
 
         internal HorizontalSpreadListSelector(T defaultSelection, int elementsPerRow, float elementSize) : base(defaultSelection, elementSize)
         {
@@ -24,7 +25,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
 
         }
 
-        protected override Rect GetViewRectSize(Rect drawRect, ICollection<T> selection)
+        protected override Rect GetViewRectSize(Rect drawRect, ICollection<SelectorPair<T>> selection)
         {
             _elementWidth = drawRect.width / _elementsPerRow;
 
