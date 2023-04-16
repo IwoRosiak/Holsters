@@ -5,7 +5,7 @@ using Verse;
 
 namespace Holsters.Settings.Drawing.Tabs.Presets
 {
-    internal static class EquipmentChoiceTracker
+    internal static class PresetEquipmentChoiceTracker
     {
         private static ThingDef _currentEquipment;
 

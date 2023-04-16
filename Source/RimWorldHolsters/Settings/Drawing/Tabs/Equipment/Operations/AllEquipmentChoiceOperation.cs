@@ -1,5 +1,4 @@
-﻿using Holsters.Settings.Drawing.Tabs.Presets;
-using Holsters.Settings.Drawing.Utilities;
+﻿using Holsters.Settings.Drawing.Utilities;
 using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie;
 using SettingsDrawer.Sections;
 using System.Collections.Generic;
@@ -25,10 +24,13 @@ namespace Holsters.Settings.Drawing.Tabs.Equipment.Operations
         public override void ExecuteOperation()
         {
             List<SelectorPair<ThingDef>> selectorPairs = _loadedEquipment
-            .Select(preset => new SelectorPair<ThingDef>(preset, preset.defName))
-            .ToList();
+                .Select(preset => new SelectorPair<ThingDef>(preset, preset.defName))
+                .ToList();
 
             _listSelector.DrawSelection(area, selectorPairs);
+
+            _listSelector.OnSelected = null;
+            _listSelector.OnSelected += SelectedEquipmentTracker.UpdateSelection;
         }
     }
 }

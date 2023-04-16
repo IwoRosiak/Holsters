@@ -32,7 +32,8 @@ namespace Holsters.Settings.Drawing.Tabs.PresetsTab
 
             _listSelector.DrawSelection(area, selectorPairs);
 
-            _listSelector.OnSelected += EquipmentChoiceTracker.UpdateChoice;
+            _listSelector.OnSelected = null;
+            _listSelector.OnSelected += PresetEquipmentChoiceTracker.UpdateChoice;
 
         }
 

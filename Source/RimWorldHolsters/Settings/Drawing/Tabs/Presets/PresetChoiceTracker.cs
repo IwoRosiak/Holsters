@@ -10,7 +10,7 @@ namespace Holsters.Settings.Drawing.Tabs.Presets
         public static void UpdateChoice(IPresetable presetable)
         {
             CurrentPreset = presetable;
-            EquipmentChoiceTracker.UpdateChoice(null);
+            PresetEquipmentChoiceTracker.UpdateChoice(null);
         }
     }
 }

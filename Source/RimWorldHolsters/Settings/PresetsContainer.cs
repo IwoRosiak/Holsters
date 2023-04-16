@@ -23,10 +23,7 @@ namespace Holsters.Settings
                 bool isItAlreadyInAnyPreset = _presetSettings.Any(preset => preset.AssocciatedEquipment.Contains(thingDef));
 
                 if (isItAlreadyInAnyPreset == true)
-                {
-                    EquipmentLoader.SaveAsLoades(thingDef);
                     continue;
-                }
 
                 HolsterPresetDef def = EquipmentPresetSorter.SortWeaponsIntoGroups(thingDef);
 
@@ -36,8 +33,6 @@ namespace Holsters.Settings
 
                 IPresetable presetSetting = FindPresetSettingOf(def);
                 presetSetting.AssocciatedEquipment.Add(thingDef);
-
-                EquipmentLoader.SaveAsLoades(thingDef);
             }
         }
 

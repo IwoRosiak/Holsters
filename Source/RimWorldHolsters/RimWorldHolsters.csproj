@@ -66,7 +66,9 @@
   <ItemGroup>
     <Compile Include="BodyType.cs" />
     <Compile Include="Settings\Drawing\Tabs\Equipment\Operations\AllEquipmentChoiceOperation.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\EquipmentChoiceTracker.cs" />
+    <Compile Include="Settings\Drawing\Tabs\Equipment\Operations\SelectedEquipmentDisplayOperation.cs" />
+    <Compile Include="Settings\Drawing\Tabs\Equipment\SelectedEquipmentTracker.cs" />
+    <Compile Include="Settings\Drawing\Tabs\Presets\PresetEquipmentChoiceTracker.cs" />
     <Compile Include="Settings\Drawing\Tabs\Presets\Operations\PresetEquipmentChoice.cs" />
     <Compile Include="Settings\Drawing\Tabs\Presets\PresetChoiceTracker.cs" />
     <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\SelectorPair.cs" />

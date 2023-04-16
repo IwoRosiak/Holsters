@@ -33,6 +33,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
 
             _listSelector.DrawSelection(area, selectorPairs);
 
+            _listSelector.OnSelected = null;
             _listSelector.OnSelected += PresetChoiceTracker.UpdateChoice;
         }
 

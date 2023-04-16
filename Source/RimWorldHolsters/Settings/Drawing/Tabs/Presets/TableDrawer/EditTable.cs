@@ -44,7 +44,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
             HandlePositionButtons();
             section.AddOperation(_positionButtons);
 
-            ThingDef currentWeapon = EquipmentChoiceTracker.CurrentEquipment;
+            ThingDef currentWeapon = PresetEquipmentChoiceTracker.CurrentEquipment;
 
             if (currentWeapon != null)
                 section.AddOperation(new WeaponDrawer(new Rect(0, 0, 10, 10), _buttons.Rotation, currentWeapon, _currentlySelected.Preset));
