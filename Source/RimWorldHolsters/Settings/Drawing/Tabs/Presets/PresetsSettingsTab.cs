@@ -3,7 +3,7 @@ using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operatio
 using Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer;
 using Holsters.Utility.ModSettings.Settings_Drawing.Tabs;
 using Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab;
-using RimWorldHolsters.Settings.Drawing.Tabs.PresetsTab;
+using Holsters.Settings.Drawing.Tabs.PresetsTab;
 using UnityEngine;
 using Verse;
 
@@ -15,7 +15,7 @@ namespace Holsters.Settings.Drawing.Tabs
         private PresetNameChange _presetNameChange;
         private PresetCreateNew _presetCreateNew;
         private PresetCopy _presetCopy;
-        private PresetEquipmentChoice _presetEquipment;
+        private PresetEquipmentChoice _presetEquipmentChoice;
 
 
         private EditTable _table;
@@ -38,7 +38,8 @@ namespace Holsters.Settings.Drawing.Tabs
                 _presetNameChange = new PresetNameChange(new Rect(0, 2, 8, 1), _presetChoice);
                 _presetCreateNew = new PresetCreateNew(new Rect(0, 3, 8, 1));
                 _presetCopy = new PresetCopy(new Rect(0, 4, 8, 1), _presetChoice);
-                _presetEquipment = new PresetEquipmentChoice(new Rect(0, 4, 4, 8));
+
+                _presetEquipmentChoice = new PresetEquipmentChoice(new Rect(0, 6, 8, 8));
 
             }
         }
@@ -57,7 +58,8 @@ namespace Holsters.Settings.Drawing.Tabs
             section.AddOperation(_presetCopy);
 
             section.AddOperation(new Label(new Rect(0, 6, 8, 1), _presetChoice.Current.Preset.Configuration[Rot4.South].Position.ToString()));
-            section.AddOperation(_presetEquipment);
+
+            section.AddOperation(_presetEquipmentChoice);
 
             _table.UpdateSelection(_presetChoice.Current);
 

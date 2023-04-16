@@ -16,6 +16,8 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
 
         protected float _elementWidth;
 
+        public Action<T> OnSelected;
+
         internal ScrollListSelector(T defaultSelection, float elementSize)
         {
             _selected = defaultSelection;
@@ -51,6 +53,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
                 ModSettingsUtilities.DrawButton(selectorPosition, selectionElement.Name.ToString(), () =>
                 {
                     _selected = selectionElement.Selected;
+                    OnSelected?.Invoke(_selected);
                 });
             }
             Widgets.EndScrollView();

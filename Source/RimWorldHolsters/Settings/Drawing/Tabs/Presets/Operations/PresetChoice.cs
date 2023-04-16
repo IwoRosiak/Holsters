@@ -1,4 +1,5 @@
 ﻿using Holsters.Settings;
+using Holsters.Settings.Drawing.Tabs.Presets;
 using Holsters.Settings.Drawing.Utilities;
 using Holsters.Settings.PresetsLoading;
 using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie;
@@ -11,7 +12,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
 {
     internal class PresetChoice : Operation
     {
-        private ScrollListSelector<IPresetable> _listSelector;
+        private readonly ScrollListSelector<IPresetable> _listSelector;
 
 
         internal PresetChoice(Rect area) : base(area)
@@ -28,6 +29,8 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
                 .ToList();
 
             _listSelector.DrawSelection(area, selectorPairs);
+
+            _listSelector.OnSelected += PresetChoiceTracker.UpdateChoice;
         }
 
     }

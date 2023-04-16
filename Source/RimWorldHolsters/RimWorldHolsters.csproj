@@ -65,9 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BodyType.cs" />
-    <Compile Include="Settings\Drawing\SelectedEquipmentManager.cs" />
+    <Compile Include="Settings\Drawing\Tabs\Presets\EquipmentChoiceTracker.cs" />
     <Compile Include="Settings\Drawing\Tabs\Presets\Operations\PresetEquipmentChoice.cs" />
-    <Compile Include="Settings\Drawing\Utilities\Selectors\SelectorPair.cs" />
+    <Compile Include="Settings\Drawing\Tabs\Presets\PresetChoiceTracker.cs" />
+    <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\SelectorPair.cs" />
     <Compile Include="Settings\EquipmentLoader.cs" />
     <Compile Include="Settings\EquipmentPresetSorter.cs" />
     <Compile Include="Drawing\Comps\DrawEquipmentComp.cs" />
@@ -95,16 +96,16 @@
     <Compile Include="Settings\Drawing\Tabs\Presets\TableDrawer\PositionButtons.cs" />
     <Compile Include="Settings\Drawing\Tabs\Presets\TableDrawer\RotationButtons.cs" />
     <Compile Include="Settings\Drawing\Tabs\Presets\TableDrawer\WeaponDrawer.cs" />
-    <Compile Include="Settings\Drawing\Utilities\Selectors\ListSelectors\HorizontalSpreadListSelector.cs" />
-    <Compile Include="Settings\Drawing\Utilities\ModSettingsUtilities.cs" />
-    <Compile Include="Settings\Drawing\Utilities\Operations\Button.cs" />
-    <Compile Include="Settings\Drawing\Utilities\Operations\Image.cs" />
-    <Compile Include="Settings\Drawing\Utilities\Operations\Label.cs" />
-    <Compile Include="Settings\Drawing\Utilities\Operations\TextEntry.cs" />
-    <Compile Include="Settings\Drawing\Utilities\Selectors\ListSelectors\ScrollListSelector.cs" />
-    <Compile Include="Settings\Drawing\Utilities\Selectors\Selector.cs" />
-    <Compile Include="Settings\Drawing\Utilities\Undo\UndoManager.cs" />
-    <Compile Include="Settings\Drawing\Utilities\Selectors\ListSelectors\UnevenScrollListSelector.cs" />
+    <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\ListSelectors\HorizontalSpreadListSelector.cs" />
+    <Compile Include="Settings\ModSettingsTools\Utilities\ModSettingsUtilities.cs" />
+    <Compile Include="Settings\ModSettingsTools\Utilities\Operations\Button.cs" />
+    <Compile Include="Settings\ModSettingsTools\Utilities\Operations\Image.cs" />
+    <Compile Include="Settings\ModSettingsTools\Utilities\Operations\Label.cs" />
+    <Compile Include="Settings\ModSettingsTools\Utilities\Operations\TextEntry.cs" />
+    <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\ListSelectors\ScrollListSelector.cs" />
+    <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\Selector.cs" />
+    <Compile Include="Settings\ModSettingsTools\Utilities\Undo\UndoManager.cs" />
+    <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\ListSelectors\UnevenScrollListSelector.cs" />
     <Compile Include="Settings\ModSettingsTools\Operation.cs" />
     <Compile Include="Settings\ModSettingsTools\Section.cs" />
     <Compile Include="Settings\Drawing\Tabs\Presets\TableDrawer\EditTable.cs" />
