@@ -40,7 +40,6 @@ namespace Holsters.Settings.Drawing.Tabs
                 _presetCopy = new PresetCopy(new Rect(0, 4, 8, 1), _presetChoice);
 
                 _presetEquipmentChoice = new PresetEquipmentChoice(new Rect(0, 6, 8, 8));
-
             }
         }
 

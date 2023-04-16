@@ -1,4 +1,4 @@
-﻿using Holsters.Utility.ModSettings.Settings_Drawing;
+﻿using Holsters.Settings.Drawing;
 using UnityEngine;
 using Verse;
 
@@ -16,7 +16,7 @@ namespace Holsters.Settings
         public IR_HolstersMod(ModContentPack content) : base(content)
         {
             _settings = GetSettings<IR_HolstersSettings>();
-            _tabsManager = new TabsManager();
+            _tabsManager = new TabsManager(); // TODO: add here DI
         }
         public override string SettingsCategory()
         {

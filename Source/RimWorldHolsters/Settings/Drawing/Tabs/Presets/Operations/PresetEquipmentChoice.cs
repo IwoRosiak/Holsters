@@ -1,6 +1,10 @@
-﻿using Holsters.Settings.Drawing.Tabs.Presets;
+﻿using Holsters.Settings.Drawing.Tabs.Equipment.Operations;
+using Holsters.Settings.Drawing.Tabs.Presets;
 using Holsters.Settings.Drawing.Utilities;
 using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie;
+using Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer;
+using Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab;
+using RimWorld;
 using SettingsDrawer.Sections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +19,7 @@ namespace Holsters.Settings.Drawing.Tabs.PresetsTab
 
         public PresetEquipmentChoice(Rect area) : base(area)
         {
-            _listSelector = new ScrollListSelector<ThingDef>(50);
+            _listSelector = new ScrollListSelector<ThingDef>(BUTTON_WIDTH);
         }
 
         public override void ExecuteOperation()

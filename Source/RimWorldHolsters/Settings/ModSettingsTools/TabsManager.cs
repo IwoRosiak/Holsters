@@ -1,4 +1,5 @@
 ﻿using Holsters.Settings.Drawing.Tabs;
+using Holsters.Settings.Drawing.Tabs.Equipment;
 using Holsters.Utility.ModSettings.Settings_Drawing.Tabs;
 using System;
 using System.Collections.Generic;
@@ -9,15 +10,15 @@ using UnityEngine;
 using Verse;
 using TabDrawer = Holsters.Utility.ModSettings.Settings_Drawing.Tabs.TabDrawer;
 
-namespace Holsters.Utility.ModSettings.Settings_Drawing
+namespace Holsters.Settings.Drawing
 {
     internal class TabsManager
     {
-        private List<TabDrawer> _tabs = new List<TabDrawer>()
+        private readonly List<TabDrawer> _tabs = new List<TabDrawer>()
         {
             new GeneralSettingsTab(),
             new PresetsSettingsTab(),
-            new WeaponsSettingsTab()
+            new EquipmentTab()
         };
 
         private int _currentIndex = 1;
@@ -34,7 +35,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing
         {
             float width = rect.width / _tabs.Count;
 
-            foreach(TabDrawer tab in _tabs)
+            foreach (TabDrawer tab in _tabs)
             {
                 int tabIndex = _tabs.IndexOf(tab);
 
