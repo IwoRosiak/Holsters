@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Verse;
 
 namespace Holsters.Settings
@@ -8,6 +9,8 @@ namespace Holsters.Settings
         string Name { get; set; }
 
         HolsterPreset Preset { get; }
+
+        List<ThingDef> AssocciatedEquipment { get; set; }
 
         void ModifyProperty(Action<HolsterConfiguration> modification, Rot4 rotation);
 

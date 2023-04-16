@@ -7,11 +7,24 @@ namespace Holsters.Settings.Drawing.Tabs.Presets
 {
     internal static class EquipmentChoiceTracker
     {
-        public static ThingDef CurrentEquipment { get; private set; }
+        private static ThingDef _currentEquipment;
+
+        public static ThingDef CurrentEquipment 
+        { 
+            get 
+            {
+                if (_currentEquipment == null)
+                    return null;
+
+                return _currentEquipment;
+            }
+            
+            private set => _currentEquipment = value; 
+        }
 
         public static void UpdateChoice(ThingDef equipment)
         {
-            CurrentEquipment = equipment;
+            _currentEquipment = equipment;
         }
     }
     

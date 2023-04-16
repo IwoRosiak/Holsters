@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Verse;
 
 namespace Holsters.Settings.PresetsLoading
@@ -8,6 +9,8 @@ namespace Holsters.Settings.PresetsLoading
         private HolsterPreset _preset;
 
         private string _presetName;
+
+        private List<ThingDef> _assocciatedEquipment = new List<ThingDef>();
 
         public HolsterCustomPresetSetting() { }
 
@@ -33,6 +36,7 @@ namespace Holsters.Settings.PresetsLoading
         public HolsterPreset Preset => _preset;
 
         public string Name { get => _presetName; set => _presetName = value; }
+        public List<ThingDef> AssocciatedEquipment { get => _assocciatedEquipment; set => _assocciatedEquipment = value; }
 
         public void ExposeData()
         {

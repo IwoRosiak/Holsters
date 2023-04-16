@@ -37,6 +37,8 @@ namespace Holsters.Settings
                 _presets.AddLoadedDefs(presetables);
                 Log.Message("Holsters: loaded presets");
             }
+
+            _presets.AddLoadedEquipment(EquipmentLoader.LoadEquipment());
         }
 
         public static IEnumerable<IPresetable> Holsters()

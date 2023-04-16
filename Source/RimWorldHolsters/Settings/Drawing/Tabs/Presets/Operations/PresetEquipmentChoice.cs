@@ -13,16 +13,16 @@ namespace Holsters.Settings.Drawing.Tabs.PresetsTab
     {
         private readonly ScrollListSelector<ThingDef> _listSelector;
 
-        private readonly List<ThingDef> _defs;
         public PresetEquipmentChoice(Rect area) : base(area)
         {
-            _defs = EquipmentLoader.LoadEquipment();
-            _listSelector = new ScrollListSelector<ThingDef>(_defs[0], 50);
+            _listSelector = new ScrollListSelector<ThingDef>(50);
         }
 
         public override void ExecuteOperation()
         {
-            List<SelectorPair<ThingDef>> selectorPairs = _defs
+            IPresetable currentPreset = PresetChoiceTracker.CurrentPreset;
+
+            List<SelectorPair<ThingDef>> selectorPairs = currentPreset.AssocciatedEquipment
             .Select(preset => new SelectorPair<ThingDef>(preset, preset.defName))
             .ToList();
 

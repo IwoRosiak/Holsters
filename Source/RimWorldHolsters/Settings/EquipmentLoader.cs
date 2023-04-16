@@ -13,7 +13,7 @@ namespace Holsters.Settings
         {
             List<ThingDef> defs = GenDefDatabase.GetAllDefsInDatabaseForDef(typeof(ThingDef)).Cast<ThingDef>().ToList();
 
-            return new List<ThingDef>() { defs[0], defs[1], defs[2], defs[3], defs[4] };
+            return defs;
         }
         
     }

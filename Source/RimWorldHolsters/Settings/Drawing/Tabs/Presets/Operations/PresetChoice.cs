@@ -24,6 +24,9 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
 
         public override void ExecuteOperation()
         {
+            if (PresetChoiceTracker.CurrentPreset == null)
+                PresetChoiceTracker.UpdateChoice(IR_HolstersSettings.Holsters().ToList()[0]);
+
             List<SelectorPair<IPresetable>> selectorPairs = IR_HolstersSettings.Holsters()
                 .Select(preset => new SelectorPair<IPresetable>(preset, preset.Name))
                 .ToList();

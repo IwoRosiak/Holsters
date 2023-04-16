@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Holsters.Settings.PresetsLoading;
+using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
@@ -15,6 +16,26 @@ namespace Holsters.Settings
             _presetSettings = presetSettings;
         }
 
+        public void AddLoadedEquipment(List<ThingDef> equipment)
+        {
+            foreach (ThingDef thingDef in equipment)
+            {
+                bool isItAlreadyInAnyPreset = _presetSettings.Any(preset => preset.AssocciatedEquipment.Contains(thingDef));
+
+                if (isItAlreadyInAnyPreset == true)
+                    continue;
+
+                HolsterPresetDef def = EquipmentPresetSorter.SortWeaponsIntoGroups(thingDef);
+
+                if (def == null)
+                    continue;
+
+
+                IPresetable presetSetting = FindPresetSettingOf(def);
+                presetSetting.AssocciatedEquipment.Add(thingDef);
+            }
+        }
+
         public void AddLoadedDefs(List<IPresetable> presetables)
         {
             if (_presetSettings.NullOrEmpty() == true)
@@ -25,6 +46,11 @@ namespace Holsters.Settings
                 .ToList();
 
             _presetSettings.AddRange(presetsToAdd);
+        }
+
+        public IPresetable FindPresetSettingOf(HolsterPresetDef preset)
+        {
+            return _presetSettings.Single(setting => setting is HolsterDefPresetSetting defSetting && defSetting.BasedOn == preset.defName);
         }
 
         public void AddNewPreset(IPresetable preset)

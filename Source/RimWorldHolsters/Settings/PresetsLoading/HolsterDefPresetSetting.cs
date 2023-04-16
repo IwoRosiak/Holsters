@@ -12,6 +12,8 @@ namespace Holsters.Settings.PresetsLoading
 
         private string _presetName;
 
+        private List<ThingDef> _assocciatedEquipment = new List<ThingDef>();
+
         public HolsterDefPresetSetting() { }
 
         public HolsterDefPresetSetting(HolsterPresetDef presetToBaseOn)
@@ -32,9 +34,12 @@ namespace Holsters.Settings.PresetsLoading
             }
         }
 
+        public string BasedOn => _basedOn;
+
         private HolsterPresetDef Def => (HolsterPresetDef)GenDefDatabase.GetDef(typeof(HolsterPresetDef), _basedOn);
 
         public string Name { get => _presetName; set => _presetName = value; }
+        public List<ThingDef> AssocciatedEquipment { get => _assocciatedEquipment; set => _assocciatedEquipment = value; }
 
         public void ExposeData()
         {
