@@ -33,6 +33,8 @@ namespace Holsters.Settings
 
                 IPresetable presetSetting = FindPresetSettingOf(def);
                 presetSetting.AssocciatedEquipment.Add(thingDef);
+
+                EquipmentLoader.SaveAsLoades(thingDef);
             }
         }
 
