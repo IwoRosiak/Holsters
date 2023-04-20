@@ -57,10 +57,6 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
                 });
             }
             Widgets.EndScrollView();
-            
-             
-
-
         }
 
         internal T GetSelected()

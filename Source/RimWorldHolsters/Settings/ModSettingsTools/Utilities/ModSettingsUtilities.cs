@@ -30,5 +30,10 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing
                 action.Invoke();
             }
         }
+
+        public static void DrawTick(Rect rect, ref bool onTick)
+        {
+            Widgets.Checkbox(new Vector2(rect.x, rect.y), ref onTick);
+        }
     }
 }

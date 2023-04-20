@@ -12,8 +12,12 @@ namespace Holsters.Settings.Drawing.Tabs.Equipment
 
         public static void UpdateSelection(ThingDef equipment)
         {
-            _selectedEquipment.Clear();
             _selectedEquipment.Add(equipment);
+        }
+
+        public static void RemoveSelection(ThingDef equipment)
+        {
+            _selectedEquipment.Remove(equipment);
         }
     }
 }

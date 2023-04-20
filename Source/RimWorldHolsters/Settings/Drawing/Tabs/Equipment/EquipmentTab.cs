@@ -14,7 +14,7 @@ namespace Holsters.Settings.Drawing.Tabs.Equipment
         {
             if (_allEquipmentOperation == null)
             {
-                _allEquipmentOperation = new AllEquipmentChoiceOperation(new Rect(1, 1, 8, 13));
+                _allEquipmentOperation = new AllEquipmentChoiceOperation(new Rect(1, 1, 8, 17));
                 _displaySelected = new SelectedEquipmentDisplayOperation(new Rect(12, 1, 9, 6));
                 _allPresetsOperation = new AllPresetsChoiceOperation(new Rect(12, 6, 9, 6));
             }
