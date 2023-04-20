@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RimWorldHolsters.Settings.ModSettingsTools.Utilities.Selectors.ListTickSelectors
 {
-    public class TickSelectorPair<T>
+    public sealed class TickSelectorPair<T>
     {
         public bool IsSelected;
 

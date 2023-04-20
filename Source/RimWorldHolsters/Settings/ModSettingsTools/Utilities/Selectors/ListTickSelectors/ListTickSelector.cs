@@ -7,16 +7,17 @@ using UnityEngine;
 using Verse;
 using System.Linq;
 using RimWorldHolsters.Settings.ModSettingsTools.Utilities.Selectors.ListTickSelectors;
+using Holsters.Settings.ModSettingsTools.Utilities.Selectors.Builders;
 
 namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors.ListTickSelectors
 {
     internal class ListTickSelector<T> : Selector
     {
-        private Vector2 _scrollVector = new Vector2();
-
         protected T _selected;
 
         protected float _elementWidth;
+
+        private readonly VerticalBuilder<TickSelectorPair<T>> _builder = new VerticalBuilder<TickSelectorPair<T>>();
 
         public Action<T> OnSelected;
         public Action<T> OnDeselected;
@@ -36,40 +37,35 @@ namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors.ListTickSelecto
 
         internal void DrawSelection(Rect drawRect, ICollection<TickSelectorPair<T>> selection)
         {
-            Rect viewRect = GetViewRectSize(drawRect, selection);
-            Rect scrollRect = GetScrollRectSize(drawRect, viewRect);
+            Action<Rect, TickSelectorPair<T>> drawElement = AssembleElement;
+
+            _builder.BuildSelector(drawRect,selection.ToList(), _elementWidth, drawElement);
+        }
 
 
-            Widgets.BeginScrollView(scrollRect, ref _scrollVector, viewRect);
+        private void AssembleElement(Rect rect, TickSelectorPair<T> selectedElement)
+        {
+            Rect selectorPosition = new Rect(rect.position, new Vector2(rect.size.x - 24, rect.size.y));
+            ModSettingsUtilities.DrawButton(selectorPosition, selectedElement.Name.ToString(), () => { });
 
-            foreach (TickSelectorPair<T> selectionElement in selection)
+            Vector2 posDiff = (selectorPosition.position + new Vector2(_elementWidth - 24, 0)) + new Vector2(0, 6);
+
+            bool valueBefore = selectedElement.IsSelected;
+
+            Rect checkboxRect = new Rect(posDiff, new Vector2(_elementWidth, buttonHeight));
+            ModSettingsUtilities.DrawTick(checkboxRect, ref selectedElement.IsSelected);
+
+            if (valueBefore != selectedElement.IsSelected)
             {
-                int positionInSelection = selection.ToList().IndexOf(selectionElement);
-
-                Vector2 position = CalculatePosition(viewRect, positionInSelection);
-                Rect selectorPosition = new Rect(position, new Vector2(_elementWidth - 24, buttonHeight));
-                ModSettingsUtilities.DrawButton(selectorPosition, selectionElement.Name.ToString(), () => { });
-
-                Vector2 posDiff = (selectorPosition.position + new Vector2(_elementWidth - 24, 0)) + new Vector2(0, 6);
-
-                bool valueBefore = selectionElement.IsSelected;
-
-                Rect checkboxRect = new Rect(posDiff, new Vector2(_elementWidth, buttonHeight));
-                ModSettingsUtilities.DrawTick(checkboxRect, ref selectionElement.IsSelected);
-
-                if (valueBefore != selectionElement.IsSelected)
+                if (selectedElement.IsSelected == false)
                 {
-                    if (selectionElement.IsSelected == false)
-                    {
-                        OnDeselected?.Invoke(selectionElement.Selected);
-                    }
-                    else
-                    {
-                        OnSelected?.Invoke(selectionElement.Selected);
-                    }
-                } 
+                    OnDeselected?.Invoke(selectedElement.Selected);
+                }
+                else
+                {
+                    OnSelected?.Invoke(selectedElement.Selected);
+                }
             }
-            Widgets.EndScrollView();
         }
 
         internal T GetSelected()
@@ -77,26 +73,6 @@ namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors.ListTickSelecto
             return _selected;
         }
 
-        protected virtual Rect GetViewRectSize(Rect drawRect, ICollection<TickSelectorPair<T>> selection)
-        {
-            return new Rect(drawRect.x, drawRect.y, smallButtonWidth + tinyButtonWidth * 2, buttonHeight * selection.Count);
-        }
 
-        protected virtual Rect GetScrollRectSize(Rect drawRect, Rect viewRect)
-        {
-            Rect scrollRect = viewRect;
-            scrollRect.width += sliderWidth;
-            scrollRect.height = drawRect.height - buttonHeight;
-
-            return scrollRect;
-        }
-
-        protected virtual Vector2 CalculatePosition(Rect drawRect, int positionInSelection)
-        {
-            Vector2 position = drawRect.position;
-            position.y += positionInSelection * buttonHeight;
-
-            return position;
-        }
     }
 }

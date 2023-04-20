@@ -73,6 +73,9 @@
     <Compile Include="Settings\Drawing\Tabs\Presets\PresetEquipmentChoiceTracker.cs" />
     <Compile Include="Settings\Drawing\Tabs\Presets\Operations\PresetEquipmentChoice.cs" />
     <Compile Include="Settings\Drawing\Tabs\Presets\PresetChoiceTracker.cs" />
+    <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\Builders\HorizontalSpreadBuilder.cs" />
+    <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\Builders\VerticalBuilder.cs" />
+    <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\ISelectorBuilder.cs" />
     <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\ListTickSelectors\ListTickSelector.cs" />
     <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\ListTickSelectors\TickSelectorPair.cs" />
     <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\SelectorPair.cs" />
