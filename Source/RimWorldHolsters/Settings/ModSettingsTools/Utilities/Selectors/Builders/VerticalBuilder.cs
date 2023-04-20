@@ -1,6 +1,4 @@
-﻿using RimWorldHolsters.Settings.ModSettingsTools.Utilities.Selectors.ListTickSelectors;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -41,12 +39,12 @@ namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors.Builders
             Widgets.EndScrollView();
         }
 
-        protected Rect GetViewRectSize(Rect drawRect, List<T> selection)
+        private Rect GetViewRectSize(Rect drawRect, List<T> selection)
         {
             return new Rect(drawRect.x, drawRect.y, smallButtonWidth + tinyButtonWidth * 2, buttonHeight * selection.Count);
         }
 
-        protected Rect GetScrollRectSize(Rect drawRect, Rect viewRect)
+        private Rect GetScrollRectSize(Rect drawRect, Rect viewRect)
         {
             Rect scrollRect = viewRect;
             scrollRect.width += sliderWidth;
@@ -55,7 +53,7 @@ namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors.Builders
             return scrollRect;
         }
 
-        protected Vector2 CalculatePosition(Rect drawRect, int positionInSelection)
+        private Vector2 CalculatePosition(Rect drawRect, int positionInSelection)
         {
             Vector2 position = drawRect.position;
             position.y += positionInSelection * buttonHeight;

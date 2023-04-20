@@ -115,7 +115,6 @@
     <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\ListSelectors\ScrollListSelector.cs" />
     <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\Selector.cs" />
     <Compile Include="Settings\ModSettingsTools\Utilities\Undo\UndoManager.cs" />
-    <Compile Include="Settings\ModSettingsTools\Utilities\Selectors\ListSelectors\UnevenScrollListSelector.cs" />
     <Compile Include="Settings\ModSettingsTools\Operation.cs" />
     <Compile Include="Settings\ModSettingsTools\Section.cs" />
     <Compile Include="Settings\Drawing\Tabs\Presets\TableDrawer\EditTable.cs" />
