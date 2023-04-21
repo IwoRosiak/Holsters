@@ -1,5 +1,6 @@
 ﻿using Holsters.Settings.Drawing.Tabs.Presets;
 using Holsters.Settings.Drawing.Utilities;
+using Holsters.Settings.ModSettingsTools.Utilities.Selectors.Builders;
 using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie;
 using SettingsDrawer.Sections;
 using System.Collections.Generic;
@@ -11,14 +12,13 @@ namespace Holsters.Settings.Drawing.Tabs.Equipment.Operations
 {
     internal sealed class AllPresetsChoiceOperation : Operation
     {
-        private readonly ScrollListSelector<IPresetable> _listSelector;
+        private readonly ClickSelector<IPresetable> _listSelector;
 
         internal AllPresetsChoiceOperation(Rect area) : base(area)
         {
-            _listSelector = new ScrollListSelector<IPresetable>(IR_HolstersSettings.Holsters().ToList()[0], BUTTON_WIDTH);
+            IPresetable defaultChoice = IR_HolstersSettings.Holsters().ToList()[0];
+            _listSelector = new ClickSelector<IPresetable>(BUTTON_WIDTH, new VerticalBuilder<SelectorPair<IPresetable>>(), defaultChoice);
         }
-
-        public IPresetable Current => _listSelector.GetSelected();
 
         public override void ExecuteOperation()
         {

@@ -1,20 +1,21 @@
 ﻿using Holsters.Settings.Drawing.Utilities;
 using Holsters.Settings.ModSettingsTools.Utilities.Selectors.ListTickSelectors;
 using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie;
-using RimWorldHolsters.Settings.ModSettingsTools.Utilities.Selectors.ListTickSelectors;
+using Holsters.Settings.ModSettingsTools.Utilities.Selectors.ListTickSelectors;
 using SettingsDrawer.Sections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Verse;
+using Holsters.Settings.ModSettingsTools.Utilities.Selectors.Builders;
 
 namespace Holsters.Settings.Drawing.Tabs.Equipment.Operations
 {
     internal sealed class AllEquipmentChoiceOperation : Operation
     {
-        private readonly ListTickSelector<ThingDef> _listSelector;
+        private readonly CheckboxSelector<ThingDef> _listSelector;
 
-        private readonly List<TickSelectorPair<ThingDef>> _selectorPairs;
+        private readonly List<SelectorPair<ThingDef>> _selectorPairs;
 
         public AllEquipmentChoiceOperation(Rect area) : base(area)
         {
@@ -23,10 +24,10 @@ namespace Holsters.Settings.Drawing.Tabs.Equipment.Operations
                 .ToList();
 
             _selectorPairs = loadedEquipment
-                .Select(preset => new TickSelectorPair<ThingDef>(preset, preset.defName))
+                .Select(preset => new SelectorPair<ThingDef>(preset, preset.defName))
                 .ToList();
 
-            _listSelector = new ListTickSelector<ThingDef>(BUTTON_WIDTH);
+            _listSelector = new CheckboxSelector<ThingDef>(BUTTON_WIDTH, new VerticalBuilder<SelectorPair<ThingDef>>());
         }
 
         public override void ExecuteOperation()

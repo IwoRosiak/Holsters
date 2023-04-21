@@ -6,16 +6,8 @@ using Verse;
 
 namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors.Builders
 {
-    public sealed class VerticalBuilder<T> : ISelectorBuilder<T>
+    public sealed class VerticalBuilder<T> : Builder, ISelectorBuilder<T>
     {
-        protected const int buttonHeight = 40;
-        protected const int buttonWidth = 180;
-        protected const int mediumButtonWidth = 120;
-        protected const int smallButtonWidth = 90;
-        protected const int tinyButtonWidth = 45;
-        protected const int weaponScale = 3;
-        protected const int sliderWidth = 16;
-
         private Vector2 _scrollVector = new Vector2();
 
         public void BuildSelector(Rect size, List<T> selection, float sizeE, Action<Rect, T> onBuilt)

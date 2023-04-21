@@ -1,30 +1,20 @@
-﻿using Holsters.Settings.ModSettingsTools.Utilities.Selectors;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace RimWorldHolsters.Settings.ModSettingsTools.Utilities.Selectors.Builders
+namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors.Builders
 {
-    public sealed class HorizontalSpreadBuilder<T> : ISelectorBuilder<T>
+    public sealed class HorizontalBuilder<T> : Builder, ISelectorBuilder<T>
     {
-        protected const int buttonHeight = 40;
-        protected const int buttonWidth = 180;
-        protected const int mediumButtonWidth = 120;
-        protected const int smallButtonWidth = 90;
-        protected const int tinyButtonWidth = 45;
-        protected const int weaponScale = 3;
-        protected const int sliderWidth = 16;
-
         private Vector2 _scrollVector = new Vector2();
 
         private float _elementWidth;
 
-        private int _elementsPerRow;
+        private readonly int _elementsPerRow;
 
-        public HorizontalSpreadBuilder( int elementsPerRow)
+        public HorizontalBuilder(int elementsPerRow)
         {
             _elementsPerRow = elementsPerRow;
         }
@@ -44,7 +34,7 @@ namespace RimWorldHolsters.Settings.ModSettingsTools.Utilities.Selectors.Builder
 
 
                 Vector2 position = CalculatePosition(viewRect, positionInSelection);
-                Rect selectorPosition = new Rect(position, new Vector2(sizeE, buttonHeight));
+                Rect selectorPosition = new Rect(position, new Vector2(_elementWidth, buttonHeight));
 
                 onBuilt?.Invoke(selectorPosition, selectionElement);
             }
