@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Holsters.Settings.Drawing.Tabs.Equipment.Operations
+namespace Holsters.Settings.Drawing.Equipment.Operations
 {
     internal sealed class AllPresetsChoiceOperation : Operation
     {

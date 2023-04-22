@@ -7,7 +7,7 @@ using ModSettingsTools.Selection;
 using ModSettingsTools.Selection.Selectors;
 using ModSettingsTools.Selection.Builders;
 
-namespace Holsters.Settings.Drawing.Tabs.Equipment.Operations
+namespace Holsters.Settings.Drawing.Equipment.Operations
 {
     internal sealed class AllEquipmentChoiceOperation : Operation
     {

@@ -65,14 +65,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BodyType.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Equipment\Operations\AllEquipmentChoiceOperation.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Equipment\Operations\AllPresetsChoiceOperation.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Equipment\Operations\SelectedEquipmentDisplayOperation.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Equipment\SelectedPresetTracker.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Equipment\SelectedEquipmentTracker.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\PresetEquipmentChoiceTracker.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\Operations\PresetEquipmentChoice.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\PresetChoiceTracker.cs" />
+    <Compile Include="Settings\Drawing\Equipment\Operations\AllEquipmentChoiceOperation.cs" />
+    <Compile Include="Settings\Drawing\Equipment\Operations\AllPresetsChoiceOperation.cs" />
+    <Compile Include="Settings\Drawing\Equipment\Operations\SelectedEquipmentDisplayOperation.cs" />
+    <Compile Include="Settings\Drawing\Equipment\SelectedPresetTracker.cs" />
+    <Compile Include="Settings\Drawing\Equipment\SelectedEquipmentTracker.cs" />
+    <Compile Include="Settings\Drawing\Presets\PresetEquipmentChoiceTracker.cs" />
+    <Compile Include="Settings\Drawing\Presets\Operations\PresetEquipmentChoice.cs" />
+    <Compile Include="Settings\Drawing\Presets\PresetChoiceTracker.cs" />
     <Compile Include="ModSettingsTools\Selection\Builders\Builder.cs" />
     <Compile Include="ModSettingsTools\Selection\Builders\HorizontalBuilder.cs" />
     <Compile Include="ModSettingsTools\Selection\Builders\VerticalBuilder.cs" />
@@ -102,10 +102,10 @@
     <Compile Include="Settings\IPresetable.cs" />
     <Compile Include="Settings\PresetDefLoader.cs" />
     <Compile Include="Settings\PresetsLoading\HolsterCustomPresetSetting.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\TableDrawer\PawnDrawer.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\TableDrawer\PositionButtons.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\TableDrawer\RotationButtons.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\TableDrawer\WeaponDrawer.cs" />
+    <Compile Include="Settings\Drawing\Presets\TableDrawer\PawnDrawer.cs" />
+    <Compile Include="Settings\Drawing\Presets\TableDrawer\PositionButtons.cs" />
+    <Compile Include="Settings\Drawing\Presets\TableDrawer\RotationButtons.cs" />
+    <Compile Include="Settings\Drawing\Presets\TableDrawer\WeaponDrawer.cs" />
     <Compile Include="ModSettingsTools\ModSettingsUtilities.cs" />
     <Compile Include="ModSettingsTools\Operations\Button.cs" />
     <Compile Include="ModSettingsTools\Operations\Image.cs" />
@@ -115,17 +115,17 @@
     <Compile Include="ModSettingsTools\Selection\Selector.cs" />
     <Compile Include="ModSettingsTools\Operation.cs" />
     <Compile Include="ModSettingsTools\Section.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\TableDrawer\EditTable.cs" />
-    <Compile Include="Settings\Drawing\Tabs\General\GeneralSettingsTab.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\Operations\PresetChoice.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\Operations\PresetCopy.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\Operations\PresetCreateNew.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\Operations\PresetDelete.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\Operations\PresetNameChange.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Presets\PresetsSettingsTab.cs" />
+    <Compile Include="Settings\Drawing\Presets\TableDrawer\EditTable.cs" />
+    <Compile Include="Settings\Drawing\General\GeneralSettingsTab.cs" />
+    <Compile Include="Settings\Drawing\Presets\Operations\PresetChoice.cs" />
+    <Compile Include="Settings\Drawing\Presets\Operations\PresetCopy.cs" />
+    <Compile Include="Settings\Drawing\Presets\Operations\PresetCreateNew.cs" />
+    <Compile Include="Settings\Drawing\Presets\Operations\PresetDelete.cs" />
+    <Compile Include="Settings\Drawing\Presets\Operations\PresetNameChange.cs" />
+    <Compile Include="Settings\Drawing\Presets\PresetsSettingsTab.cs" />
     <Compile Include="ModSettingsTools\TabDrawer.cs" />
     <Compile Include="ModSettingsTools\TabsManager.cs" />
-    <Compile Include="Settings\Drawing\Tabs\Equipment\EquipmentTab.cs" />
+    <Compile Include="Settings\Drawing\Equipment\EquipmentTab.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

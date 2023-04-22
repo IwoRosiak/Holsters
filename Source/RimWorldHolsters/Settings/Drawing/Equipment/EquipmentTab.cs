@@ -1,9 +1,9 @@
-﻿using Holsters.Settings.Drawing.Tabs.Equipment.Operations;
+﻿using Holsters.Settings.Drawing.Equipment.Operations;
 using ModSettingsTools;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Holsters.Settings.Drawing.Tabs.Equipment
+namespace Holsters.Settings.Drawing.Equipment
 {
     internal sealed class EquipmentTab : TabDrawer
     {

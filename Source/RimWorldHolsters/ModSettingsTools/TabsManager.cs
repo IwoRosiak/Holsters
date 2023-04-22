@@ -1,5 +1,5 @@
 ﻿using Holsters.Settings.Drawing.Tabs;
-using Holsters.Settings.Drawing.Tabs.Equipment;
+using Holsters.Settings.Drawing.Equipment;
 using Holsters.Utility.ModSettings.Settings_Drawing.Tabs;
 using System.Collections.Generic;
 using UnityEngine;

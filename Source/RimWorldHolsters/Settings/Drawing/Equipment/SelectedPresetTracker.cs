@@ -1,6 +1,4 @@
-﻿using Holsters.Settings.Drawing.Tabs.Presets;
-
-namespace Holsters.Settings.Drawing.Tabs.Equipment
+﻿namespace Holsters.Settings.Drawing.Equipment
 {
     internal static class SelectedPresetTracker
     {

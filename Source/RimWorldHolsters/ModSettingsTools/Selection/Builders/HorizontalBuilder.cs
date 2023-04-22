@@ -48,7 +48,8 @@ namespace ModSettingsTools.Selection.Builders
             _elementWidth = drawRect.width / _elementsPerRow;
 
             int timesButtonCanFit = Mathf.FloorToInt(drawRect.width / _elementWidth);
-            int selectionCountModulo = Mathf.CeilToInt(selection.Count / timesButtonCanFit);
+
+            int selectionCountModulo = Mathf.CeilToInt((float)selection.Count / timesButtonCanFit);
 
             Rect viewRect = new Rect(drawRect.x, drawRect.y, timesButtonCanFit * _elementWidth, buttonHeight * selectionCountModulo);
 

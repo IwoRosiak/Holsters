@@ -2,9 +2,9 @@
 using UnityEngine;
 using Verse;
 
-namespace Holsters.Settings.Drawing.Tabs.Equipment
+namespace Holsters.Settings.Drawing.Equipment
 {
-    internal static class SelectedEquipmentTracker 
+    internal static class SelectedEquipmentTracker
     {
         private static readonly List<ThingDef> _selectedEquipment = new List<ThingDef>();
 
