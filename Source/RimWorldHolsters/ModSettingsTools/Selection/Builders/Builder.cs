@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using UnityEngine;
-
-namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors.Builders
+﻿namespace ModSettingsTools.Selection.Builders
 {
-    public abstract class Builder 
+    public abstract class Builder
     {
         protected const int buttonHeight = 40;
         protected const int buttonWidth = 180;

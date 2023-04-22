@@ -1,10 +1,9 @@
 ﻿using Holsters.Settings;
-using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
-using Holsters.Settings.Drawing;
-using SettingsDrawer.Sections;
 using UnityEngine;
 using Verse;
 using Holsters.Settings.Drawing.Tabs.Presets;
+using ModSettingsTools;
+using ModSettingsTools.Operations;
 
 namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
 {
@@ -34,7 +33,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
 
         public override void ExecuteOperation()
         {
-            Section section = new Section(area, 10, 10);
+            ModSettingsTools.Section section = new ModSettingsTools.Section(area, 10, 10);
 
             section.AddOperation(new Image(new Rect(0, 0, 10, 10), IR_Textures.backgroundPawn));
             section.AddOperation(_buttons);

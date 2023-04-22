@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace Holsters.Utility.ModSettings.Settings_Drawing
+namespace ModSettingsTools
 {
     internal static class ModSettingsUtilities
     {
-        internal static float PixelRatio = 96;
+        internal static readonly float PixelRatio = 96;
 
         public static void DrawLine(ref Rect rect, string lineName)
         {

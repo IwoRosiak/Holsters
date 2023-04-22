@@ -1,12 +1,10 @@
-﻿using Holsters.Settings.Drawing.Utilities;
-using Holsters.Settings.ModSettingsTools.Utilities.Selectors;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
+namespace ModSettingsTools.Selection
 {
     public abstract class Selector<T>
     {
@@ -37,7 +35,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
         public void DrawSelection(Rect drawRect, ICollection<SelectorPair<T>> selection, string labelName)
         {
             Widgets.LabelFit(new Rect(drawRect.x, drawRect.y, drawRect.width, buttonHeight), labelName);
-            Widgets.DrawLineHorizontal(drawRect.x, drawRect.y + (buttonHeight * 0.8f), smallButtonWidth + tinyButtonWidth);
+            Widgets.DrawLineHorizontal(drawRect.x, drawRect.y + buttonHeight * 0.8f, smallButtonWidth + tinyButtonWidth);
 
             DrawSelection(drawRect, selection);
         }

@@ -1,9 +1,8 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors
+namespace ModSettingsTools.Selection
 {
     public interface ISelectorBuilder<T>
     {

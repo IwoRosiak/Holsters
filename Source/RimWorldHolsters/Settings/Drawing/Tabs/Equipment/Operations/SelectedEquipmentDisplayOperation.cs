@@ -1,5 +1,5 @@
 ﻿using Holsters.Utility.ModSettings.Settings_Drawing;
-using SettingsDrawer.Sections;
+using ModSettingsTools;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,11 +31,7 @@ namespace Holsters.Settings.Drawing.Tabs.Equipment.Operations
             Texture text = def.graphic.MatNorth.mainTexture;
             float scale = (((1 / def.uiIconScale) / (text.width / 64)) * 1.35f * def.graphic.drawSize.x) ;
 
-            //Widgets.DrawTextureRotated(rect.center + (offset * pixelRatio), text, IR_WeaponData.GetWeaponAngle(GetCurGroup()sIndex, currentDir), scale);
-
             Vector2 center =  area.center;
-
-            Log.Message("Hello");
 
             Widgets.DrawTextureRotated(new Rect(center.x - scale / 2f, center.y - scale / 2f, 200, 200), text, 0);
         }

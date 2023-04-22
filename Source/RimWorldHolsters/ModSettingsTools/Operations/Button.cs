@@ -1,10 +1,9 @@
-﻿using SettingsDrawer.Sections;
-using System;
+﻿using System;
 using UnityEngine;
 
-namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations
+namespace ModSettingsTools.Operations
 {
-    internal class Button : Operation
+    internal sealed class Button : Operation
     {
         private Action _onClick;
         private string _text;

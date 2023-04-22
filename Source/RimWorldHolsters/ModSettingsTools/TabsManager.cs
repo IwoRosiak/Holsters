@@ -1,16 +1,11 @@
 ﻿using Holsters.Settings.Drawing.Tabs;
 using Holsters.Settings.Drawing.Tabs.Equipment;
 using Holsters.Utility.ModSettings.Settings_Drawing.Tabs;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using TabDrawer = Holsters.Utility.ModSettings.Settings_Drawing.Tabs.TabDrawer;
 
-namespace Holsters.Settings.Drawing
+namespace ModSettingsTools
 {
     internal class TabsManager
     {

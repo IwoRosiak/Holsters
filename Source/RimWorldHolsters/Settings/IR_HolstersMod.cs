@@ -1,4 +1,4 @@
-﻿using Holsters.Settings.Drawing;
+﻿using ModSettingsTools;
 using UnityEngine;
 using Verse;
 

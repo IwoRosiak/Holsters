@@ -1,13 +1,11 @@
-﻿using Holsters.Settings.Drawing.Utilities;
-using Holsters.Settings.ModSettingsTools.Utilities.Selectors.ListTickSelectors;
-using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie;
-using Holsters.Settings.ModSettingsTools.Utilities.Selectors.ListTickSelectors;
-using SettingsDrawer.Sections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Verse;
-using Holsters.Settings.ModSettingsTools.Utilities.Selectors.Builders;
+using ModSettingsTools;
+using ModSettingsTools.Selection;
+using ModSettingsTools.Selection.Selectors;
+using ModSettingsTools.Selection.Builders;
 
 namespace Holsters.Settings.Drawing.Tabs.Equipment.Operations
 {

@@ -1,17 +1,29 @@
-﻿using System;
+﻿using ModSettingsTools.Selection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors.Builders
+namespace ModSettingsTools.Selection.Builders
 {
-    public sealed class VerticalBuilder<T> : Builder, ISelectorBuilder<T>
+    public sealed class HorizontalBuilder<T> : Builder, ISelectorBuilder<T>
     {
         private Vector2 _scrollVector = new Vector2();
 
+        private float _elementWidth;
+
+        private readonly int _elementsPerRow;
+
+        public HorizontalBuilder(int elementsPerRow)
+        {
+            _elementsPerRow = elementsPerRow;
+        }
+
         public void BuildSelector(Rect size, List<T> selection, float sizeE, Action<Rect, T> onBuilt)
         {
+            _elementWidth = sizeE;
+
             Rect viewRect = GetViewRectSize(size, selection);
             Rect scrollRect = GetScrollRectSize(size, viewRect);
 
@@ -23,7 +35,7 @@ namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors.Builders
 
 
                 Vector2 position = CalculatePosition(viewRect, positionInSelection);
-                Rect selectorPosition = new Rect(position, new Vector2(sizeE, buttonHeight));
+                Rect selectorPosition = new Rect(position, new Vector2(_elementWidth, buttonHeight));
 
                 onBuilt?.Invoke(selectorPosition, selectionElement);
             }
@@ -33,7 +45,14 @@ namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors.Builders
 
         private Rect GetViewRectSize(Rect drawRect, List<T> selection)
         {
-            return new Rect(drawRect.x, drawRect.y, smallButtonWidth + tinyButtonWidth * 2, buttonHeight * selection.Count);
+            _elementWidth = drawRect.width / _elementsPerRow;
+
+            int timesButtonCanFit = Mathf.FloorToInt(drawRect.width / _elementWidth);
+            int selectionCountModulo = Mathf.CeilToInt(selection.Count / timesButtonCanFit);
+
+            Rect viewRect = new Rect(drawRect.x, drawRect.y, timesButtonCanFit * _elementWidth, buttonHeight * selectionCountModulo);
+
+            return viewRect;
         }
 
         private Rect GetScrollRectSize(Rect drawRect, Rect viewRect)
@@ -47,8 +66,14 @@ namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors.Builders
 
         private Vector2 CalculatePosition(Rect drawRect, int positionInSelection)
         {
+            int timesButtonCanFit = Mathf.FloorToInt(drawRect.width / _elementWidth);
+
+            int column = positionInSelection % timesButtonCanFit;
+            int row = Mathf.FloorToInt(positionInSelection / timesButtonCanFit);
+
             Vector2 position = drawRect.position;
-            position.y += positionInSelection * buttonHeight;
+            position.x += column * _elementWidth;
+            position.y += row * buttonHeight;
 
             return position;
         }

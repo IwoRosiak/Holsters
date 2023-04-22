@@ -1,6 +1,6 @@
 ﻿using Holsters.Settings;
+using ModSettingsTools;
 using RimWorld;
-using SettingsDrawer.Sections;
 using UnityEngine;
 using Verse;
 

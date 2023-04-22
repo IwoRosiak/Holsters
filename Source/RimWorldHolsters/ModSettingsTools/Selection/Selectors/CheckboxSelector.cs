@@ -1,10 +1,7 @@
-﻿using Holsters.Settings.Drawing.Utilities;
-using Holsters.Utility.ModSettings.Settings_Drawing;
-using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie;
-using System;
+﻿using System;
 using UnityEngine;
 
-namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors.ListTickSelectors
+namespace ModSettingsTools.Selection.Selectors
 {
     internal sealed class CheckboxSelector<T> : Selector<T>
     {
@@ -20,7 +17,7 @@ namespace Holsters.Settings.ModSettingsTools.Utilities.Selectors.ListTickSelecto
             Rect selectorPosition = new Rect(rect.position, new Vector2(rect.size.x - 24, rect.size.y));
             ModSettingsUtilities.DrawButton(selectorPosition, selectedElement.Name.ToString(), () => { });
 
-            Vector2 posDiff = (selectorPosition.position + new Vector2(_elementWidth - 24, 0)) + new Vector2(0, 6);
+            Vector2 posDiff = selectorPosition.position + new Vector2(_elementWidth - 24, 0) + new Vector2(0, 6);
 
             bool valueBefore = selectedElement.IsSelected;
 

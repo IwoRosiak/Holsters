@@ -1,10 +1,9 @@
-﻿using SettingsDrawer.Sections;
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
-namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations
+namespace ModSettingsTools.Operations
 {
-    internal class Label : Operation
+    internal sealed class Label : Operation
     {
         private string _text;
 

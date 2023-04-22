@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse.Noise;
 using Verse;
+using ModSettingsTools;
 
 namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs
 {
-    internal class GeneralSettingsTab : TabDrawer
+    internal class GeneralSettingsTab : ModSettingsTools.TabDrawer
     {
         private string errorLog;
         private bool restoreDefaultConfirmation;

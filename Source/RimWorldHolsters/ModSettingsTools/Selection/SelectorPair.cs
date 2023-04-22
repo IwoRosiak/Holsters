@@ -1,4 +1,4 @@
-﻿namespace Holsters.Settings.Drawing.Utilities
+﻿namespace ModSettingsTools.Selection
 {
     public sealed class SelectorPair<T>
     {

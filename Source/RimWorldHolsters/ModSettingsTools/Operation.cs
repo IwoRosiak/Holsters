@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SettingsDrawer.Sections
+namespace ModSettingsTools
 {
     public abstract class Operation
     {

@@ -1,5 +1,5 @@
-﻿using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
-using SettingsDrawer.Sections;
+﻿using ModSettingsTools;
+using ModSettingsTools.Operations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +29,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
                 _groupName = "";
             }
 
-            Section section = new Section(area, 4, 1);
+            ModSettingsTools.Section section = new ModSettingsTools.Section(area, 4, 1);
 
             TextEntry textEntry = new TextEntry(new Rect(0, 0, 3, 1), "Preset's new name: ", _groupName);
             section.AddOperation(textEntry);

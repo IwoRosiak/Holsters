@@ -1,9 +1,10 @@
 ﻿using Holsters.Settings.Drawing.Tabs.Equipment.Operations;
+using ModSettingsTools;
 using UnityEngine;
 
 namespace Holsters.Settings.Drawing.Tabs.Equipment
 {
-    internal sealed class EquipmentTab : Utility.ModSettings.Settings_Drawing.Tabs.TabDrawer
+    internal sealed class EquipmentTab : TabDrawer
     {
         private AllEquipmentChoiceOperation _allEquipmentOperation;
         private SelectedEquipmentDisplayOperation _displaySelected;
@@ -19,7 +20,7 @@ namespace Holsters.Settings.Drawing.Tabs.Equipment
                 _allPresetsOperation = new AllPresetsChoiceOperation(new Rect(12, 6, 9, 6));
             }
 
-            Utility.ModSettings.Settings_Drawing.Section section = new Utility.ModSettings.Settings_Drawing.Section(inRect, 20, 20);
+            Section section = new Section(inRect, 20, 20);
 
             section.AddOperation(_allEquipmentOperation);
             section.AddOperation(_displaySelected);

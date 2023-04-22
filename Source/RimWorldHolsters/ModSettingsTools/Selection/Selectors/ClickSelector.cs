@@ -1,15 +1,7 @@
-﻿using Holsters.Settings;
-using Holsters.Settings.Drawing.Utilities;
-using Holsters.Settings.ModSettingsTools.Utilities.Selectors;
-using Holsters.Settings.ModSettingsTools.Utilities.Selectors.Builders;
-using Holsters.Settings.ModSettingsTools.Utilities.Selectors.ListTickSelectors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using UnityEngine;
-using Verse;
 
-namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie
+namespace ModSettingsTools.Selection.Selectors
 {
     internal sealed class ClickSelector<T> : Selector<T>
     {

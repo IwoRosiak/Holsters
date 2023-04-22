@@ -1,4 +1,4 @@
-﻿using SettingsDrawer.Sections;
+﻿using ModSettingsTools;
 using UnityEngine;
 using Verse;
 

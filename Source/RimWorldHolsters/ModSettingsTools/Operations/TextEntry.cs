@@ -1,10 +1,10 @@
-﻿using SettingsDrawer.Sections;
+﻿using ModSettingsTools;
 using UnityEngine;
 using Verse;
 
-namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations
+namespace ModSettingsTools.Operations
 {
-    internal class TextEntry : Operation
+    internal sealed class TextEntry : Operation
     {
         private string _label;
 
@@ -26,6 +26,6 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Oper
             return _fieldText;
         }
 
-        
+
     }
 }

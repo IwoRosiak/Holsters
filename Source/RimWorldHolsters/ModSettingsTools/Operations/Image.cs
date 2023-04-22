@@ -1,16 +1,15 @@
-﻿using SettingsDrawer.Sections;
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
-namespace Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations
+namespace ModSettingsTools.Operations
 {
-    internal class Image : Operation
+    internal sealed class Image : Operation
     {
         private Texture _texture;
 
         public Image(Rect area, Texture texture) : base(area)
         {
-            _texture = texture; 
+            _texture = texture;
         }
 
         public override void ExecuteOperation()

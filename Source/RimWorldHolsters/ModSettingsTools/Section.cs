@@ -1,17 +1,16 @@
-﻿using SettingsDrawer.Sections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
-namespace Holsters.Utility.ModSettings.Settings_Drawing
+namespace ModSettingsTools
 {
-    internal class Section
+    internal sealed class Section
     {
         private Vector2 _spacePerSegment;
 
         private Vector2 _start;
 
-        private List<Operation> _operations = new List<Operation>();
+        private readonly List<Operation> _operations = new List<Operation>();
 
         internal Section(Rect sectionArea, Vector2Int divisions, bool ensureMargins, bool ensureMarginsInBetweenElements) //TODO
         {
@@ -31,14 +30,14 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing
 
             Rect sectionArea = operation.SectionArea;
 
-            Rect area = new Rect(_start +  (sectionArea.position * _spacePerSegment), sectionArea.size * _spacePerSegment);
+            Rect area = new Rect(_start + sectionArea.position * _spacePerSegment, sectionArea.size * _spacePerSegment);
 
             operation.AllocateSpace(area);
         }
 
         internal void DrawOperations()
         {
-            foreach(Operation operation in _operations)
+            foreach (Operation operation in _operations)
             {
                 operation.ExecuteOperation();
             }

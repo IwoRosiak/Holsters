@@ -1,15 +1,13 @@
-﻿using Holsters.Utility.ModSettings.Settings_Drawing;
-using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
-using Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer;
-using Holsters.Utility.ModSettings.Settings_Drawing.Tabs;
+﻿using Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer;
 using Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab;
 using Holsters.Settings.Drawing.Tabs.PresetsTab;
 using UnityEngine;
 using Verse;
+using ModSettingsTools.Operations;
 
 namespace Holsters.Settings.Drawing.Tabs
 {
-    internal sealed class PresetsSettingsTab : Utility.ModSettings.Settings_Drawing.Tabs.TabDrawer
+    internal sealed class PresetsSettingsTab : ModSettingsTools.TabDrawer
     {
         private PresetChoice _presetChoice;
         private PresetNameChange _presetNameChange;
@@ -45,7 +43,7 @@ namespace Holsters.Settings.Drawing.Tabs
 
         private void DrawPresetsManagement(Rect rect)
         {
-            Utility.ModSettings.Settings_Drawing.Section section = new Utility.ModSettings.Settings_Drawing.Section(rect, 20, 20);
+            ModSettingsTools.Section section = new ModSettingsTools.Section(rect, 20, 20);
 
             if (_presetChoice.Current != null)
                 section.AddOperation(new Label(new Rect(0, 1, 8, 1), _presetChoice.Current.Name));

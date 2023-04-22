@@ -1,10 +1,5 @@
-﻿using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
-using SettingsDrawer.Sections;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ModSettingsTools;
+using ModSettingsTools.Operations;
 using UnityEngine;
 using Verse;
 
@@ -27,7 +22,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
 
         private void DrawDirectionsButtons()
         {
-            Section section = new Section(area, 10, 10);
+            ModSettingsTools.Section section = new ModSettingsTools.Section(area, 10, 10);
 
             Rect west = new Rect(0, 4.5f, 1, 1);
             Rect east = new Rect(9, 4.5f, 1, 1);

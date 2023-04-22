@@ -1,7 +1,7 @@
 ﻿using Holsters.Settings;
 using Holsters.Settings.PresetsLoading;
-using Holsters.Utility.ModSettings.Settings_Drawing.ModSettingsUtilitie.Operations;
-using SettingsDrawer.Sections;
+using ModSettingsTools;
+using ModSettingsTools.Operations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
