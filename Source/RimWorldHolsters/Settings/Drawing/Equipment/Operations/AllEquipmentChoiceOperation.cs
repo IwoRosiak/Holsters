@@ -22,7 +22,7 @@ namespace Holsters.Settings.Drawing.Equipment.Operations
                 .ToList();
 
             _selectorPairs = loadedEquipment
-                .Select(preset => new SelectorPair<ThingDef>(preset, preset.defName))
+                .Select(preset => new SelectorPair<ThingDef>(preset, preset.label))
                 .ToList();
 
             _listSelector = new CheckboxSelector<ThingDef>(BUTTON_WIDTH, new VerticalBuilder<SelectorPair<ThingDef>>());

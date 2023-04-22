@@ -1,5 +1,4 @@
-﻿using Holsters.Settings.Drawing.Tabs.Presets;
-using ModSettingsTools;
+﻿using ModSettingsTools;
 using ModSettingsTools.Selection;
 using ModSettingsTools.Selection.Builders;
 using ModSettingsTools.Selection.Selectors;
@@ -15,6 +14,8 @@ namespace Holsters.Settings.Drawing.Equipment.Operations
         private readonly ClickSelector<IPresetable> _listSelector;
         private readonly ClickSelector<IPresetable> _transferSelector;
 
+        private List<IPresetable> _presetOfCurrentSelection;
+        private List<ThingDef> SelectedEquipment => SelectedEquipmentTracker.SelectedEquipment;
 
         internal EquipmentPresetsTransferOperation(Rect area) : base(area)
         {
@@ -27,19 +28,17 @@ namespace Holsters.Settings.Drawing.Equipment.Operations
 
         public override void ExecuteOperation()
         {
-            if (SelectedEquipmentTracker.SelectedEquipment?.FirstOrDefault() == null)
+            if (SelectedEquipment.NullOrEmpty() == true)
                 return;
 
             DrawTransferList();
             DrawAvailableList();
         }
 
-        private List<IPresetable> _presetOfCurrentSelection;
-
         private void DrawTransferList()
         {
             _presetOfCurrentSelection = IR_HolstersSettings.Holsters()
-                .Where(preset => preset.AssocciatedEquipment.Contains(SelectedEquipmentTracker.SelectedEquipment.First()))
+                .Where(preset => SelectedEquipment.All(eq =>  preset.AssocciatedEquipment.Contains(eq)))
                 .ToList();
 
             List<SelectorPair<IPresetable>> selectorPairs = _presetOfCurrentSelection
@@ -51,7 +50,6 @@ namespace Holsters.Settings.Drawing.Equipment.Operations
             _transferSelector.DrawSelection(halfRect, selectorPairs);
 
             _transferSelector.OnSelected = null;
-
             _transferSelector.OnSelected += Remove;
         }
         private void DrawAvailableList()
@@ -71,18 +69,21 @@ namespace Holsters.Settings.Drawing.Equipment.Operations
 
         private void Remove(IPresetable presetable)
         {
-            ThingDef thing = SelectedEquipmentTracker.SelectedEquipment?.FirstOrDefault();
-            
-            presetable.AssocciatedEquipment.Remove(thing);
+            foreach(ThingDef def in SelectedEquipment)
+            {
+                presetable.AssocciatedEquipment.Remove(def);
+            }
         }
 
         private void Add(IPresetable presetable)
         {
-            ThingDef thing = SelectedEquipmentTracker.SelectedEquipment?.FirstOrDefault();
+            foreach (ThingDef def in SelectedEquipment)
+            {
+                if (presetable.AssocciatedEquipment.Contains(def) == true)
+                    continue;
 
-            presetable.AssocciatedEquipment.Add(thing);
+                presetable.AssocciatedEquipment.Add(def);
+            }
         }
-
-
     }
 }
