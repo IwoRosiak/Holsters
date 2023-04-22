@@ -12,8 +12,8 @@ namespace Holsters.Settings.Drawing.Equipment
         protected override List<Operation> Operations => new List<Operation>
         {
             new AllEquipmentChoiceOperation(new Rect(1, 1, 8, 17)),
-            new SelectedEquipmentDisplayOperation(new Rect(10, 1, 10, 8)),
-            new EquipmentPresetsTransferOperation(new Rect(10, 9, 10, 9))
+            new SelectedEquipmentDisplayOperation(new Rect(10, 1, 9, 8)),
+            new EquipmentPresetsTransferOperation(new Rect(10, 9, 9, 9))
         };
 
         protected override Vector2Int SectionGrid => new Vector2Int(20, 20);
