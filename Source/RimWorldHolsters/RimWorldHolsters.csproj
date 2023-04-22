@@ -66,7 +66,7 @@
   <ItemGroup>
     <Compile Include="BodyType.cs" />
     <Compile Include="Settings\Drawing\Equipment\Operations\AllEquipmentChoiceOperation.cs" />
-    <Compile Include="Settings\Drawing\Equipment\Operations\AllPresetsChoiceOperation.cs" />
+    <Compile Include="Settings\Drawing\Equipment\Operations\EquipmentPresetsTransferOperation.cs" />
     <Compile Include="Settings\Drawing\Equipment\Operations\SelectedEquipmentDisplayOperation.cs" />
     <Compile Include="Settings\Drawing\Equipment\SelectedPresetTracker.cs" />
     <Compile Include="Settings\Drawing\Equipment\SelectedEquipmentTracker.cs" />

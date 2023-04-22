@@ -13,7 +13,7 @@ namespace Holsters.Settings.Drawing.Equipment
         {
             new AllEquipmentChoiceOperation(new Rect(1, 1, 8, 17)),
             new SelectedEquipmentDisplayOperation(new Rect(12, 1, 9, 6)),
-            new AllPresetsChoiceOperation(new Rect(12, 6, 9, 6))
+            new EquipmentPresetsTransferOperation(new Rect(12, 6, 9, 6))
         };
 
         protected override Vector2Int SectionGrid => new Vector2Int(20, 20);
