@@ -71,12 +71,16 @@ namespace Holsters.Settings.Drawing.Equipment.Operations
 
         private void Remove(IPresetable presetable)
         {
-
+            ThingDef thing = SelectedEquipmentTracker.SelectedEquipment?.FirstOrDefault();
+            
+            presetable.AssocciatedEquipment.Remove(thing);
         }
 
         private void Add(IPresetable presetable)
         {
+            ThingDef thing = SelectedEquipmentTracker.SelectedEquipment?.FirstOrDefault();
 
+            presetable.AssocciatedEquipment.Add(thing);
         }
 
 
