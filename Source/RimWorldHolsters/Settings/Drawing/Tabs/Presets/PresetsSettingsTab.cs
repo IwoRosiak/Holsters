@@ -4,65 +4,29 @@ using Holsters.Settings.Drawing.Tabs.PresetsTab;
 using UnityEngine;
 using Verse;
 using ModSettingsTools.Operations;
+using System.Collections.Generic;
+using ModSettingsTools;
+using Holsters.Settings.Drawing.Tabs.Presets;
 
 namespace Holsters.Settings.Drawing.Tabs
 {
     internal sealed class PresetsSettingsTab : ModSettingsTools.TabDrawer
     {
-        private PresetChoice _presetChoice;
-        private PresetNameChange _presetNameChange;
-        private PresetCreateNew _presetCreateNew;
-        private PresetCopy _presetCopy;
-        private PresetEquipmentChoice _presetEquipmentChoice;
-
-
-        private EditTable _table;
-
         public override string TabName => "Presets";
 
-        protected override void TabContent(Rect inRect)
+        protected override List<Operation> Operations => new List<Operation>
         {
-            Initialise();
+            new EditTable(new Rect(8, 0, 12, 12)),
+            new PresetChoice(new Rect(3, 12, 14, 6)),
+            new PresetNameChange(new Rect(0, 2, 8, 1)),
+            new PresetCreateNew(new Rect(0, 3, 8, 1)),
+            new PresetCopy(new Rect(0, 4, 8, 1)),
+            new PresetEquipmentChoice(new Rect(0, 6, 8, 8)),
+            new PresetDelete(new Rect(0, 5, 8, 1)),
+            new Label(new Rect(0, 6, 8, 1), PresetChoiceTracker.CurrentPreset.Preset.Configuration[Rot4.South].Position.ToString()), // These two need to be updated each frame
+            new Label(new Rect(0, 1, 8, 1), PresetChoiceTracker.CurrentPreset.Name) // <---
+        };
 
-            DrawPresetsManagement(inRect);
-        }
-
-        public void Initialise()
-        {
-            if (_presetChoice == null)
-            {
-                _table = new EditTable(new Rect(8, 0, 12, 12));
-                _presetChoice = new PresetChoice(new Rect(3, 12, 14, 6));
-                _presetNameChange = new PresetNameChange(new Rect(0, 2, 8, 1), _presetChoice);
-                _presetCreateNew = new PresetCreateNew(new Rect(0, 3, 8, 1));
-                _presetCopy = new PresetCopy(new Rect(0, 4, 8, 1), _presetChoice);
-
-                _presetEquipmentChoice = new PresetEquipmentChoice(new Rect(0, 6, 8, 8));
-            }
-        }
-
-        private void DrawPresetsManagement(Rect rect)
-        {
-            ModSettingsTools.Section section = new ModSettingsTools.Section(rect, 20, 20);
-
-            if (_presetChoice.Current != null)
-                section.AddOperation(new Label(new Rect(0, 1, 8, 1), _presetChoice.Current.Name));
-
-            section.AddOperation(_presetChoice);
-            section.AddOperation(_presetNameChange);
-            section.AddOperation(_presetCreateNew);
-            section.AddOperation(new PresetDelete(new Rect(0, 5, 8, 1)));
-            section.AddOperation(_presetCopy);
-
-            section.AddOperation(new Label(new Rect(0, 6, 8, 1), _presetChoice.Current.Preset.Configuration[Rot4.South].Position.ToString()));
-
-            section.AddOperation(_presetEquipmentChoice);
-
-            _table.UpdateSelection(_presetChoice.Current);
-
-            section.AddOperation(_table);
-
-            section.DrawOperations();
-        }
+        protected override Vector2Int SectionGrid => new Vector2Int(20, 20);
     }
 }

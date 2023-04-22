@@ -1,12 +1,7 @@
-﻿using ModSettingsTools;
+﻿using Holsters.Settings.Drawing.Tabs.Presets;
+using ModSettingsTools;
 using ModSettingsTools.Operations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using Verse;
 
 namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
 {
@@ -14,11 +9,9 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
     {
         private string _groupName;
         private bool _isCleared;
-        private readonly PresetChoice _presetChoice;
 
-        public PresetNameChange(Rect area, PresetChoice choice) : base(area)
+        public PresetNameChange(Rect area) : base(area)
         {
-            _presetChoice = choice;
         }
 
         public override void ExecuteOperation()
@@ -47,7 +40,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
             if (_groupName.Equals(""))
                 return;
 
-            _presetChoice.Current.Name = _groupName;
+            PresetChoiceTracker.CurrentPreset.Name = _groupName;
 
 
             _groupName = "";

@@ -21,7 +21,11 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs
 
         public override string TabName => "General";
 
-        protected override void TabContent(Rect inRect)
+        protected override List<Operation> Operations => new List<Operation>();
+
+        protected override Vector2Int SectionGrid => new Vector2Int(1,1);
+        
+        protected void TabContent(Rect inRect)
         {
             //Rect leftSideRect = new Rect(inRect.x + 10f, inRect.y + (inRect.height * 0.3f), 0.2f * inRect.width - 20f, inRect.height);
             //Widgets.DrawLineHorizontal(leftSideRect.x, leftSideRect.y + 24f, leftSideRect.width);

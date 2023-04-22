@@ -1,4 +1,5 @@
 ﻿using Holsters.Settings;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
@@ -15,15 +16,31 @@ namespace ModSettingsTools
 
         protected const int sliderWidth = 16;
 
+
+        private readonly List<Operation> _operations = new List<Operation>();
+        protected abstract List<Operation> Operations { get; }
+
+        protected abstract Vector2Int SectionGrid { get; }
+
         public abstract string TabName { get; }
+
+        private bool _initialised = false;
 
         internal void DrawTab(Rect inRect)
         {
+            if (_initialised == false)
+            {
+                _initialised = true;
+                _operations.AddRange(Operations);
+            }
+
             Widgets.DrawTextureFitted(inRect, IR_Textures.background, 1);
 
-            TabContent(inRect);
-        }
+            Section section = new Section(inRect, SectionGrid.x, SectionGrid.y);
 
-        protected abstract void TabContent(Rect inRect);
+            _operations.ForEach(operation => section.AddOperation(operation));
+
+            section.DrawOperations();
+        }
     }
 }

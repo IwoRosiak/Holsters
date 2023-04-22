@@ -33,6 +33,8 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
 
         public override void ExecuteOperation()
         {
+            _currentlySelected = PresetChoiceTracker.CurrentPreset;
+
             ModSettingsTools.Section section = new ModSettingsTools.Section(area, 10, 10);
 
             section.AddOperation(new Image(new Rect(0, 0, 10, 10), IR_Textures.backgroundPawn));
@@ -51,10 +53,6 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
             section.DrawOperations();
         }
 
-        public void UpdateSelection(IPresetable currentlySelected)
-        {
-            _currentlySelected = currentlySelected;
-        }
 
         private void HandlePositionButtons()
         {
