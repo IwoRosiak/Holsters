@@ -1,4 +1,5 @@
 ﻿using ModSettingsTools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -27,11 +28,15 @@ namespace Holsters.Settings.Drawing.Equipment.Operations
         private void DisplayOneEquipment(ThingDef def)
         {
             Texture text = def.graphic.MatNorth.mainTexture;
-            float scale = 1 / def.uiIconScale / (text.width / 64) * 1.35f * def.graphic.drawSize.x;
 
             Vector2 center = area.center;
+            Widgets.DrawBox(area);
 
-            Widgets.DrawTextureRotated(new Rect(center.x - scale / 2f, center.y - scale / 2f, 200, 200), text, 0);
+            Rect displayRect = new Rect(center.x - (area.height / 2), center.y - (area.height / 2), area.height, area.height);
+
+            Widgets.DrawTextureRotated(displayRect, text, -45);
+
+            Widgets.DrawBox(displayRect);
         }
 
         private void DisplayMultiple(List<ThingDef> def)

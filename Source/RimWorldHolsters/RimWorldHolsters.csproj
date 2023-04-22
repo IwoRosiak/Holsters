@@ -68,7 +68,6 @@
     <Compile Include="Settings\Drawing\Equipment\Operations\AllEquipmentChoiceOperation.cs" />
     <Compile Include="Settings\Drawing\Equipment\Operations\EquipmentPresetsTransferOperation.cs" />
     <Compile Include="Settings\Drawing\Equipment\Operations\SelectedEquipmentDisplayOperation.cs" />
-    <Compile Include="Settings\Drawing\Equipment\SelectedPresetTracker.cs" />
     <Compile Include="Settings\Drawing\Equipment\SelectedEquipmentTracker.cs" />
     <Compile Include="Settings\Drawing\Presets\PresetEquipmentChoiceTracker.cs" />
     <Compile Include="Settings\Drawing\Presets\Operations\PresetEquipmentChoice.cs" />
