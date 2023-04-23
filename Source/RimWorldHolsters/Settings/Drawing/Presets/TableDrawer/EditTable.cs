@@ -56,6 +56,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.TableDrawer
 
         private void HandlePositionButtons()
         {
+            // TODO: It tries immiedietally after...
             _currentlySelected.ModifyProperty((holster => holster.Position += new Vector3(_positionButtons.ApplyProperty().x, 0, _positionButtons.ApplyProperty().y)), _buttons.Rotation);
         }
 

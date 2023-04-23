@@ -1,5 +1,9 @@
-﻿using ModSettingsTools;
+﻿using Holsters.Settings;
+using Holsters.Settings.Drawing.Tabs.Presets;
+using Holsters.Settings.PresetsLoading;
+using ModSettingsTools;
 using ModSettingsTools.Operations;
+using System.Linq;
 using UnityEngine;
 
 namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
@@ -13,7 +17,7 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
         {
             Section section = new Section(area, 1, 1);
 
-            Button button = new Button(new Rect(0, 0, 1, 1), "Delete", ButtonClick);
+            Button button = new Button(new Rect(0, 0, 1, 1), ChooseWording(), ButtonClick);
             section.AddOperation(button);
 
             section.DrawOperations();
@@ -21,24 +25,23 @@ namespace Holsters.Utility.ModSettings.Settings_Drawing.Tabs.PresetsTab
 
         private void ButtonClick()
         {
-            if (false)//!GetCurGroup().isDisplay)
-            {
-                //errorLog = "This group cannot be deleted.";
+            IPresetable presetable = PresetChoiceTracker.CurrentPreset;
 
-            }
-            else if (false)//GetCurWeapon() == null)
-            {
-                //errorLog = GetCurGroup().Name + " deleted!";
-                //IR_HolstersSettings.RemoveGroup(GetCurGroup());
+            IR_HolstersSettings.RemoveSetting(presetable);
+            
+            if (IR_HolstersSettings.Holsters().Contains(presetable) == false)
+                PresetChoiceTracker.UpdateChoice(IR_HolstersSettings.Holsters().ToList()[0]);
+        }
 
-                //curGroupIndex = 0;
-                return;
+        private string ChooseWording()
+        {
+            IPresetable presetable = PresetChoiceTracker.CurrentPreset;
 
-            }
-            else
+            if (presetable is HolsterDefPresetSetting)
             {
-                //errorLog = "The group can be only deleted if it has no weapons assigned (move weapons to another group to resolve that issue)";
+                return "Reset";
             }
+            else return "Delete";
         }
     }
 }

@@ -64,6 +64,11 @@ namespace Holsters.Settings
             _presets.AddNewPreset(newSetting);
         }
 
+        public static void RemoveSetting(IPresetable setting)
+        {
+            _presets.RemovePreset(setting);
+        }
+
         public static HolsterConfiguration GetHolsterConfigurationFor(ThingDef def, Rot4 rot)
         {
             return GetConfiguration(def).Configuration[rot];

@@ -7,7 +7,7 @@ using Verse;
 
 namespace ModSettingsTools
 {
-    internal class TabsManager
+    internal sealed class TabsManager
     {
         private readonly List<TabDrawer> _tabs = new List<TabDrawer>()
         {

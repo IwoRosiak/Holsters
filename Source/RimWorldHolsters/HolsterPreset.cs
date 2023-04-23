@@ -16,7 +16,12 @@ namespace Holsters
 
         public HolsterPreset(HolsterPreset copy)
         {
-            Configuration = new Dictionary<Rot4, HolsterConfiguration>(copy.Configuration);
+            Configuration = new Dictionary<Rot4, HolsterConfiguration>();
+            foreach (var pair in copy.Configuration)
+            {
+                Configuration.Add(pair.Key, pair.Value.Copy());
+            }
+
             BodyOffsetsModifs = new Dictionary<BodyType, float>(copy.BodyOffsetsModifs);
         }
 

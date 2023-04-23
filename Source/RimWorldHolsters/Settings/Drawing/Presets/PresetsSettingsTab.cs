@@ -23,8 +23,13 @@ namespace Holsters.Settings.Drawing.Tabs
             new PresetCopy(new Rect(0, 4, 8, 1)),
             new PresetEquipmentChoice(new Rect(0, 6, 8, 8)),
             new PresetDelete(new Rect(0, 5, 8, 1)),
-            new Label(new Rect(0, 6, 8, 1), PresetChoiceTracker.CurrentPreset.Preset.Configuration[Rot4.South].Position.ToString()), // These two need to be updated each frame
-            new Label(new Rect(0, 1, 8, 1), PresetChoiceTracker.CurrentPreset.Name) // <---
+
+        };
+
+        protected override List<Operation> UpdateOperations => new List<Operation>
+        {
+            new Label(new Rect(0, 6, 8, 1), PresetChoiceTracker.CurrentPreset.Preset.Configuration[Rot4.South].Position.ToString()),
+            new Label(new Rect(0, 1, 8, 1), PresetChoiceTracker.CurrentPreset.Name)
         };
 
         protected override Vector2Int SectionGrid => new Vector2Int(20, 20);

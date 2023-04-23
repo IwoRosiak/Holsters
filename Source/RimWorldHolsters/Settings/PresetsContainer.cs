@@ -58,6 +58,18 @@ namespace Holsters.Settings
             _presetSettings.Add(preset);
         }
 
+        public void RemovePreset(IPresetable preset)
+        {
+            if (preset is HolsterDefPresetSetting defPreset)
+            {
+                defPreset.Reset();
+            }
+            else
+            {
+                _presetSettings.Remove(preset);
+            }
+        }
+
         public void ExposeData()
         {
             Scribe_Collections.Look(ref _presetSettings, "presetSettings", LookMode.Deep);

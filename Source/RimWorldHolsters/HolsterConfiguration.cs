@@ -23,6 +23,19 @@ namespace Holsters
 
         }
 
+        public HolsterConfiguration Copy()
+        {
+            return new HolsterConfiguration
+            {
+                Position = Position,
+                Rotation = Rotation,
+                Size = Size,
+                IsFlipped = IsFlipped,
+                IsAtFront = IsAtFront,
+                BodyOffset = BodyOffset
+            };
+        }
+
         public static HolsterConfiguration EmptyConfiguration => new HolsterConfiguration
         {
             Position = Vector3.zero,

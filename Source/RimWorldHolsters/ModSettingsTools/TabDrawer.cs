@@ -20,6 +20,8 @@ namespace ModSettingsTools
         private readonly List<Operation> _operations = new List<Operation>();
         protected abstract List<Operation> Operations { get; }
 
+        protected virtual List<Operation> UpdateOperations { get; }
+
         protected abstract Vector2Int SectionGrid { get; }
 
         public abstract string TabName { get; }
@@ -39,6 +41,7 @@ namespace ModSettingsTools
             Section section = new Section(inRect, SectionGrid.x, SectionGrid.y);
 
             _operations.ForEach(operation => section.AddOperation(operation));
+            UpdateOperations.ForEach(operation => section.AddOperation(operation));
 
             section.DrawOperations();
         }

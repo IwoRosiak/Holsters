@@ -1,7 +1,5 @@
 ﻿using ModSettingsTools;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -9,6 +7,8 @@ namespace Holsters.Settings.Drawing.Equipment.Operations
 {
     internal sealed class SelectedEquipmentDisplayOperation : Operation
     {
+        private const int ANGLE_OF_DISPLAY = -45;
+
         public SelectedEquipmentDisplayOperation(Rect area) : base(area)
         {
         }
@@ -64,7 +64,7 @@ namespace Holsters.Settings.Drawing.Equipment.Operations
 
             Rect displayRect = new Rect(center.x - (area.width / 2), center.y - (area.height / 2), area.width, area.height);
 
-            Widgets.DrawTextureRotated(displayRect, text, -45);
+            Widgets.DrawTextureRotated(displayRect, text, ANGLE_OF_DISPLAY);
         }
     }
 }

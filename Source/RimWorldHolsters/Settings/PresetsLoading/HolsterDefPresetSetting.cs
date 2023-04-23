@@ -27,8 +27,9 @@ namespace Holsters.Settings.PresetsLoading
             get
             {
                 if (_customPreset == null || _customPreset.Configuration.NullOrEmpty())
+                {
                     return Def.Preset;
-
+                }
 
                 return _customPreset;
             }
@@ -41,6 +42,14 @@ namespace Holsters.Settings.PresetsLoading
         public string Name { get => _presetName; set => _presetName = value; }
         public List<ThingDef> AssocciatedEquipment { get => _assocciatedEquipment; set => _assocciatedEquipment = value; }
 
+        private HolsterPreset PresetOld;
+
+        public void Reset()
+        {
+            PresetOld = _customPreset;
+            _customPreset = null;
+        }
+
         public void ExposeData()
         {
             Scribe_Values.Look(ref _presetName, "presetName");
@@ -51,13 +60,8 @@ namespace Holsters.Settings.PresetsLoading
         public void ModifyProperty(Action<HolsterConfiguration> modification, Rot4 rotation)
         {
             if (_customPreset == null)
-            {
-                Log.Message("Refreshing the preset");
-                _customPreset = new HolsterPreset()
-                {
-                    Configuration = new Dictionary<Rot4, HolsterConfiguration>(Def.Configuration),
-                    BodyOffsetsModifs = new Dictionary<BodyType, float>(Def.BodyOffsetsModifs)
-                };
+            {// The configuration is not deep copied but shallow only
+                _customPreset = new HolsterPreset(Def.Preset);
             }
 
             HolsterConfiguration holster = _customPreset.Configuration[rotation];
