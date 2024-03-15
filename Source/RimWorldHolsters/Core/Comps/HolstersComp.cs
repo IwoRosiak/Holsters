@@ -5,10 +5,7 @@ namespace RimWorldHolsters
 {
     public class HolstersComp : ThingComp
     {
-        public HolstersCompProperties Props
-        {
-            get => (HolstersCompProperties)props;
-        }
+        public HolstersCompProperties Props => (HolstersCompProperties)props;
 
         public Pawn pawn
         {
@@ -19,7 +16,7 @@ namespace RimWorldHolsters
         {
             base.PostDraw();
 
-            WeaponDrawingManager.DrawWeaponFor(pawn.Drawer.renderer, pawn.DrawPos, pawn.Rotation, pawn);
+            WeaponDrawingManager.DrawWeaponsFor(pawn);
         }
     }
 }
