@@ -7,16 +7,11 @@ namespace RimWorldHolsters
     {
         public HolstersCompProperties Props => (HolstersCompProperties)props;
 
-        public Pawn pawn
-        {
-            get => (Pawn)parent;
-        }
-
         public override void PostDraw()
         {
             base.PostDraw();
 
-            WeaponDrawingManager.DrawWeaponsFor(pawn);
+            WeaponDrawingManager.DrawWeaponsFor((Pawn)parent);
         }
     }
 }

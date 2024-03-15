@@ -14,7 +14,7 @@ namespace RimWorldHolsters
 
         public static List<WeaponGroupCordInfo> LoadDefaultWeaponGroups()
         {
-            List<WeaponGroupCordInfo> defaultGroups = new List<WeaponGroupCordInfo>();
+            var defaultGroups = new List<WeaponGroupCordInfo>();
 
             //Long Ranged
             defaultGroups.Add(new WeaponGroupCordInfo("Long Ranged",

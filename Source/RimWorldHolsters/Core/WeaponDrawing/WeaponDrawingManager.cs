@@ -16,13 +16,12 @@ namespace RimWorldHolsters.Core.WeaponDrawing
 
             var drawingHandler = new WeaponDrawingHandler(pawn, rootLoc, pawnRotation);
 
-            drawingHandler.DrawEquipment(false);
-            bool carriesWeaponOpenly = CarriesWeapon(pawn);
+            bool carriesWeaponOpenly = IsCarryingWeaponOpenly(pawn);
 
             drawingHandler.DrawEquipment(carriesWeaponOpenly);
         }
 
-        private static bool CarriesWeapon(Pawn pawn)
+        private static bool IsCarryingWeaponOpenly(Pawn pawn)
         {
             if (pawn.carryTracker != null && pawn.carryTracker.CarriedThing != null)
                 return false;
