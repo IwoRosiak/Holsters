@@ -4,15 +4,14 @@ using Verse;
 
 namespace RimWorldHolsters.Core
 {
-    internal class WeaponDrawingHandler
+    internal sealed class WeaponDrawingHandler
     {
-        private Pawn _pawn;
-        private Vector3 _rootLoc;
-        private Rot4 _pawnRotation;
+        private readonly Pawn _pawn;
+        private readonly List<WeaponGroupCordInfo> _filledSlots = new List<WeaponGroupCordInfo>();
+        private readonly Vector3 _rootLoc;
+        private readonly Rot4 _pawnRotation;
 
-        private List<WeaponGroupCordInfo> _filledSlots = new List<WeaponGroupCordInfo>();
-
-        internal WeaponDrawingHandler(Pawn pawn, Vector3 rootLoc, Rot4 pawnRotation) 
+        internal WeaponDrawingHandler(Pawn pawn, Vector3 rootLoc, Rot4 pawnRotation)
         {
             _pawn = pawn;
             _rootLoc = rootLoc;
@@ -25,21 +24,22 @@ namespace RimWorldHolsters.Core
             if (!isCarryingWeapon)
             {
                 DrawWeapon(_pawn.equipment.Primary);
-            } else
+            }
+            else
             {
                 WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(_pawn.equipment.Primary.def.defName);
                 _filledSlots.Add(curGroup);
-
             }
 
-            if (IR_HolstersSettings.displaySide)
-            {
-                foreach (Thing thing in _pawn.inventory.innerContainer)
-                {
-                    if (thing.def.IsWeapon == false) continue;
+            if (!IR_HolstersSettings.displaySide)
+                return;
 
-                    DrawWeapon((ThingWithComps)thing);
-                }
+            foreach (Thing thing in _pawn.inventory.innerContainer)
+            {
+                if (!thing.def.IsWeapon) 
+                    continue;
+
+                DrawWeapon((ThingWithComps)thing);
             }
         }
 
@@ -48,17 +48,14 @@ namespace RimWorldHolsters.Core
             WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName);
 
             if (!curGroup.isDisplay)
-            {
                 return;
-            }
 
             bool isSide = IsSide(curGroup);
 
-            Vector3 positionOnPawn = IR_HolstersSettings.GetWeaponPos(weapon.def.defName, _pawnRotation, isSide, _pawn, curGroup); 
+            Vector3 positionOnPawn = IR_HolstersSettings.GetWeaponPos(weapon.def.defName, _pawnRotation, isSide, _pawn, curGroup);
             positionOnPawn += _rootLoc;
 
-
-            WeaponDrawingProperties drawingProperties = new WeaponDrawingProperties(weapon, curGroup, positionOnPawn, _pawnRotation, isSide);
+            var drawingProperties = new WeaponDrawingProperties(weapon, curGroup, positionOnPawn, _pawnRotation, isSide);
 
             IR_DisplayWeapon.DrawEquipmentHolstered(drawingProperties);
 

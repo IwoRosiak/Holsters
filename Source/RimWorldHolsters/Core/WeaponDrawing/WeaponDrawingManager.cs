@@ -9,15 +9,13 @@ namespace RimWorldHolsters.Core.WeaponDrawing
         internal static void DrawWeaponFor(PawnRenderer renderer, Vector3 rootLoc, Rot4 pawnRotation, Pawn pawn)
         {
             if (WeaponDrawingConditionChecker.ShouldDraw(pawn) == false)
-            {
                 return;
-            }
+            
 
-            //bool carriesMainWeapon = (bool)CarryWeaponOpenly?.Invoke(renderer, null);
+            var drawingHandler = new WeaponDrawingHandler(pawn, rootLoc, pawnRotation);
 
-            WeaponDrawingHandler drawingHandler = new WeaponDrawingHandler(pawn, rootLoc, pawnRotation);
-
-            drawingHandler.DrawEquipment(false);
+            bool carriesMainWeapon = pawn.Drafted;
+            drawingHandler.DrawEquipment(carriesMainWeapon);
         }
     }
 }

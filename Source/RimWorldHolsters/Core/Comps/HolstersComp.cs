@@ -1,32 +1,18 @@
-﻿using RimWorld;
-using RimWorldHolsters.Core;
-using RimWorldHolsters.Core.WeaponDrawing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RimWorldHolsters.Core.WeaponDrawing;
 using Verse;
 
 namespace RimWorldHolsters
 {
     public class HolstersComp : ThingComp
     {
-
         public HolstersCompProperties Props
         {
-            get
-            {
-                return (HolstersCompProperties)this.props;
-            }
+            get => (HolstersCompProperties)props;
         }
 
         public Pawn pawn
         {
-            get
-            {
-                return (Pawn)this.parent;
-            }
+            get => (Pawn)parent;
         }
 
         public override void PostDraw()
@@ -35,7 +21,5 @@ namespace RimWorldHolsters
 
             WeaponDrawingManager.DrawWeaponFor(pawn.Drawer.renderer, pawn.DrawPos, pawn.Rotation, pawn);
         }
-
-       
     }
 }
