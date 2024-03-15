@@ -10,6 +10,9 @@ namespace RimWorldHolsters.Core
             if (pawn.Dead)
                 return false;
 
+            if (!pawn.ageTracker.Adult)
+                return false;
+
             if (!IR_HolstersSettings.displayIndoors && pawn.GetRoom()?.ProperRoom == true)
                 return false;
 
