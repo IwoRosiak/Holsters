@@ -23,5 +23,13 @@ namespace RimWorldHolsters.Core.RenderNodes
 
             yield break;
         }
+
+        public override bool FlipGraphic(PawnDrawParms parms) 
+        {
+            Log.Message("Flipping!");
+            ThingWithComps weapon = parms.pawn.equipment.Primary;
+            WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName);
+            return IR_HolstersSettings.GetWeaponFlip(curGroup, parms.facing, false);
+        }
     }
 }
