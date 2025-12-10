@@ -72,6 +72,7 @@ namespace RimWorldHolsters.Core
             _filledSlots.Add(curGroup);
         }
 
+
         private bool IsSide(WeaponGroupCordInfo curGroup)
         {
             bool isSide = true;

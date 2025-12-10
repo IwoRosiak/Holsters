@@ -1,5 +1,4 @@
-﻿#if RimWorld_1_4 || RimWorld_1_3
-using HarmonyLib;
+﻿using HarmonyLib;
 using System.Reflection;
 using Verse;
 
@@ -17,4 +16,3 @@ namespace RimWorldHolsters.Core
         }
     }
 }
-#endif
