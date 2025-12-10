@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Patch>
-  <Operation Class="PatchOperationConditional">
-    <xpath>/Defs/ThingDef[@Name="BasePawn"]/comps</xpath>
-    <nomatch Class="PatchOperationAdd">
-      <xpath>/Defs/ThingDef[@Name="BasePawn"]</xpath>
-      <value>
-        <comps>
-          <li Class="RimWorldHolsters.HolstersCompProperties"/>
-        </comps>
-      </value>
-    </nomatch>
-    <match Class="PatchOperationAdd">
-      <xpath>/Defs/ThingDef[@Name="BasePawn"]/comps</xpath>
-      <value>
-        <li Class="RimWorldHolsters.HolstersCompProperties"/>
-      </value>
-    </match>
+  <Operation Class="PatchOperationAdd">
+    <xpath>
+      /Defs
+      /PawnRenderTreeDef[defName="Humanlike"]
+      /root/children
+      /li[debugLabel="Body"]
+      /children
+    </xpath>
+    <value>
+      <li Class="RimWorldHolsters.Core.RenderNodes.PawnRenderNodeProperties_Holsters">
+        <debugLabel>Holsters root</debugLabel>
+        <workerClass>RimWorldHolsters.Core.RenderNodes.PawnRenderNodeWorker_Holsters</workerClass>
+        <tagDef>Holster</tagDef>
+        <baseLayer>80</baseLayer>
+      </li>
+    </value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>/Defs</xpath>
+    <value>
+      <PawnRenderNodeTagDef>
+        <defName>Holster</defName>
+      </PawnRenderNodeTagDef>
+    </value>
   </Operation>
 </Patch>

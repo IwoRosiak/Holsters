@@ -7,6 +7,9 @@ namespace RimWorldHolsters.Core.RenderNodes
 {
     internal class PawnRenderNodeWorker_Holsters : PawnRenderNodeWorker
     {
+        // In RimWorld code -10f and 90f are the furthest back/front layer reserved for carried things. These values ensuresholstered weapons are behind/ahead everything else.
+        private const float BACK_LAYER = -5f;
+
         public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
         {
             Pawn pawn = parms.pawn;
@@ -50,7 +53,7 @@ namespace RimWorldHolsters.Core.RenderNodes
             if (isFront)
                 return base.LayerFor(node, parms);
 
-            return -5f;
+            return BACK_LAYER;
         }
 
         public override Vector3 OffsetFor(PawnRenderNode node, PawnDrawParms parms, out Vector3 pivot)
@@ -63,6 +66,7 @@ namespace RimWorldHolsters.Core.RenderNodes
             //Log.Message($"Offset: {vector.ToString()} Original offset: {(vector-pos).ToString()}" );
             return vector;
         }
+
         public override Quaternion RotationFor(PawnRenderNode node, PawnDrawParms parms)
         {
             ThingWithComps weapon = parms.pawn.equipment.Primary;

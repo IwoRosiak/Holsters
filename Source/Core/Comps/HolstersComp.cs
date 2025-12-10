@@ -15,7 +15,7 @@ namespace RimWorldHolsters
 
             try
             {
-                WeaponDrawingManager.DrawWeaponsFor((Pawn)parent);
+                //WeaponDrawingManager.DrawWeaponsFor((Pawn)parent);
             }
             catch (Exception ex)
             {
