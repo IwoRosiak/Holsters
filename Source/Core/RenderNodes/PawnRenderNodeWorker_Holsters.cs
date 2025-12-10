@@ -14,16 +14,22 @@ namespace RimWorldHolsters.Core.RenderNodes
             if (pawn.Dead)
                 return false;
 
-            if (!IR_HolstersSettings.displayIndoors && pawn.GetRoom()?.ProperRoom == true)
-                return false;
-
-            if (pawn.GetPosture() != PawnPosture.Standing)
-                return false;
-
             if (pawn.equipment?.Primary == null)
                 return false;
 
             if (!Enum.TryParse<BodyType>(pawn.story?.bodyType?.defName.ToLower(), out _))
+                return false;
+
+            if (parms.Portrait)
+                return true;
+
+            if (pawn.Drafted)
+                return false;
+
+            if (!IR_HolstersSettings.displayIndoors && pawn.GetRoom()?.ProperRoom == true)
+                return false;
+
+            if (pawn.GetPosture() != PawnPosture.Standing)
                 return false;
 
             if (pawn.Swimming)
@@ -34,16 +40,24 @@ namespace RimWorldHolsters.Core.RenderNodes
 
         public override float LayerFor(PawnRenderNode node, PawnDrawParms parms)
         {
-            //Log.Message("Layer: " + base.LayerFor(node, parms).ToString());
+            Log.Message("Layer: " + base.LayerFor(node, parms).ToString());
 
-            return base.LayerFor(node, parms);
+            ThingWithComps weapon = parms.pawn.equipment.Primary;
+            WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName);
+
+            bool isFront = IR_HolstersSettings.GetWeaponLayer(curGroup, parms.facing, false);
+
+            if (isFront)
+                return base.LayerFor(node, parms);
+
+            return -5f;
         }
 
         public override Vector3 OffsetFor(PawnRenderNode node, PawnDrawParms parms, out Vector3 pivot)
         {
             ThingWithComps weapon = parms.pawn.equipment.Primary;
             WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName);
-            var pos = IR_HolstersSettings.GetWeaponPos(weapon.def.defName, parms.pawn.Rotation, false, parms.pawn, curGroup);
+            var pos = IR_HolstersSettings.GetWeaponPos(weapon.def.defName, parms.facing, false, parms.pawn, curGroup);
             Vector3 vector = base.OffsetFor(node, parms, out pivot);
             vector += pos;
             //Log.Message($"Offset: {vector.ToString()} Original offset: {(vector-pos).ToString()}" );
@@ -53,8 +67,9 @@ namespace RimWorldHolsters.Core.RenderNodes
         {
             ThingWithComps weapon = parms.pawn.equipment.Primary;
             WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName);
-            var rotation = IR_HolstersSettings.GetWeaponAngle(weapon.def.defName, parms.pawn.Rotation, false);
-            if (IR_HolstersSettings.GetWeaponFlip(curGroup, parms.pawn.Rotation, false))
+            var rotation = IR_HolstersSettings.GetWeaponAngle(weapon.def.defName, parms.facing, false);
+
+            if (IR_HolstersSettings.GetWeaponFlip(curGroup, parms.facing, false))
                 rotation += 180;
 
             rotation %= 360;
@@ -68,16 +83,12 @@ namespace RimWorldHolsters.Core.RenderNodes
         {
             ThingWithComps weapon = parms.pawn.equipment.Primary;
             WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName);
-            var size = curGroup.GetSize(parms.pawn.Rotation);
+            var size = curGroup.GetSize(parms.facing);
             float UIIconScale = weapon.def.uiIconScale;
             Vector3 scale = Vector3.one / UIIconScale * size;
 
             //Log.Message("Scale: " + scale.ToString());
             return scale;
         }
-
-        protected override Graphic GetGraphic(PawnRenderNode node, PawnDrawParms parms) => base.GetGraphic(node, parms);
-        protected override GraphicStateDef GetGraphicState(PawnRenderNode node, PawnDrawParms parms) => base.GetGraphicState(node, parms);
-        protected override Vector3 PivotFor(PawnRenderNode node, PawnDrawParms parms) => base.PivotFor(node, parms);
     }
 }

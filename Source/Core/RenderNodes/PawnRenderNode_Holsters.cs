@@ -29,6 +29,7 @@ namespace RimWorldHolsters.Core.RenderNodes
             Log.Message("Flipping!");
             ThingWithComps weapon = parms.pawn.equipment.Primary;
             WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName);
+
             return IR_HolstersSettings.GetWeaponFlip(curGroup, parms.facing, false);
         }
     }
