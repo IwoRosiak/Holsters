@@ -14,21 +14,33 @@ namespace RimWorldHolsters.Core.RenderNodes
         {
             if (pawn.equipment == null || pawn.equipment.AllEquipmentListForReading.Count == 0)
                 yield break;
-         
+
+
+            var filledSlots = new List<WeaponGroupCordInfo>();
+
             Log.Message("-----Generating Dynamic Nodes-----");
 
             PawnRenderNode holsterNode = tree.TryGetNodeByTag(PawnRenderNodeTagDefOf_Holsters.Holster,  out PawnRenderNode node) ? node : null;
 
             if (pawn.equipment.Primary != null && ShouldAddHolsterNode(pawn.equipment.Primary))
             {
-                foreach ((PawnRenderNode node, PawnRenderNode parent) result in ProcessWeapons(pawn, tree, pawn.equipment.Primary, holsterNode))
+                if (!PawnRenderUtility.CarryWeaponOpenly(pawn))
                 {
-                    if (result.node != null)
-                        yield return result;
+                    foreach ((PawnRenderNode node, PawnRenderNode parent) result in ProcessWeapon(pawn, tree, pawn.equipment.Primary, holsterNode, false, true))
+                    {
+                        if (result.node != null)
+                            yield return result;
 
-                    Log.Message("Adding main weapon");
+                        Log.Message("Adding main weapon");
+                    }
                 }
+
+                WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(pawn.equipment.Primary.def.defName);
+                filledSlots.Add(curGroup);
             }
+
+            if (!IR_HolstersSettings.displaySide)
+                yield break;
 
             Log.Message("Things in inventory: " + pawn.inventory.innerContainer.Count);
 
@@ -39,11 +51,14 @@ namespace RimWorldHolsters.Core.RenderNodes
 
                 Log.Message("Processing: " + item.def.defName);
 
-                foreach ((PawnRenderNode node, PawnRenderNode parent) result in ProcessWeapons(pawn, tree, item, holsterNode))
+                bool isSidearm = IsSide(IR_HolstersSettings.GetWeaponGroupOf(item.def.defName), filledSlots);
+
+                foreach ((PawnRenderNode node, PawnRenderNode parent) result in ProcessWeapon(pawn, tree, item, holsterNode, isSidearm, false))
                 {
                     if (result.node != null)
                         yield return result;
 
+                    filledSlots.Add(IR_HolstersSettings.GetWeaponGroupOf(item.def.defName));
                     Log.Message("Adding secondary weapon");
                 }
             }
@@ -51,10 +66,22 @@ namespace RimWorldHolsters.Core.RenderNodes
             Log.Message("-----Ending Generating Dynamic Nodes-----");
             Log.Message(".");
         }
-
         private static bool ShouldAddHolsterNode(ThingWithComps gear) => gear.def.IsWeapon;
 
-        private static IEnumerable<(PawnRenderNode node, PawnRenderNode parent)> ProcessWeapons(Pawn pawn, PawnRenderTree tree, ThingWithComps item, PawnRenderNode parentNode)
+        private bool IsSide(WeaponGroupCordInfo curGroup, List<WeaponGroupCordInfo> filledSlots)
+        {
+            bool isSide = true;
+
+            if (IR_HolstersSettings.smartSideDisplay && !filledSlots.Contains(curGroup))
+            {
+                isSide = false;
+            }
+
+            return isSide;
+        }
+
+
+        private static IEnumerable<(PawnRenderNode node, PawnRenderNode parent)> ProcessWeapon(Pawn pawn, PawnRenderTree tree, ThingWithComps item, PawnRenderNode parentNode, bool isSidearm, bool isMainWeapon)
         {
             PawnRenderNodeProperties pawnRenderNodeProperties = null;
             PawnRenderNode pawnRenderNode2 = null;
@@ -75,7 +102,7 @@ namespace RimWorldHolsters.Core.RenderNodes
 
             if (tree.ShouldAddNodeToTree(pawnRenderNodeProperties))
             {
-                yield return (node: new PawnRenderNode_Holsters(pawn, pawnRenderNodeProperties, tree, item), parent: pawnRenderNode2);
+                yield return (node: new PawnRenderNode_Holsters(pawn, pawnRenderNodeProperties, tree, item, isSidearm, isMainWeapon), parent: pawnRenderNode2);
             }
             else
             {

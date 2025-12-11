@@ -10,6 +10,7 @@ namespace RimWorldHolsters.Core.RenderNodes
         private const float BACK_LAYER = -5f;
         public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
         {
+            var holsterNode = node as PawnRenderNode_Holsters;
             Pawn pawn = parms.pawn;
 
             if (pawn.Dead)
@@ -21,8 +22,8 @@ namespace RimWorldHolsters.Core.RenderNodes
             if (parms.Portrait)
                 return true;
 
-            //if (pawn.Drafted)
-            //    return false;
+            if (holsterNode.TreatAsMainWeapon && pawn.Drafted)
+                return false;
 
             if (!IR_HolstersSettings.displayIndoors && pawn.GetRoom()?.ProperRoom == true)
                 return false;
@@ -43,7 +44,7 @@ namespace RimWorldHolsters.Core.RenderNodes
             ThingWithComps weapon = holsterNode.Thing;
             WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName);
 
-            bool isFront = IR_HolstersSettings.GetWeaponLayer(curGroup, parms.facing, false);
+            bool isFront = IR_HolstersSettings.GetWeaponLayer(curGroup, parms.facing, holsterNode.DrawInAlternativePosition);
 
             if (isFront)
                 return base.LayerFor(node, parms);
@@ -56,7 +57,7 @@ namespace RimWorldHolsters.Core.RenderNodes
             var holsterNode = node as PawnRenderNode_Holsters;
 
             WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(holsterNode.Thing.def.defName);
-            Vector3 pos = IR_HolstersSettings.GetWeaponPos(holsterNode.Thing.def.defName, parms.facing, false, parms.pawn, curGroup);
+            Vector3 pos = IR_HolstersSettings.GetWeaponPos(holsterNode.Thing.def.defName, parms.facing, holsterNode.DrawInAlternativePosition, parms.pawn, curGroup);
             Vector3 vector = base.OffsetFor(node, parms, out pivot);
             vector += pos;
 
@@ -68,9 +69,9 @@ namespace RimWorldHolsters.Core.RenderNodes
             var holsterNode = node as PawnRenderNode_Holsters;
 
             ThingWithComps weapon = holsterNode.Thing;
-            float rotation = IR_HolstersSettings.GetWeaponAngle(weapon.def.defName, parms.facing, false);
+            float rotation = IR_HolstersSettings.GetWeaponAngle(weapon.def.defName, parms.facing, holsterNode.DrawInAlternativePosition);
 
-            if (IR_HolstersSettings.GetWeaponFlip(holsterNode.WeaponGroupCordInfo, parms.facing, false))
+            if (IR_HolstersSettings.GetWeaponFlip(holsterNode.WeaponGroupCordInfo, parms.facing, holsterNode.DrawInAlternativePosition))
                 rotation += 180;
 
             rotation %= 360;
