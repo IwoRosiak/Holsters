@@ -17,14 +17,11 @@ namespace RimWorldHolsters.Core.RenderNodes
          
             Log.Message("-----Generating Dynamic Nodes-----");
 
-
-            var layerOffsets = new Dictionary<PawnRenderNode, int>();
             PawnRenderNode holsterNode = tree.TryGetNodeByTag(PawnRenderNodeTagDefOf_Holsters.Holster,  out PawnRenderNode node) ? node : null;
-
 
             if (pawn.equipment.Primary != null && ShouldAddHolsterNode(pawn.equipment.Primary))
             {
-                foreach ((PawnRenderNode node, PawnRenderNode parent) result in ProcessWeapons(pawn, tree, pawn.equipment.Primary, holsterNode, layerOffsets))
+                foreach ((PawnRenderNode node, PawnRenderNode parent) result in ProcessWeapons(pawn, tree, pawn.equipment.Primary, holsterNode))
                 {
                     if (result.node != null)
                         yield return result;
@@ -32,6 +29,7 @@ namespace RimWorldHolsters.Core.RenderNodes
                     Log.Message("Adding main weapon");
                 }
             }
+
             Log.Message("Things in inventory: " + pawn.inventory.innerContainer.Count);
 
             foreach (ThingWithComps item in pawn.inventory.innerContainer)
@@ -41,17 +39,12 @@ namespace RimWorldHolsters.Core.RenderNodes
 
                 Log.Message("Processing: " + item.def.defName);
 
-                foreach ((PawnRenderNode node, PawnRenderNode parent) result in ProcessWeapons(pawn, tree, item, holsterNode, layerOffsets))
+                foreach ((PawnRenderNode node, PawnRenderNode parent) result in ProcessWeapons(pawn, tree, item, holsterNode))
                 {
                     if (result.node != null)
                         yield return result;
 
                     Log.Message("Adding secondary weapon");
-
-                    //if (result.parent != null && !layerOffsets.TryAdd(result.parent, 1))
-                    //{
-                    //    layerOffsets[result.parent]++;
-                    //}
                 }
             }
 
@@ -61,11 +54,10 @@ namespace RimWorldHolsters.Core.RenderNodes
 
         private static bool ShouldAddHolsterNode(ThingWithComps gear) => gear.def.IsWeapon;
 
-        private static IEnumerable<(PawnRenderNode node, PawnRenderNode parent)> ProcessWeapons(Pawn pawn, PawnRenderTree tree, ThingWithComps item, PawnRenderNode parentNode, Dictionary<PawnRenderNode, int> layerOffsets)
+        private static IEnumerable<(PawnRenderNode node, PawnRenderNode parent)> ProcessWeapons(Pawn pawn, PawnRenderTree tree, ThingWithComps item, PawnRenderNode parentNode)
         {
             PawnRenderNodeProperties pawnRenderNodeProperties = null;
             PawnRenderNode pawnRenderNode2 = null;
-            //DrawData drawData = item.def.apparel.drawData;
             if (parentNode != null)
             {
                 if (pawnRenderNode2 == null)
@@ -77,7 +69,6 @@ namespace RimWorldHolsters.Core.RenderNodes
                     debugLabel = item.def.defName,
                     workerClass = typeof(PawnRenderNodeWorker_Holsters),
                     baseLayer = pawnRenderNode2.Props.baseLayer,
-                    //drawData = drawData,
                     parentTagDef = PawnRenderNodeTagDefOf_Holsters.Holster
                 };
             }

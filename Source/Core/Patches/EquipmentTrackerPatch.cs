@@ -25,6 +25,24 @@ namespace RimWorldHolsters.Core.Patches
         }
     }
 
+    [HarmonyPatch(typeof(Pawn_EquipmentTracker), "Notify_EquipmentRemoved")]
+    public static class Pawn_EquipmentTracker_Notify_EquipmentRemoved_Patch
+    {
+        [HarmonyPostfix]
+        public static void Notify_EquipmentRemovedPostfix(Pawn_EquipmentTracker __instance, ThingWithComps eq)
+        {
+            try
+            {
+                Log.Message("Checking removed equipment...");
+                __instance.pawn.Drawer.renderer.SetAllGraphicsDirty();
+            }
+            catch (Exception ex)
+            {
+                ExceptionHandler.HandleException(ex, 0);
+            }
+        }
+    }
+
 
     [HarmonyPatch(typeof(ThingOwner), "NotifyAdded")]
     public static class ThingOwnerPatch
@@ -41,6 +59,28 @@ namespace RimWorldHolsters.Core.Patches
                     {
                         tracker.pawn.Drawer.renderer.SetAllGraphicsDirty();
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionHandler.HandleException(ex, 0);
+            }
+        }
+    }
+
+
+    [HarmonyPatch(typeof(Pawn_InventoryTracker), "Notify_ItemRemoved")]
+    public static class ThingOwnerItemRemovedPatch
+    {
+        [HarmonyPostfix]
+        public static void Notify_ItemRemovedPostfix(Pawn_InventoryTracker __instance, Thing item)
+        {
+            try
+            {
+                Log.Message("Checking inventory...");
+                if (item.def.IsWeapon)
+                {
+                    __instance.pawn.Drawer.renderer.SetAllGraphicsDirty();
                 }
             }
             catch (Exception ex)
