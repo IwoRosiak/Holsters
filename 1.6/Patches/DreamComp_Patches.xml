@@ -9,9 +9,8 @@
       /children
     </xpath>
     <value>
-      <li Class="RimWorldHolsters.Core.RenderNodes.PawnRenderNodeProperties_Holsters">
+      <li Class="PawnRenderNodeProperties_Parent">
         <debugLabel>Holsters root</debugLabel>
-        <workerClass>RimWorldHolsters.Core.RenderNodes.PawnRenderNodeWorker_Holsters</workerClass>
         <tagDef>Holster</tagDef>
         <baseLayer>80</baseLayer>
       </li>

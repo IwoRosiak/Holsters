@@ -72,6 +72,7 @@
       <HintPath>..\..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="netstandard" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -98,14 +99,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Comps\HolstersComp.cs" />
-    <Compile Include="Core\Comps\HolstersCompProperties.cs" />
     <Compile Include="Core\DisplayWeapon.cs" />
-    <Compile Include="Core\Patches\CompatibilityMode.cs" />
-    <Compile Include="Core\Patches\DrawEquipmentPatch.cs" />
     <Compile Include="Core\Patches\EquipmentTrackerPatch.cs" />
     <Compile Include="Core\Patches\Initialise.cs" />
+    <Compile Include="Core\RenderNodes\DynamicPawnRenderNodeSetup_Holsters.cs" />
     <Compile Include="Core\RenderNodes\PawnRenderNodeProperties_Holsters.cs" />
+    <Compile Include="Core\RenderNodes\PawnRenderNodeTagDefOf_Holsters.cs" />
     <Compile Include="Core\RenderNodes\PawnRenderNodeWorker_Holsters.cs" />
     <Compile Include="Core\RenderNodes\PawnRenderNode_Holsters.cs" />
     <Compile Include="Core\WeaponDrawingProperties.cs" />

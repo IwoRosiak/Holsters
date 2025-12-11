@@ -24,4 +24,29 @@ namespace RimWorldHolsters.Core.Patches
             }
         }
     }
+
+
+    [HarmonyPatch(typeof(ThingOwner), "NotifyAdded")]
+    public static class ThingOwnerPatch
+    {
+        [HarmonyPostfix]
+        public static void NotifyAddedPostfix(ThingOwner __instance, Thing item)
+        {
+            try
+            {
+                Log.Message("Checking inventory...");
+                if (item.def.IsWeapon)
+                {
+                    if (__instance.Owner is Pawn_InventoryTracker tracker)
+                    {
+                        tracker.pawn.Drawer.renderer.SetAllGraphicsDirty();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionHandler.HandleException(ex, 0);
+            }
+        }
+    }
 }
