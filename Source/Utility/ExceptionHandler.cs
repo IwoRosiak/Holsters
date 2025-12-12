@@ -15,6 +15,9 @@ namespace RimWorldHolsters.Core.WeaponDrawing
 #if RimWorld_1_5
             "1.5";
 #endif
+#if RimWorld_1_6
+            "1.6";
+#endif
 
         private const string REPORT_MESSAGE_PREFIX = 
             "Holsters encountered unhandled error. Please, report the following on the mods page:\n" +
