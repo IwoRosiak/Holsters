@@ -18,7 +18,7 @@ namespace RimWorldHolsters.Core.RenderNodes
 
             var filledSlots = new List<WeaponGroupCordInfo>();
 
-            Log.Message("-----Generating Dynamic Nodes-----");
+            //Log.Message("-----Generating Dynamic Nodes-----");
 
             PawnRenderNode holsterNode = tree.TryGetNodeByTag(PawnRenderNodeTagDefOf_Holsters.Holster,  out PawnRenderNode node) ? node : null;
 
@@ -31,7 +31,7 @@ namespace RimWorldHolsters.Core.RenderNodes
                         if (result.node != null)
                             yield return result;
 
-                        Log.Message("Adding main weapon");
+                        //Log.Message("Adding main weapon");
                     }
                 }
 
@@ -42,7 +42,7 @@ namespace RimWorldHolsters.Core.RenderNodes
             if (!IR_HolstersSettings.displaySide)
                 yield break;
 
-            Log.Message("Things in inventory: " + pawn.inventory.innerContainer.Count);
+            //Log.Message("Things in inventory: " + pawn.inventory.innerContainer.Count);
 
             foreach (ThingWithComps item in pawn.inventory.innerContainer)
             {
@@ -59,12 +59,12 @@ namespace RimWorldHolsters.Core.RenderNodes
                         yield return result;
 
                     filledSlots.Add(IR_HolstersSettings.GetWeaponGroupOf(item.def.defName));
-                    Log.Message("Adding secondary weapon");
+                    //Log.Message("Adding secondary weapon");
                 }
             }
 
-            Log.Message("-----Ending Generating Dynamic Nodes-----");
-            Log.Message(".");
+            //Log.Message("-----Ending Generating Dynamic Nodes-----");
+            //Log.Message(".");
         }
         private static bool ShouldAddHolsterNode(ThingWithComps gear) => gear.def.IsWeapon;
 
