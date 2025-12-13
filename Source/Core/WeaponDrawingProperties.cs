@@ -9,7 +9,6 @@ namespace RimWorldHolsters.Core
         private Vector3 _location;
         private float _rotation;
         private Mesh _mesh;
-
         private float _size;
 
         public WeaponDrawingProperties(ThingWithComps item, WeaponGroupCordInfo groupSettings, Vector3 drawLoc, Rot4 pawnRotation, bool isSide)
@@ -40,8 +39,6 @@ namespace RimWorldHolsters.Core
             }
 
         }
-
-
 
         public ThingWithComps Item => _item;
         public Vector3 Location => _location;

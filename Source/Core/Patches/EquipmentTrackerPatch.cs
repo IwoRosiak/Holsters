@@ -15,7 +15,6 @@ namespace RimWorldHolsters.Core.Patches
         {
             try
             {
-                Log.Message("Checking equipment...");
                 __instance.pawn.Drawer.renderer.SetAllGraphicsDirty();
             }
             catch (Exception ex)
@@ -33,7 +32,6 @@ namespace RimWorldHolsters.Core.Patches
         {
             try
             {
-                Log.Message("Checking removed equipment...");
                 __instance.pawn.Drawer.renderer.SetAllGraphicsDirty();
             }
             catch (Exception ex)
@@ -52,7 +50,6 @@ namespace RimWorldHolsters.Core.Patches
         {
             try
             {
-                Log.Message("Checking inventory...");
                 if (item.def.IsWeapon)
                 {
                     if (__instance.Owner is Pawn_InventoryTracker tracker)
@@ -77,7 +74,6 @@ namespace RimWorldHolsters.Core.Patches
         {
             try
             {
-                Log.Message("Checking inventory...");
                 if (item.def.IsWeapon)
                 {
                     __instance.pawn.Drawer.renderer.SetAllGraphicsDirty();

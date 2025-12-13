@@ -22,15 +22,12 @@ namespace RimWorldHolsters.Core.RenderNodes
         
         public override bool FlipGraphic(PawnDrawParms parms)
         {
-            //Log.Message("Flipping!");
             WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(Thing.def.defName);
             return IR_HolstersSettings.GetWeaponFlip(curGroup, parms.facing, DrawInAlternativePosition);
         }
 
         protected override IEnumerable<Graphic> GraphicsFor(Pawn pawn)
         {
-            Log.Message("Providing graphics");
-
             if (Thing == null)
                 yield break;
 

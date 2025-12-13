@@ -99,7 +99,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\DisplayWeapon.cs" />
+    <Compile Include="BodyType.cs" />
     <Compile Include="Core\Patches\EquipmentTrackerPatch.cs" />
     <Compile Include="Core\Patches\Initialise.cs" />
     <Compile Include="Core\RenderNodes\DynamicPawnRenderNodeSetup_Holsters.cs" />
@@ -108,9 +108,9 @@
     <Compile Include="Core\RenderNodes\PawnRenderNodeWorker_Holsters.cs" />
     <Compile Include="Core\RenderNodes\PawnRenderNode_Holsters.cs" />
     <Compile Include="Core\WeaponDrawingProperties.cs" />
+    <Compile Include="HolsterConfiguration.cs" />
+    <Compile Include="HolsterPreset.cs" />
     <Compile Include="Utility\ExceptionHandler.cs" />
-    <Compile Include="Core\WeaponDrawing\WeaponDrawingConditionChecker.cs" />
-    <Compile Include="Core\WeaponDrawing\WeaponDrawingManager.cs" />
     <Compile Include="Utility\ModSettings\IR_ModSettingsDrawer.cs" />
     <Compile Include="Core\WeaponGroupCordInfo.cs" />
     <Compile Include="Utility\IR_Textures.cs" />
@@ -118,7 +118,6 @@
     <Compile Include="Utility\ModSettings\IR_HolstersSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\Initialization\HolstersInit.cs" />
-    <Compile Include="Core\WeaponDrawing\WeaponDrawingHandler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
