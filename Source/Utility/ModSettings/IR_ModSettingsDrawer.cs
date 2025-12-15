@@ -435,32 +435,7 @@ namespace RimWorldHolsters
             }
         }*/
 
-        private static Texture ChooseBodyTexture() 
-        {
-            if (mod == null)
-            {
-                Log.Message("Mod is null");
-            }
-            if (mod.CurrentBody == null)
-            {
-                Log.Message("Current body is null");
-            }    
-            if (mod._curDir == null) 
-            {
-                Log.Message("Current direction is null");
-            }
-            if (IR_Textures.bodies == null)
-            {
-                Log.Message("Wth");
-            }
-            if (IR_Textures.bodies[mod.CurrentBody] == null)
-            {
-                Log.Message("Body type texture map is null");
-            }
-
-            return IR_Textures.bodies[mod.CurrentBody][mod._curDir];
-
-        } 
+        private static Texture ChooseBodyTexture() => IR_Textures.bodies[mod.CurrentBody][mod._curDir];
 
         private static Texture ChooseHeadTexture()
         {
