@@ -1,5 +1,6 @@
 ﻿using Holsters;
 using RimWorld;
+using RimWorldHolsters.Utility;
 using System;
 using UnityEngine;
 using Verse;
@@ -26,7 +27,7 @@ namespace RimWorldHolsters.Core.RenderNodes
             if (holsterNode.TreatAsMainWeapon && pawn.Drafted)
                 return false;
 
-            if (!IR_HolstersSettings.displayIndoors && pawn.GetRoom()?.ProperRoom == true)
+            if (!IR_HolstersSettings.DisplayIndoors && pawn.GetRoom()?.ProperRoom == true)
                 return false;
 
             if (pawn.GetPosture() != PawnPosture.Standing)

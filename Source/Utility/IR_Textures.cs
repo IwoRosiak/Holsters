@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RimWorldHolsters.Utility;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
@@ -9,6 +10,7 @@ namespace RimWorldHolsters
     {
         public static Texture2D background = ContentFinder<Texture2D>.Get("Background", true);
         public static Texture2D backgroundPawn = ContentFinder<Texture2D>.Get("BackgroundPawn", true);
+
 
         public static Dictionary<Rot4, Texture2D> femaleHead = new Dictionary<Rot4, Texture2D>()
         {
@@ -68,10 +70,10 @@ namespace RimWorldHolsters
 
         public static Dictionary<BodyType, Dictionary<Rot4, Texture2D>> bodies = new Dictionary<BodyType, Dictionary<Rot4, Texture2D>>()
         {
-            {BodyType.fat,fatBody },
+            {BodyType.fat, fatBody },
             {BodyType.male, maleBody},
             {BodyType.female,femaleBody },
-            {BodyType.hulk,hulkBody },
+            {BodyType.hulk, hulkBody },
             {BodyType.thin, thinBody}
         };
     }

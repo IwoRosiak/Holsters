@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using RimWorldHolsters.Utility;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,40 +9,64 @@ namespace RimWorldHolsters
 {
     public class IR_HolstersMod : Mod
     {
-        private IR_HolstersSettings settings;
+        internal const float PIXEL_RATIO = 96;
+
+        private readonly IR_HolstersSettings _settings;
+
+        private string _errorLog;
+        private bool _restoreDefaultConfirmation;
+
+        private float _receivingGroupIndex;
+        private string _groupName;
+
+        internal BodyType CurrentBody = BodyType.male;
+        internal List<ThingDef> _curWeapons = new List<ThingDef>();
+        internal int _curGroupIndex = 0;
+
+
+        internal Rot4 _curDir = Rot4.South;
+        internal bool _isSidearmMode = false;
+        internal bool _isPrimaryMode = true;
+
+
+        internal int _curWeaponIndex = 0;
+
+        //private string instructions = "Guide: \nAll placement settings are group specific, not weapon specific. \nIf you use any sidearm mod you can also edit position for those seperately. \nPositions have to be manually adjusted for each side the pawn is looking at. \nBody offsets are there since some bodies have different dimensions. The position offsets are shared for all bodies but can be modified using impacts (impact 0 means body offsets do not affect this body type.)\n";
 
         public IR_HolstersMod(ModContentPack content) : base(content)
         {
-            this.settings = GetSettings<IR_HolstersSettings>();
+            _settings = GetSettings<IR_HolstersSettings>();
         }
+
+        public override string SettingsCategory() => "Holsters";
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
             IR_ModSettingsDrawer.mod = this;
 
-            if (curWeapons.NullOrEmpty())
+            if (_curWeapons.NullOrEmpty())
             {
-                TryLoadWeapons(true);
+                _ = TryLoadWeapons(true);
             } 
 
             Widgets.DrawTextureFitted(inRect, IR_Textures.background, 1);
 
-            Rect middleRect = new Rect(inRect.x + (0.3f * inRect.width) +10f, inRect.y, 0.4f * inRect.width -20f, 0.3f * inRect.height);
-            Listing_Standard middleListing = new Listing_Standard();
+            var middleRect = new Rect(inRect.x + (0.3f * inRect.width) +10f, inRect.y, 0.4f * inRect.width -20f, 0.3f * inRect.height);
+            var middleListing = new Listing_Standard();
             
 
             middleListing.Begin(middleRect);
 
             //middleListing.Label(instructions);
 
-            if (!errorLog.NullOrEmpty())
+            if (!_errorLog.NullOrEmpty())
             {
-                middleListing.Label(errorLog);
+                _ = middleListing.Label(_errorLog);
             }
            
             middleListing.End();
 
-            Rect bodyFrameRect = new Rect(inRect.x + (0.2f * inRect.width), inRect.y + (0.34f * inRect.height), 0.6f * inRect.width, 0.6f * inRect.height);
+            var bodyFrameRect = new Rect(inRect.x + (0.2f * inRect.width), inRect.y + (0.34f * inRect.height), 0.6f * inRect.width, 0.6f * inRect.height);
             IR_ModSettingsDrawer.DrawPawn(bodyFrameRect);
 
 
@@ -50,24 +75,25 @@ namespace RimWorldHolsters
 
 
             //DANGER ZONE
-            Rect dangerZoneRect = new Rect(inRect.x + 10f, inRect.y + (0.55f * inRect.height), 0.2f * inRect.width - 20f, 0.6f * inRect.height);
+            var dangerZoneRect = new Rect(inRect.x + 10f, inRect.y + (0.55f * inRect.height), 0.2f * inRect.width - 20f, 0.6f * inRect.height);
             Widgets.DrawLineHorizontal(dangerZoneRect.x, dangerZoneRect.y + 24f, dangerZoneRect.width);
-            Listing_Standard dangerZoneListing = new Listing_Standard();
+            var dangerZoneListing = new Listing_Standard();
             dangerZoneListing.Begin(dangerZoneRect);
 
-            dangerZoneListing.Label("DANGER ZONE");
+            _ = dangerZoneListing.Label("DANGER ZONE");
             dangerZoneListing.Gap();
 
-            if (dangerZoneListing.ButtonText("Restore default settings") && restoreDefaultConfirmation)
+            if (dangerZoneListing.ButtonText("Restore default settings") && _restoreDefaultConfirmation)
             {
-                curGroupIndex = 0;
-                curWeaponIndex = 0;
+                _curGroupIndex = 0;
+                _curWeaponIndex = 0;
                 IR_HolstersSettings.ResetAllGroups();
 
-                TryLoadWeapons(true);
+                _ = TryLoadWeapons(true);
                 return;
             }
-            dangerZoneListing.CheckboxLabeled("Confirm: ", ref restoreDefaultConfirmation, "It cannot be reversed!");
+
+            dangerZoneListing.CheckboxLabeled("Confirm: ", ref _restoreDefaultConfirmation, "It cannot be reversed!");
 
             dangerZoneListing.End();
 
@@ -79,18 +105,18 @@ namespace RimWorldHolsters
             
 
             //MODE MANAGEMENT
-            Rect leftSideRect = new Rect(inRect.x +10f , inRect.y+ (inRect.height*0.3f), 0.2f * inRect.width - 20f, inRect.height);
+            var leftSideRect = new Rect(inRect.x +10f , inRect.y+ (inRect.height*0.3f), 0.2f * inRect.width - 20f, inRect.height);
             Widgets.DrawLineHorizontal(leftSideRect.x, leftSideRect.y + 24f, leftSideRect.width);
 
 
-            Listing_Standard leftSideListing = new Listing_Standard();
+            var leftSideListing = new Listing_Standard();
             leftSideListing.Begin(leftSideRect);
 
-            leftSideListing.Label("Display Settings");
+            _ = leftSideListing.Label("Display Settings");
             leftSideListing.Gap();
 
             string currentModeLabel;
-            if (isSidearmMode)
+            if (_isSidearmMode)
             {
                 currentModeLabel = "sidearms";
             }
@@ -99,29 +125,42 @@ namespace RimWorldHolsters
                 currentModeLabel = "primary";
             }
 
-            leftSideListing.CheckboxLabeled("Display indoors: ", ref IR_HolstersSettings.displayIndoors);
-            leftSideListing.CheckboxLabeled("Display sidearms: ", ref IR_HolstersSettings.displaySide);
-            leftSideListing.CheckboxLabeled("Smart sidearms: ", ref IR_HolstersSettings.smartSideDisplay);
+            leftSideListing.CheckboxLabeled("Display indoors: ", ref IR_HolstersSettings.DisplayIndoors);
+            leftSideListing.CheckboxLabeled("Display sidearms: ", ref IR_HolstersSettings.DisplaySidearms);
+            leftSideListing.CheckboxLabeled("Smart sidearms: ", ref IR_HolstersSettings.SmartSideDisplay);
 
             if (leftSideListing.ButtonText("Edit mode: " + currentModeLabel, "Change to edit sidearms positions and primary positions of the weapons."))
             {
-                isSidearmMode = !isSidearmMode;
+                _isSidearmMode = !_isSidearmMode;
                 return;
             }
 
             leftSideListing.End();
         }
 
-        private string errorLog;
-        private bool restoreDefaultConfirmation;
-        private bool resetConfirmation;
+        internal ThingDef GetCurWeapon()
+        {
+            if (_curWeapons.NullOrEmpty())
+            {
+                return null;
+            }
 
-        private float receivingGroupIndex;
-        private string groupName;
+            return _curWeapons[_curWeaponIndex];
+        }
+
+        internal HolsterWeaponRenderGroup GetCurGroup()
+        {
+            if (IR_HolstersSettings.RenderGroups.NullOrEmpty())
+            {
+                IR_HolstersSettings.InitBasicGroups();
+            }
+
+            return IR_HolstersSettings.RenderGroups[_curGroupIndex];
+        }
 
         private void DrawGroupsManagement(Rect rect)
         {
-            Rect mainRect = new Rect(rect.x + (0.7f * rect.width) + 10f, rect.y, 0.3f * rect.width -20f, 0.40f * rect.height);
+            var mainRect = new Rect(rect.x + (0.7f * rect.width) + 10f, rect.y, 0.3f * rect.width -20f, 0.40f * rect.height);
 
             Rect gapLine = mainRect;
             //gapLine.x +=15f;
@@ -141,37 +180,37 @@ namespace RimWorldHolsters
             changeGroupRect.width = mainRect.width * 0.2f;
             if (Widgets.ButtonText(changeGroupRect, "<-"))
             {
-                if (curGroupIndex == 0)
+                if (_curGroupIndex == 0)
                 {
-                    curGroupIndex = IR_HolstersSettings.RenderGroups.Count - 1;
+                    _curGroupIndex = IR_HolstersSettings.RenderGroups.Count - 1;
                 }
                 else
                 {
-                    curGroupIndex--;
+                    _curGroupIndex--;
                 }
 
-                TryLoadWeapons(true);
+                _ = TryLoadWeapons(true);
                 return;
             }
 
             changeGroupRect.width = mainRect.width * 0.6f;
             changeGroupRect.x = mainRect.x + (mainRect.width * 0.2f);
-            Widgets.ButtonText(changeGroupRect, GetCurGroup().Name, true, false, false);
+            _ = Widgets.ButtonText(changeGroupRect, GetCurGroup().Name, true, false, false);
 
             changeGroupRect.width = mainRect.width * 0.2f;
             changeGroupRect.x = mainRect.x + (mainRect.width * 0.8f);
             if (Widgets.ButtonText(changeGroupRect, "->"))
             {
-                if (curGroupIndex == IR_HolstersSettings.RenderGroups.Count - 1)
+                if (_curGroupIndex == IR_HolstersSettings.RenderGroups.Count - 1)
                 {
-                    curGroupIndex = 0;
+                    _curGroupIndex = 0;
                 }
                 else
                 {
-                    curGroupIndex++;
+                    _curGroupIndex++;
                 }
 
-                TryLoadWeapons(true);
+                 _ = TryLoadWeapons(true);
                 return;
             }
 
@@ -180,36 +219,36 @@ namespace RimWorldHolsters
             Rect changeNameRect = mainRect;
             changeNameRect.height = 30;
 
-            groupName = Widgets.TextEntryLabeled(changeNameRect, "Group's name", groupName);
+            _groupName = Widgets.TextEntryLabeled(changeNameRect, "Group's name", _groupName);
 
             changeNameRect.y += 30;
             changeNameRect.width = mainRect.width * 0.5f;
 
             if (Widgets.ButtonText(changeNameRect, "Change name"))
             {
-                if (groupName.Equals(""))
+                if (_groupName.Equals(""))
                 {
-                    errorLog = "Name needs at least one letter!";
+                    _errorLog = "Name needs at least one letter!";
                     return;
                 }
 
-                errorLog = GetCurGroup().Name + " changed to " + groupName + ".";
-                IR_HolstersSettings.ChangeGroupsName(GetCurGroup(), groupName);
-                groupName = "";
+                _errorLog = GetCurGroup().Name + " changed to " + _groupName + ".";
+                IR_HolstersSettings.ChangeGroupsName(GetCurGroup(), _groupName);
+                _groupName = "";
             }
 
             changeNameRect.x = mainRect.x + (mainRect.width * 0.5f);
 
             if (Widgets.ButtonText(changeNameRect, "Create group"))
             {
-                if (groupName.Equals(""))
+                if (_groupName.Equals(""))
                 {
-                    errorLog = "Name needs at least one letter!";
+                    _errorLog = "Name needs at least one letter!";
                     return;
                 }
 
-                errorLog = groupName + " created!";
-                IR_HolstersSettings.AddNewSettingsGroup(groupName);
+                _errorLog = _groupName + " created!";
+                IR_HolstersSettings.AddNewSettingsGroup(_groupName);
             }
 
             mainRect.y += 60;
@@ -219,27 +258,27 @@ namespace RimWorldHolsters
             {
                 if (!GetCurGroup().ShouldDisplay)
                 {
-                    errorLog = "This group cannot be deleted.";
+                    _errorLog = "This group cannot be deleted.";
 
                 } else if (GetCurWeapon() == null)
                 {
-                    errorLog = GetCurGroup().Name + " deleted!";
+                    _errorLog = GetCurGroup().Name + " deleted!";
                     IR_HolstersSettings.RemoveGroup(GetCurGroup());
                     
-                    curGroupIndex = 0;
+                    _curGroupIndex = 0;
                     return;
 
                 }
                 else
                 {
-                    errorLog = "The group can be only deleted if it has no weapons assigned (move weapons to another group to resolve that issue)";
+                    _errorLog = "The group can be only deleted if it has no weapons assigned (move weapons to another group to resolve that issue)";
                 }
             }
         }
 
         private void DrawWeaponsManagement(Rect rect)
         {
-            Rect mainRect = new Rect(rect.x + 10f, rect.y, 0.3f * rect.width -20f, 0.4f * rect.height);
+            var mainRect = new Rect(rect.x + 10f, rect.y, 0.3f * rect.width -20f, 0.4f * rect.height);
 
             Rect gapLine = mainRect;
 
@@ -256,58 +295,58 @@ namespace RimWorldHolsters
             changeWeapons.width = mainRect.width * 0.2f;
             if (Widgets.ButtonText(changeWeapons, "<-"))
             {
-                if (curWeaponIndex == 0)
+                if (_curWeaponIndex == 0)
                 {
-                    curWeaponIndex = curWeapons.Count - 1;
+                    _curWeaponIndex = _curWeapons.Count - 1;
                 }
                 else
                 {
-                    curWeaponIndex--;
+                    _curWeaponIndex--;
                 }
             }
 
             changeWeapons.width = mainRect.width * 0.6f;
             changeWeapons.x = mainRect.x + (mainRect.width * 0.2f);
             
-            if (curWeapons.NullOrEmpty())
+            if (_curWeapons.NullOrEmpty())
             {
-                Widgets.ButtonText(changeWeapons, "Empty group", true, false, false);
+                _ = Widgets.ButtonText(changeWeapons, "Empty group", true, false, false);
             }
             else
             {
-                Widgets.ButtonText(changeWeapons, curWeapons[curWeaponIndex].label, true, false, false);
+                _ = Widgets.ButtonText(changeWeapons, _curWeapons[_curWeaponIndex].label, true, false, false);
             }
 
             changeWeapons.width = mainRect.width * 0.2f;
             changeWeapons.x = mainRect.x + (mainRect.width * 0.8f);
             if (Widgets.ButtonText(changeWeapons, "->"))
             {
-                if (curWeaponIndex == curWeapons.Count - 1)
+                if (_curWeaponIndex == _curWeapons.Count - 1)
                 {
-                    curWeaponIndex = 0;
+                    _curWeaponIndex = 0;
                 }
                 else
                 {
-                    curWeaponIndex++;
+                    _curWeaponIndex++;
                 }
             }
 
             mainRect.y+=30;
             mainRect.height = 30;
 
-            if (Widgets.ButtonText(mainRect ,"Send to: " + IR_HolstersSettings.RenderGroups[(int)receivingGroupIndex].Name))
+            if (Widgets.ButtonText(mainRect ,"Send to: " + IR_HolstersSettings.RenderGroups[(int)_receivingGroupIndex].Name))
             {
                 if (GetCurWeapon() != null)
                 {
-                    errorLog = GetCurWeapon().defName + " moved to " + IR_HolstersSettings.RenderGroups[(int)receivingGroupIndex].Name;
-                    ChangeCurWeaponsGroup(GetCurGroup(), (int)receivingGroupIndex);
+                    _errorLog = GetCurWeapon().defName + " moved to " + IR_HolstersSettings.RenderGroups[(int)_receivingGroupIndex].Name;
+                    ChangeCurWeaponsGroup(GetCurGroup(), (int)_receivingGroupIndex);
                     TryLoadWeapons(false);
                     return;
                 }
             }
 
             mainRect.y+=30;
-            receivingGroupIndex = (int)Widgets.HorizontalSlider(mainRect, receivingGroupIndex, 0, IR_HolstersSettings.RenderGroups.Count - 1);
+            _receivingGroupIndex = (int)Widgets.HorizontalSlider(mainRect, _receivingGroupIndex, 0, IR_HolstersSettings.RenderGroups.Count - 1);
 
 
             mainRect.y += 30;
@@ -317,19 +356,23 @@ namespace RimWorldHolsters
         {
             if (resetIndex)
             {
-                curWeaponIndex = 0;
-            } else AdjustWeaponIndex();
-            curWeapons.Clear();
+                _curWeaponIndex = 0;
+            } 
+            else
+            {
+                AdjustWeaponIndex();
+            }
+            _curWeapons.Clear();
 
             foreach (ThingDef weapon in GenDefDatabase.GetAllDefsInDatabaseForDef(typeof(ThingDef)))
             {
                 if (weapon.IsWeapon && weapon.equipmentType == EquipmentType.Primary && GetCurGroup().Weapons.Contains(weapon.defName) && weapon.tradeability != Tradeability.None)
                 {
-                    curWeapons.Add(weapon);
+                    _curWeapons.Add(weapon);
                 }
             }
             
-            if (curWeapons.NullOrEmpty())
+            if (_curWeapons.NullOrEmpty())
             {
                 return false;
             }
@@ -338,10 +381,10 @@ namespace RimWorldHolsters
 
         private void AdjustWeaponIndex()
         {
-            if (curWeaponIndex != 0)
-            {
-                curWeaponIndex--;
-            }
+            if (_curWeaponIndex == 0)
+                return;
+            
+            _curWeaponIndex--;
         }
 
         private void ChangeCurWeaponsGroup(HolsterWeaponRenderGroup fromGroup, int toGroupIndex)
@@ -352,52 +395,6 @@ namespace RimWorldHolsters
             IR_HolstersSettings.RenderGroups[toGroupIndex].Weapons.Add(weapon.defName);
         }
 
-        internal ThingDef GetCurWeapon()
-        {
-            if (curWeapons.NullOrEmpty())
-            {
-                return null;
-            }
 
-            return curWeapons[curWeaponIndex];
-        }
-
-        internal HolsterWeaponRenderGroup GetCurGroup()
-        {
-            if (IR_HolstersSettings.RenderGroups.NullOrEmpty())
-            {
-                IR_HolstersSettings.InitBasicGroups();
-            }
-
-            return IR_HolstersSettings.RenderGroups[curGroupIndex];
-        }
-
-        internal BodyType currentBody = BodyType.male;
-        internal List<ThingDef> curWeapons = new List<ThingDef>();
-        internal int curGroupIndex = 0;
-
-
-        internal Rot4 curDir = Rot4.South;
-        internal bool isSidearmMode = false;
-        internal bool isPrimaryMode = true;
-
-        internal static float pixelRatio = 96;
-
-        internal int curWeaponIndex = 0;
-
-        private string instructions = "Guide: \nAll placement settings are group specific, not weapon specific. \nIf you use any sidearm mod you can also edit position for those seperately. \nPositions have to be manually adjusted for each side the pawn is looking at. \nBody offsets are there since some bodies have different dimensions. The position offsets are shared for all bodies but can be modified using impacts (impact 0 means body offsets do not affect this body type.)\n";
-        public override string SettingsCategory()
-        {
-            return "Holsters";
-        }
-    }
-
-    public enum BodyType
-    {
-        hulk,
-        fat,
-        thin,
-        male,
-        female
     }
 }

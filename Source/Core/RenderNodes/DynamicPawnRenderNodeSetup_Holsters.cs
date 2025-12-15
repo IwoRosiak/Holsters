@@ -36,7 +36,7 @@ namespace RimWorldHolsters.Core.RenderNodes
                 filledSlots.Add(curGroup);
             }
 
-            if (!IR_HolstersSettings.displaySide)
+            if (!IR_HolstersSettings.DisplaySidearms)
                 yield break;
 
             //Log.Message("Things in inventory: " + pawn.inventory.innerContainer.Count);
@@ -69,7 +69,7 @@ namespace RimWorldHolsters.Core.RenderNodes
         {
             bool isSide = true;
 
-            if (IR_HolstersSettings.smartSideDisplay && !filledSlots.Contains(curGroup))
+            if (IR_HolstersSettings.SmartSideDisplay && !filledSlots.Contains(curGroup))
             {
                 isSide = false;
             }

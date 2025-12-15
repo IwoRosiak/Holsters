@@ -1,5 +1,6 @@
 ﻿using Holsters;
 using RimWorld;
+using RimWorldHolsters.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,39 +40,39 @@ namespace RimWorldHolsters
 
         internal static bool IsWeaponInFrontLayer()
         {
-            return mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).IsAtFront;
+            return mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).IsAtFront;
         }
 
         private static void DrawWeapon(Rect rect)
         {
-            if (mod.curWeapons.NullOrEmpty()) //||mod.GetCurGroup()sIndex == WeaponType.doNotDisplay)
+            if (mod._curWeapons.NullOrEmpty()) //||mod.GetCurGroup()sIndex == WeaponType.doNotDisplay)
             {
                 return;
             }
-            Vector2 offset = new Vector2(IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode, mod.currentBody).x, -IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode, mod.currentBody).z);
+            Vector2 offset = new Vector2(IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod._curDir, mod._isSidearmMode, mod.CurrentBody).x, -IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod._curDir, mod._isSidearmMode, mod.CurrentBody).z);
 
             Texture text = mod.GetCurWeapon().graphic.MatNorth.mainTexture;
-            float scale = (((1 / mod.GetCurWeapon().uiIconScale) / (text.width / 64)) * 1.35f * mod.GetCurWeapon().graphic.drawSize.x) * mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Size;
+            float scale = (((1 / mod.GetCurWeapon().uiIconScale) / (text.width / 64)) * 1.35f * mod.GetCurWeapon().graphic.drawSize.x) * mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Size;
 
             //Widgets.DrawTextureRotated(rect.center + (offset * pixelRatio), text, IR_WeaponData.GetWeaponAngle(GetCurGroup()sIndex, currentDir), scale);
 
-            Vector2 center = rect.center + (offset * IR_HolstersMod.pixelRatio);
+            Vector2 center = rect.center + (offset * IR_HolstersMod.PIXEL_RATIO);
 
-            float num = (float)text.width * scale;
+            float num = text.width * scale;
 
-            float num2 = (float)text.height * scale;
+            float num2 = text.height * scale;
 
-            if (IR_HolstersSettings.GetWeaponFlip(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode))
+            if (mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).IsFlipped)
             {
-                num2 = (float)text.height * -scale;
+                num2 = text.height * -scale;
             }
 
-            Widgets.DrawTextureRotated(new Rect(center.x - num / 2f, center.y - num2 / 2f, num, num2), text, IR_HolstersSettings.GetWeaponAngle(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode));
+            Widgets.DrawTextureRotated(new Rect(center.x - num / 2f, center.y - num2 / 2f, num, num2), text, IR_HolstersSettings.GetWeaponAngle(mod.GetCurGroup(), mod._curDir, mod._isSidearmMode));
         }
 
         private static void DrawBody(Rect rect)
         {
-            Rect bodyRect = new Rect(rect.x + (0.2f * rect.width), rect.y + (0.3f * rect.height), 0.6f * rect.width, 0.6f * rect.width);
+            //Rect bodyRect = new Rect(rect.x + (0.2f * rect.width), rect.y + (0.3f * rect.height), 0.6f * rect.width, 0.6f * rect.width);
 
             Texture texture = ChooseBodyTexture();
 
@@ -80,22 +81,22 @@ namespace RimWorldHolsters
 
         private static void DrawHead(Rect rect)
         {
-            Rect headRect = new Rect(rect.x + (0.2f * rect.width), rect.y + (0.3f * rect.height), 0.6f * rect.width, 0.6f * rect.width);
+            //Rect headRect = new Rect(rect.x + (0.2f * rect.width), rect.y + (0.3f * rect.height), 0.6f * rect.width, 0.6f * rect.width);
 
             Texture texture = ChooseHeadTexture();
 
             float offset = 0;
 
-            if (mod.curDir == Rot4.East)
+            if (mod._curDir == Rot4.East)
             {
                 offset = -ChooseHeadOffset();
             }
-            else if (mod.curDir == Rot4.West)
+            else if (mod._curDir == Rot4.West)
             {
                 offset = ChooseHeadOffset();
             }
 
-            Widgets.DrawTextureRotated(rect.center - new Vector2(offset * IR_HolstersMod.pixelRatio, 34), texture, 0);
+            Widgets.DrawTextureRotated(rect.center - new Vector2(offset * IR_HolstersMod.PIXEL_RATIO, 34), texture, 0);
         }
 
         internal static void DrawButtons(Rect rect)
@@ -104,26 +105,22 @@ namespace RimWorldHolsters
             DrawSizeButtons(rect);
             DrawAngleButtons(rect);
             DrawPositionButtons(rect);
-            DrawPresetsButtons(rect);
             DrawLayerButtons(rect);
 
+            var buttonFlip = new Rect(rect.x + (0.2f * rect.width), rect.y +(rect.height), 0.15f * rect.width, 0.1f * rect.height);
 
-            Rect buttonFlip = new Rect(rect.x + (0.2f * rect.width), rect.y +(rect.height), 0.15f * rect.width, 0.1f * rect.height);
-
-            Rect textPosition = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.02f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
-            Rect textBodyPos = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.12f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
-            //LAYER
-           
+            var textPosition = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.02f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
+            var textBodyPos = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.12f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
 
             //FLIP
             if (Widgets.ButtonText(buttonFlip, "Flip"))
             {
-                bool flip = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).IsFlipped;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).IsFlipped = !flip;
+                bool flip = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).IsFlipped;
+                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).IsFlipped = !flip;
                 return;
             }
 
-            Vector2 pos = new Vector2(IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode).x, -IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode).z);
+            Vector2 pos = new Vector2(IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod._curDir, mod._isSidearmMode).x, -IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod._curDir, mod._isSidearmMode).z);
             //+Math.Round(IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode).x, 4) + ", " + Math.Round(IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode).z, 4)
             Widgets.Label(textPosition, "Position: " + Math.Round(pos.x, 3) + " and " + -Math.Round(pos.y, 3));
 
@@ -138,191 +135,136 @@ namespace RimWorldHolsters
         {
             Rect buttonLayer = new Rect(rect.x, rect.y + (rect.height), 0.2f * rect.width, 0.1f * rect.height);
 
-            string layerLabel;
-
-            if (!IsWeaponInFrontLayer())
-            {
-                layerLabel = "back";
-            }
-            else
-            {
-                layerLabel = "front";
-            }
-            if (Prefs.DevMode)
-            {
-                Rect buttonLayerMinusOffset = new Rect(rect.x, rect.y + (rect.height), 0.025f * rect.width, 0.1f * rect.height);
-                buttonLayer = new Rect(rect.x + 0.025f * rect.width, rect.y + (rect.height), 0.15f * rect.width, 0.1f * rect.height);
-                Rect buttonLayerPlusOffset = new Rect(rect.x + 0.175f * rect.width, rect.y + (rect.height), 0.025f * rect.width, 0.1f * rect.height);
-
-                if (Widgets.ButtonText(buttonLayerMinusOffset, "<"))
-                {
-                    if (IsWeaponInFrontLayer())
-                    {
-                        IR_HolstersSettings.frontLayerOffset -= 0.001f;
-                    }
-
-                    if (!IsWeaponInFrontLayer())
-                    {
-                        IR_HolstersSettings.backLayerOffset -= 0.001f;
-                    }
-                }
-
-
-
-                if (Widgets.ButtonText(buttonLayerPlusOffset, ">"))
-                {
-                    if (IsWeaponInFrontLayer())
-                    {
-                        IR_HolstersSettings.frontLayerOffset += 0.001f;
-                    }
-
-                    if (!IsWeaponInFrontLayer())
-                    {
-                        IR_HolstersSettings.backLayerOffset += 0.001f;
-                    }
-                }
-            }
-
-            
+            string layerLabel = IsWeaponInFrontLayer() ? "front" : "back";
 
             if (Widgets.ButtonText(buttonLayer, "Layer: " + layerLabel))
             {
-                var temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).IsAtFront;
+                var temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).IsAtFront;
                 temp = !temp;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).IsAtFront = temp;
+                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).IsAtFront = temp;
             }
-        }
-
-        private static void DrawPresetsButtons(Rect rect)
-        {
-            Rect buttonPreset1 = new Rect(rect.x, rect.y - (0.1f * rect.height), rect.width, 0.1f * rect.height);
-            /*
-            if (Widgets.ButtonText(buttonPreset1, "PRESETS", true, true, Color.blue, true))
-            {
-                
-            }*/
         }
 
         private static void DrawPositionButtons(Rect rect)
         {
-            Rect buttonWest = new Rect(rect.x, rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonEast = new Rect(rect.x + (0.9f * rect.width), rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonNorth = new Rect(rect.x + (0.45f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonSouth = new Rect(rect.x + (0.45f * rect.width), rect.y + (0.9f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+            var buttonWest = new Rect(rect.x, rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+            var buttonEast = new Rect(rect.x + (0.9f * rect.width), rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+            var buttonNorth = new Rect(rect.x + (0.45f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
+            var buttonSouth = new Rect(rect.x + (0.45f * rect.width), rect.y + (0.9f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
        
-            if (Widgets.ButtonText(buttonWest, "-X", true, true, Color.blue, true))
+            if (Widgets.ButtonText(buttonWest, "-X"))
             {
-                var temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Position;
+                Vector3 temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Position;
                 temp.x -= 0.05f;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Position = temp;
+                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Position = temp;
             }
             if (Widgets.ButtonText(buttonEast, "+X"))
             {
-                var temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Position;
+                Vector3 temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Position;
                 temp.x += 0.05f;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Position = temp;
+                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Position = temp;
             }
             if (Widgets.ButtonText(buttonNorth, "+Y"))
             {
-                var temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Position;
+                Vector3 temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Position;
                 temp.z += 0.05f;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Position = temp;
+                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Position = temp;
             }
             if (Widgets.ButtonText(buttonSouth, "-Y"))
             {
-                var temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Position;
+                Vector3 temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Position;
                 temp.z -= 0.05f;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Position = temp;
+                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Position = temp;
             }
         }
 
         private static void DrawDirectionsButtons(Rect rect)
         {
-            Rect buttonLookWest = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonLookEast = new Rect(rect.x + (0.8f * rect.width), rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonLookNorth = new Rect(rect.x + (0.45f * rect.width), rect.y + (0.1f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonLookSouth = new Rect(rect.x + (0.45f * rect.width), rect.y + (0.8f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+            var buttonLookWest = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+            var buttonLookEast = new Rect(rect.x + (0.8f * rect.width), rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+            var buttonLookNorth = new Rect(rect.x + (0.45f * rect.width), rect.y + (0.1f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+            var buttonLookSouth = new Rect(rect.x + (0.45f * rect.width), rect.y + (0.8f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
 
             //DIRECTION
             if (Widgets.ButtonText(buttonLookWest, "W"))
             {
-                mod.curDir = Rot4.West;
+                mod._curDir = Rot4.West;
             }
             if (Widgets.ButtonText(buttonLookEast, "E"))
             {
-                mod.curDir = Rot4.East;
+                mod._curDir = Rot4.East;
             }
             if (Widgets.ButtonText(buttonLookNorth, "N"))
             {
-                mod.curDir = Rot4.North;
+                mod._curDir = Rot4.North;
             }
             if (Widgets.ButtonText(buttonLookSouth, "S"))
             {
-                mod.curDir = Rot4.South;
+                mod._curDir = Rot4.South;
             }
         }
 
         internal static void DrawSizeButtons(Rect rect)
         {
-            Rect buttonPlusSize = new Rect(rect.x + (0.6f * rect.width), rect.y + (1f * rect.height), 0.05f * rect.width, 0.1f * rect.height);
-            Rect buttonSize = new Rect(rect.x + (0.4f * rect.width), rect.y + (1f * rect.height), 0.2f * rect.width, 0.1f * rect.height);
-            Rect buttonMinusSize = new Rect(rect.x + (0.35f * rect.width), rect.y + (1f * rect.height), 0.05f * rect.width, 0.1f * rect.height);
+            var buttonPlusSize = new Rect(rect.x + (0.6f * rect.width), rect.y + (1f * rect.height), 0.05f * rect.width, 0.1f * rect.height);
+            var buttonSize = new Rect(rect.x + (0.4f * rect.width), rect.y + (1f * rect.height), 0.2f * rect.width, 0.1f * rect.height);
+            var buttonMinusSize = new Rect(rect.x + (0.35f * rect.width), rect.y + (1f * rect.height), 0.05f * rect.width, 0.1f * rect.height);
 
             if (Widgets.ButtonText(buttonMinusSize, "<"))
             {
-                var temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Size;
+                var temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Size;
                 temp -= 0.05f;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Size = temp;
+                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Size = temp;
             }
 
-            _ = Widgets.ButtonText(buttonSize, "Size: " + Math.Round(mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Size * 100, 3) + "%");
+            _ = Widgets.ButtonText(buttonSize, "Size: " + Math.Round(mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Size * 100, 3) + "%");
 
             if (Widgets.ButtonText(buttonPlusSize, ">"))
             {
-                var temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Size;
+                var temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Size;
                 temp += 0.05f;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Size = temp;
+                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Size = temp;
             }
         }
 
         internal static void DrawAngleButtons(Rect rect)
         {
-            Rect buttonRotateLeft = new Rect(rect.x + (0.7f * rect.width), rect.y + rect.height, 0.05f * rect.width, 0.1f * rect.height);
-            Rect buttonRotateRight = new Rect(rect.x + (0.90f * rect.width), rect.y + rect.height, 0.05f * rect.width, 0.1f * rect.height);
+            var buttonRotateLeft = new Rect(rect.x + (0.7f * rect.width), rect.y + rect.height, 0.05f * rect.width, 0.1f * rect.height);
+            var buttonRotateRight = new Rect(rect.x + (0.90f * rect.width), rect.y + rect.height, 0.05f * rect.width, 0.1f * rect.height);
 
-            Rect buttonAngle = new Rect(rect.x + (0.75f * rect.width), rect.y + rect.height, 0.15f * rect.width, 0.1f * rect.height);
+            var buttonAngle = new Rect(rect.x + (0.75f * rect.width), rect.y + rect.height, 0.15f * rect.width, 0.1f * rect.height);
 
-            Rect buttonRotateLeftPlus = new Rect(rect.x + (0.65f * rect.width), rect.y + rect.height, 0.05f * rect.width, 0.1f * rect.height);
-            Rect buttonRotateRightPlus = new Rect(rect.x + (0.95f * rect.width), rect.y + rect.height, 0.05f * rect.width, 0.1f * rect.height);
+            var buttonRotateLeftPlus = new Rect(rect.x + (0.65f * rect.width), rect.y + rect.height, 0.05f * rect.width, 0.1f * rect.height);
+            var buttonRotateRightPlus = new Rect(rect.x + (0.95f * rect.width), rect.y + rect.height, 0.05f * rect.width, 0.1f * rect.height);
 
 
 
-            Widgets.ButtonText(buttonAngle, "Angle: " + IR_HolstersSettings.GetWeaponAngle(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode) % 360 + "°");
+            _ = Widgets.ButtonText(buttonAngle, "Angle: " + IR_HolstersSettings.GetWeaponAngle(mod.GetCurGroup(), mod._curDir, mod._isSidearmMode) % 360 + "°");
 
             if (Widgets.ButtonText(buttonRotateLeftPlus, "<<"))
             {
-                var tempX = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Rotation;
+                var tempX = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Rotation;
                 tempX -= 5;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Rotation = tempX;
+                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Rotation = tempX;
             }
             if (Widgets.ButtonText(buttonRotateLeft, "<"))
             {
-                var tempX = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Rotation;
+                var tempX = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Rotation;
                 tempX -= 1;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Rotation = tempX;
+                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Rotation = tempX;
             }
 
             if (Widgets.ButtonText(buttonRotateRight, ">"))
             {
-                var tempX = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Rotation;
+                var tempX = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Rotation;
                 tempX += 1;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Rotation = tempX;
+                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Rotation = tempX;
             }
             if (Widgets.ButtonText(buttonRotateRightPlus, ">>"))
             {
-                var tempX = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Rotation;
+                var tempX = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Rotation;
                 tempX += 5;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.curDir, mod.isSidearmMode).Rotation = tempX;
+                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod._curDir, mod._isSidearmMode).Rotation = tempX;
             }
         }
         /*
@@ -493,36 +435,54 @@ namespace RimWorldHolsters
             }
         }*/
 
-
-
-        private static Texture ChooseBodyTexture()
+        private static Texture ChooseBodyTexture() 
         {
-            return IR_Textures.bodies[mod.currentBody][mod.curDir];
-        }
+            if (mod == null)
+            {
+                Log.Message("Mod is null");
+            }
+            if (mod.CurrentBody == null)
+            {
+                Log.Message("Current body is null");
+            }    
+            if (mod._curDir == null) 
+            {
+                Log.Message("Current direction is null");
+            }
+            if (IR_Textures.bodies == null)
+            {
+                Log.Message("Wth");
+            }
+            if (IR_Textures.bodies[mod.CurrentBody] == null)
+            {
+                Log.Message("Body type texture map is null");
+            }
 
-        
+            return IR_Textures.bodies[mod.CurrentBody][mod._curDir];
+
+        } 
 
         private static Texture ChooseHeadTexture()
         {
-            switch (mod.currentBody)
+            switch (mod.CurrentBody)
             {
                 default:
                 case BodyType.hulk:
                 case BodyType.fat:
                 case BodyType.male:
-                    return IR_Textures.maleHead[mod.curDir];
+                    return IR_Textures.maleHead[mod._curDir];
                     break;
 
                 case BodyType.thin:
                 case BodyType.female:
-                    return IR_Textures.femaleHead[mod.curDir];
+                    return IR_Textures.femaleHead[mod._curDir];
                     break;
             }
         }
 
         private static float ChooseHeadOffset()
         {
-            switch (mod.currentBody)
+            switch (mod.CurrentBody)
             {
                 default:
                 case BodyType.hulk:
@@ -546,7 +506,5 @@ namespace RimWorldHolsters
                     break;
             }
         }
-
-
     }
 }
