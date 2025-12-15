@@ -517,6 +517,8 @@ namespace RimWorldHolsters
             Scribe_Collections.Look(ref size, "size", LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref isFront, "isFront", LookMode.Value, LookMode.Value);
 
+
+            // To delete as it is now handled with a seperate HolsterRenderData
             Scribe_Collections.Look(ref posSide, "posSide", LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref angleSide, "angleSide", LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref flipSide, "flipSide", LookMode.Value, LookMode.Value);
@@ -524,8 +526,13 @@ namespace RimWorldHolsters
             Scribe_Collections.Look(ref bodyOffsetSide, "bodyOffsetSide", LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref isFrontSide, "isFrontSide", LookMode.Value, LookMode.Value);
 
-            Scribe_Collections.Look(ref weapons, "weapons", LookMode.Value);
 
+
+
+
+
+            // We don't need to save weapons here anymore
+            Scribe_Collections.Look(ref weapons, "weapons", LookMode.Value);
 
         }
     }

@@ -1,7 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
 using Verse;
 
 namespace RimWorldHolsters.Core.RenderNodes
@@ -10,17 +7,17 @@ namespace RimWorldHolsters.Core.RenderNodes
     {
         public override bool HumanlikeOnly => true;
 
-        public override IEnumerable<(PawnRenderNode node, PawnRenderNode parent)> GetDynamicNodes(Pawn pawn, PawnRenderTree tree) 
+        public override IEnumerable<(PawnRenderNode node, PawnRenderNode parent)> GetDynamicNodes(Pawn pawn, PawnRenderTree tree)
         {
             if (pawn.equipment == null || pawn.equipment.AllEquipmentListForReading.Count == 0)
                 yield break;
 
 
-            var filledSlots = new List<WeaponGroupCordInfo>();
+            var filledSlots = new List<HolsterWeaponRenderGroup>();
 
             //Log.Message("-----Generating Dynamic Nodes-----");
 
-            PawnRenderNode holsterNode = tree.TryGetNodeByTag(PawnRenderNodeTagDefOf_Holsters.Holster,  out PawnRenderNode node) ? node : null;
+            PawnRenderNode holsterNode = tree.TryGetNodeByTag(PawnRenderNodeTagDefOf_Holsters.Holster, out PawnRenderNode node) ? node : null;
 
             if (pawn.equipment.Primary != null && ShouldAddHolsterNode(pawn.equipment.Primary))
             {
@@ -35,7 +32,7 @@ namespace RimWorldHolsters.Core.RenderNodes
                     }
                 }
 
-                WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(pawn.equipment.Primary.def.defName);
+                HolsterWeaponRenderGroup curGroup = IR_HolstersSettings.GetWeaponGroupOf(pawn.equipment.Primary.def.defName);
                 filledSlots.Add(curGroup);
             }
 
@@ -68,7 +65,7 @@ namespace RimWorldHolsters.Core.RenderNodes
         }
         private static bool ShouldAddHolsterNode(ThingWithComps gear) => gear.def.IsWeapon;
 
-        private bool IsSide(WeaponGroupCordInfo curGroup, List<WeaponGroupCordInfo> filledSlots)
+        private bool IsSide(HolsterWeaponRenderGroup curGroup, List<HolsterWeaponRenderGroup> filledSlots)
         {
             bool isSide = true;
 

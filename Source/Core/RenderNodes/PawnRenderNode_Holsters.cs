@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Holsters;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorldHolsters.Core.RenderNodes
@@ -8,23 +9,29 @@ namespace RimWorldHolsters.Core.RenderNodes
         public PawnRenderNode_Holsters(Pawn pawn, PawnRenderNodeProperties props, PawnRenderTree tree, ThingWithComps thing, bool drawInAlternativePosition = false, bool treatAsMainWeapon = false) : base(pawn, props, tree)
         {
             Thing = thing;
-            WeaponGroupCordInfo = IR_HolstersSettings.GetWeaponGroupOf(thing.def.defName);
             DrawInAlternativePosition = drawInAlternativePosition;
             TreatAsMainWeapon = treatAsMainWeapon;
+
+            RenderData = IR_HolstersSettings.GetWeaponGroupOf(thing.def.defName).HolsterRenderData;
         }
 
         public ThingWithComps Thing { get; }
-        public WeaponGroupCordInfo WeaponGroupCordInfo { get; }
+        public HolsterRenderData RenderData { get; }
+
         public bool DrawInAlternativePosition { get; }
         public bool TreatAsMainWeapon { get; }
 
         public override GraphicMeshSet MeshSetFor(Pawn pawn) => new GraphicMeshSet(MeshPool.GridPlane(this.props.overrideMeshSize ?? this.props.drawSize));
         
-        public override bool FlipGraphic(PawnDrawParms parms)
+        public HolsterConfiguration GetRenderData(Rot4 facing)
         {
-            WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(Thing.def.defName);
-            return IR_HolstersSettings.GetWeaponFlip(curGroup, parms.facing, DrawInAlternativePosition);
+            Dictionary<Rot4, HolsterConfiguration> configurations = DrawInAlternativePosition 
+                ? RenderData.SideConfiguration : RenderData.Configuration;
+
+            return configurations[facing];
         }
+
+        public override bool FlipGraphic(PawnDrawParms parms) => GetRenderData(parms.facing).IsFlipped;
 
         protected override IEnumerable<Graphic> GraphicsFor(Pawn pawn)
         {

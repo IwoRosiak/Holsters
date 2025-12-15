@@ -1,6 +1,8 @@
-﻿using RimWorldHolsters.Core;
+﻿using Holsters;
+using RimWorldHolsters.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -8,21 +10,7 @@ namespace RimWorldHolsters
 {
     public class IR_HolstersSettings : ModSettings
     {
-#if RimWorld_1_5
-        private const float FORWARD_LAYER_SPACE = 0.036f;
-#else
-        private const float FORWARD_LAYER_SPACE = 0.026f;
-#endif
-        private const float MIDDLE_LAYER_SPACE = 0.0128957527f;
-        private const float BACK_LAYER_SPACE = -0.0128957527f;
-
-        public IR_HolstersSettings()
-        {
-        }
-
         public static bool isFirstLaunch;
-
-        public static List<WeaponGroupCordInfo> groups;
 
         public static bool displaySide;
 
@@ -33,9 +21,19 @@ namespace RimWorldHolsters
 
         public static bool displayIndoors = true;
 
+        public static List<HolsterWeaponRenderGroup> RenderGroups;
+
+        public IR_HolstersSettings() { }
+
+
         public override void ExposeData()
         {
-            Scribe_Collections.Look(ref groups,"groupsCordSettings3", LookMode.Deep);
+            // New
+            Scribe_Collections.Look(ref RenderGroups, "renderGroups", LookMode.Deep);
+            
+            
+            // Old
+            //Scribe_Collections.Look(ref groups,"groupsCordSettings4" /*changed from 3 to 4 for development for now*/, LookMode.Deep);
             Scribe_Values.Look(ref displaySide, "displaySide", true);
             Scribe_Values.Look(ref smartSideDisplay, "smartSideDisplay", true);
             Scribe_Values.Look(ref isFirstLaunch, "isFirstLaunch7", true);
@@ -50,17 +48,27 @@ namespace RimWorldHolsters
         //MANAGING GROUPS
         public static void InitBasicGroups()
         {
-            if (isFirstLaunch || groups.NullOrEmpty())
+            if (ShouldInitializeGroups())
             {
                 Log.Message("[Holsters] Groups initialised.");
                 ResetAllGroups();
-            } else
+            } 
+            else
             {
                 CheckIfAllWeaponsBelongToAGroup();
             }
 
             isFirstLaunch = false;
         }
+
+        private static bool ShouldInitializeGroups() => isFirstLaunch || RenderGroups.NullOrEmpty();
+
+
+        public static void ResetAllGroups()
+        {
+            RenderGroups = IR_HolstersInit.LoadDefaultWeaponGroups();
+        }
+
 
         public static void CheckIfAllWeaponsBelongToAGroup()
         {
@@ -74,102 +82,73 @@ namespace RimWorldHolsters
                 }
             } 
 
-            IR_HolstersInit.SortWeaponsIntoGroups(ref groups, weaponsWithoutGroup);
+            IR_HolstersInit.SortWeaponsIntoGroups(ref RenderGroups, weaponsWithoutGroup);
             
         }
 
-        public static void ResetAllGroups()
+
+        public static void ResetGroup(HolsterWeaponRenderGroup group)
         {
-            groups = IR_HolstersInit.LoadDefaultWeaponGroups();
-        }
+            //var newGroup = group;
 
-        public static void ResetGroup(WeaponGroupCordInfo group)
+            group.HolsterRenderData.Reset();
+            //RenderGroups[RenderGroups.IndexOf(group)]= newGroup;
+        }
+        public static void ChangeGroupsName(HolsterWeaponRenderGroup group, string name)
         {
-            var newGroup = group;
+            //var newGroup = group;
 
-            newGroup.Reset();
-
-            groups[groups.IndexOf(group)]= newGroup;
+            //newGroup.Name = name;
+            group.Name = name;
+            //RenderGroups[RenderGroups.IndexOf(group)] = newGroup;
         }
-        public static void ChangeGroupsName(WeaponGroupCordInfo group, string name)
-        {
-            var newGroup = group;
+        public static void RemoveGroup(HolsterWeaponRenderGroup group) => _ = RenderGroups.Remove(group);
 
-            newGroup.Name = name;
+        public static void AddNewSettingsGroup(string name) => RenderGroups.Add(new HolsterWeaponRenderGroup(name));
 
-            groups[groups.IndexOf(group)] = newGroup;
-        }
-        public static void RemoveGroup(WeaponGroupCordInfo group)
-        {
-            groups.Remove(group);
-        }
-
-        public static void AddNewSettingsGroup(string name)
-        {
-            groups.Add(new WeaponGroupCordInfo(name));
-        }
-
-        public static WeaponGroupCordInfo GetWeaponGroupOf(string weaponDefName)
-        {
-            foreach (WeaponGroupCordInfo group in groups)
-            {
-                if (group.weapons.Contains(weaponDefName))
-                {
-                    return group;
-                }
-                /* Really inefficient method 
-                foreach (string weaponInGroup in group.weapons)
-                {
-                    if (weaponDefName.Equals(weaponInGroup))
-                    {
-                        return group;
-                    }
-                }*/
-            }
-
-            return new WeaponGroupCordInfo("noGroup");
-        }
+        public static HolsterWeaponRenderGroup GetWeaponGroupOf(string weaponDefName) =>
+            RenderGroups.SingleOrDefault(rg => rg.HasWeapon(weaponDefName)) ?? new HolsterWeaponRenderGroup("noGroup");
 
         //GETTING DATA
-        public static Vector3 GetWeaponPos(string weaponDefName, Rot4 rot, bool isSide, Pawn pawn, WeaponGroupCordInfo group)
+        public static Vector3 GetWeaponPos(string weaponDefName, Rot4 rot, bool isSide, Pawn pawn, HolsterWeaponRenderGroup group)
         {
             BodyType bodyType = (BodyType)Enum.Parse(typeof(BodyType), pawn.story?.bodyType?.defName.ToLower());
 
             return GetWeaponPos(group, rot, isSide, bodyType);
         }
 
-        public static Vector3 GetWeaponPos(WeaponGroupCordInfo group, Rot4 rot, bool isSide, BodyType body)
+        public static Vector3 GetWeaponPos(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide, BodyType body)
         {
-            Vector3 pos = group.GetPos(rot, isSide);
+            Vector3 pos = group.HolsterRenderData.GetConfiguration(rot, isSide).Position;
 
-            Vector3 offset = group.GetBodyOffset(rot, isSide) * group.GetBodyOffsetModif(body,isSide);
+            //Vector3 offset = group.GetBodyOffset(rot, isSide) * group.GetBodyOffsetModif(body,isSide);
 
-            pos += offset;
+            //pos += offset;
 
             return pos;
         }
 
-        public static Vector3 GetWeaponPos(WeaponGroupCordInfo group, Rot4 rot, bool isSide)
+        public static Vector3 GetWeaponPos(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide)
         {
-            Vector3 pos = group.GetPos(rot, isSide);
+            Vector3 pos = group.HolsterRenderData.GetConfiguration(rot, isSide).Position;
 
             return pos;
         }
 
-        public static bool GetWeaponLayer(WeaponGroupCordInfo group, Rot4 rot, bool isSide)
+        public static bool GetWeaponLayer(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide)
         {
-            return group.GetLayer(rot, isSide);
+            return group.HolsterRenderData.GetConfiguration(rot, isSide).IsAtFront;
         }
 
         public static float GetWeaponAngle(string weaponDefName, Rot4 rot, bool isSide)
         {
-            WeaponGroupCordInfo group = GetWeaponGroupOf(weaponDefName);
+            HolsterWeaponRenderGroup group = GetWeaponGroupOf(weaponDefName);
             return GetWeaponAngle(group, rot, isSide);
         }
 
-        public static float GetWeaponAngle(WeaponGroupCordInfo group, Rot4 rot, bool isSide)
+        public static float GetWeaponAngle(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide)
         {
-            return group.GetAngle(rot, isSide);
+            return group.HolsterRenderData.GetConfiguration(rot, isSide).Rotation;
         }
         /*
         public static bool GetWeaponFlip(string weaponDefName, Rot4 rot, bool isSide)
@@ -178,19 +157,9 @@ namespace RimWorldHolsters
             return GetWeaponFlip(group, rot, isSide);
         }*/
 
-        public static bool GetWeaponFlip(WeaponGroupCordInfo group, Rot4 rot, bool isSide)
+        public static bool GetWeaponFlip(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide)
         {
-            return group.GetFlip(rot, isSide);
-        }
-
-        public static float FrontPos
-        {
-            get { return FORWARD_LAYER_SPACE + frontLayerOffset; }
-        }
-
-        public static float BackPos
-        {
-            get { return BACK_LAYER_SPACE + backLayerOffset; }
+            return group.HolsterRenderData.GetConfiguration(rot, isSide).IsFlipped;
         }
     }
 }

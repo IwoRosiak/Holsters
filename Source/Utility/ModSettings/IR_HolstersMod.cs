@@ -74,7 +74,7 @@ namespace RimWorldHolsters
             //Rect layerOffsetsRect= new Rect(inRect.x + 10f, inRect.y + (0.5f * inRect.height), 0.2f * inRect.width - 20f, 0.6f * inRect.height);
 
 
-            IR_ModSettingsDrawer.DrawBodyManagement(new Rect(inRect.x + (0.8f * inRect.width) + 10f, inRect.y + (0.3f * inRect.height), 0.2f * inRect.width -20f, 0.6f * inRect.height));
+            //TODO: BODY MODIFS IR_ModSettingsDrawer.DrawBodyManagement(new Rect(inRect.x + (0.8f * inRect.width) + 10f, inRect.y + (0.3f * inRect.height), 0.2f * inRect.width -20f, 0.6f * inRect.height));
 
             
 
@@ -143,7 +143,7 @@ namespace RimWorldHolsters
             {
                 if (curGroupIndex == 0)
                 {
-                    curGroupIndex = IR_HolstersSettings.groups.Count - 1;
+                    curGroupIndex = IR_HolstersSettings.RenderGroups.Count - 1;
                 }
                 else
                 {
@@ -162,7 +162,7 @@ namespace RimWorldHolsters
             changeGroupRect.x = mainRect.x + (mainRect.width * 0.8f);
             if (Widgets.ButtonText(changeGroupRect, "->"))
             {
-                if (curGroupIndex == IR_HolstersSettings.groups.Count - 1)
+                if (curGroupIndex == IR_HolstersSettings.RenderGroups.Count - 1)
                 {
                     curGroupIndex = 0;
                 }
@@ -217,7 +217,7 @@ namespace RimWorldHolsters
             mainRect.height = 30;
             if (Widgets.ButtonText(mainRect ,"Delete group"))
             {
-                if (!GetCurGroup().isDisplay)
+                if (!GetCurGroup().ShouldDisplay)
                 {
                     errorLog = "This group cannot be deleted.";
 
@@ -295,11 +295,11 @@ namespace RimWorldHolsters
             mainRect.y+=30;
             mainRect.height = 30;
 
-            if (Widgets.ButtonText(mainRect ,"Send to: " + IR_HolstersSettings.groups[(int)receivingGroupIndex].Name))
+            if (Widgets.ButtonText(mainRect ,"Send to: " + IR_HolstersSettings.RenderGroups[(int)receivingGroupIndex].Name))
             {
                 if (GetCurWeapon() != null)
                 {
-                    errorLog = GetCurWeapon().defName + " moved to " + IR_HolstersSettings.groups[(int)receivingGroupIndex].Name;
+                    errorLog = GetCurWeapon().defName + " moved to " + IR_HolstersSettings.RenderGroups[(int)receivingGroupIndex].Name;
                     ChangeCurWeaponsGroup(GetCurGroup(), (int)receivingGroupIndex);
                     TryLoadWeapons(false);
                     return;
@@ -307,7 +307,7 @@ namespace RimWorldHolsters
             }
 
             mainRect.y+=30;
-            receivingGroupIndex = (int)Widgets.HorizontalSlider(mainRect, receivingGroupIndex, 0, IR_HolstersSettings.groups.Count - 1);
+            receivingGroupIndex = (int)Widgets.HorizontalSlider(mainRect, receivingGroupIndex, 0, IR_HolstersSettings.RenderGroups.Count - 1);
 
 
             mainRect.y += 30;
@@ -323,7 +323,7 @@ namespace RimWorldHolsters
 
             foreach (ThingDef weapon in GenDefDatabase.GetAllDefsInDatabaseForDef(typeof(ThingDef)))
             {
-                if (weapon.IsWeapon && weapon.equipmentType == EquipmentType.Primary && GetCurGroup().weapons.Contains(weapon.defName) && weapon.tradeability != Tradeability.None)
+                if (weapon.IsWeapon && weapon.equipmentType == EquipmentType.Primary && GetCurGroup().Weapons.Contains(weapon.defName) && weapon.tradeability != Tradeability.None)
                 {
                     curWeapons.Add(weapon);
                 }
@@ -344,12 +344,12 @@ namespace RimWorldHolsters
             }
         }
 
-        private void ChangeCurWeaponsGroup(WeaponGroupCordInfo fromGroup, int toGroupIndex)
+        private void ChangeCurWeaponsGroup(HolsterWeaponRenderGroup fromGroup, int toGroupIndex)
         {
             ThingDef weapon = GetCurWeapon();
 
-            fromGroup.weapons.Remove(weapon.defName);
-            IR_HolstersSettings.groups[toGroupIndex].weapons.Add(weapon.defName);
+            _ = fromGroup.Weapons.Remove(weapon.defName);
+            IR_HolstersSettings.RenderGroups[toGroupIndex].Weapons.Add(weapon.defName);
         }
 
         internal ThingDef GetCurWeapon()
@@ -362,14 +362,14 @@ namespace RimWorldHolsters
             return curWeapons[curWeaponIndex];
         }
 
-        internal WeaponGroupCordInfo GetCurGroup()
+        internal HolsterWeaponRenderGroup GetCurGroup()
         {
-            if (IR_HolstersSettings.groups.NullOrEmpty())
+            if (IR_HolstersSettings.RenderGroups.NullOrEmpty())
             {
                 IR_HolstersSettings.InitBasicGroups();
             }
 
-            return IR_HolstersSettings.groups[curGroupIndex];
+            return IR_HolstersSettings.RenderGroups[curGroupIndex];
         }
 
         internal BodyType currentBody = BodyType.male;

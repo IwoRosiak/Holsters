@@ -4,14 +4,8 @@ using Verse;
 
 namespace RimWorldHolsters
 {
-    [StaticConstructorOnStartup]
-    public static class IR_HolstersInit
+    public static class HolstersInit
     {
-        static IR_HolstersInit()
-        {
-            IR_HolstersSettings.InitBasicGroups();
-        }
-
         public static List<WeaponGroupCordInfo> LoadDefaultWeaponGroups()
         {
             var defaultGroups = new List<WeaponGroupCordInfo>();
@@ -42,7 +36,7 @@ namespace RimWorldHolsters
                 { Rot4.East, false},
                 { Rot4.West, true}
             },  
-            
+            //Side
             new Dictionary<Rot4, Vector3>()
             {
                 {Rot4.South, new Vector3(1.5f, 0, 0f) },
@@ -66,6 +60,8 @@ namespace RimWorldHolsters
                 {Rot4.East, false},
                 {Rot4.West, true}
             },
+
+            // size
             new Dictionary<Rot4, float>()
             {
                 {Rot4.South, 1},
@@ -73,6 +69,7 @@ namespace RimWorldHolsters
                 {Rot4.East, 1},
                 {Rot4.West, 1}
             }, 
+            // isFront
             new Dictionary<Rot4, bool>()
             {
                 {Rot4.South, false},

@@ -1,12 +1,13 @@
-﻿using RimWorld;
+﻿using Holsters;
+using RimWorld;
 using System;
 using UnityEngine;
 using Verse;
 namespace RimWorldHolsters.Core.RenderNodes
 {
-    internal class PawnRenderNodeWorker_Holsters : PawnRenderNodeWorker
+    public class PawnRenderNodeWorker_Holsters : PawnRenderNodeWorker
     {
-        // In RimWorld code -10f and 90f are the furthest back/front layer reserved for carried things. These values ensuresholstered weapons are behind/ahead everything else.
+        // In RimWorld code -10f and 90f are the furthest back/front layer reserved for carried things. These values ensures holstered weapons are behind/ahead everything else.
         private const float BACK_LAYER = -5f;
         public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
         {
@@ -41,10 +42,7 @@ namespace RimWorldHolsters.Core.RenderNodes
         {
             var holsterNode = node as PawnRenderNode_Holsters;
 
-            ThingWithComps weapon = holsterNode.Thing;
-            WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(weapon.def.defName);
-
-            bool isFront = IR_HolstersSettings.GetWeaponLayer(curGroup, parms.facing, holsterNode.DrawInAlternativePosition);
+            bool isFront = holsterNode.GetRenderData(parms.facing).IsAtFront;
 
             if (isFront)
                 return base.LayerFor(node, parms);
@@ -56,8 +54,7 @@ namespace RimWorldHolsters.Core.RenderNodes
         {
             var holsterNode = node as PawnRenderNode_Holsters;
 
-            WeaponGroupCordInfo curGroup = IR_HolstersSettings.GetWeaponGroupOf(holsterNode.Thing.def.defName);
-            Vector3 pos = IR_HolstersSettings.GetWeaponPos(holsterNode.Thing.def.defName, parms.facing, holsterNode.DrawInAlternativePosition, parms.pawn, curGroup);
+            Vector3 pos = holsterNode.GetRenderData(parms.facing).Position; // TODO: Need to include body modifs!
             Vector3 vector = base.OffsetFor(node, parms, out pivot);
             vector += pos;
 
@@ -68,10 +65,11 @@ namespace RimWorldHolsters.Core.RenderNodes
         {
             var holsterNode = node as PawnRenderNode_Holsters;
 
-            ThingWithComps weapon = holsterNode.Thing;
-            float rotation = IR_HolstersSettings.GetWeaponAngle(weapon.def.defName, parms.facing, holsterNode.DrawInAlternativePosition);
+            HolsterConfiguration renderData = holsterNode.GetRenderData(parms.facing);
 
-            if (IR_HolstersSettings.GetWeaponFlip(holsterNode.WeaponGroupCordInfo, parms.facing, holsterNode.DrawInAlternativePosition))
+            float rotation = renderData.Rotation; 
+
+            if (renderData.IsFlipped)
                 rotation += 180;
 
             rotation %= 360;
@@ -84,9 +82,8 @@ namespace RimWorldHolsters.Core.RenderNodes
         {
             var holsterNode = node as PawnRenderNode_Holsters;
 
-            ThingWithComps weapon = holsterNode.Thing;
-            var size = holsterNode.WeaponGroupCordInfo.GetSize(parms.facing);
-            float UIIconScale = weapon.def.uiIconScale;
+            var size = holsterNode.GetRenderData(parms.facing).Size;
+            float UIIconScale = holsterNode.Thing.def.uiIconScale; // TODO: settings to toggle this!
             Vector3 scale = Vector3.one / UIIconScale * size;
 
             return scale;
