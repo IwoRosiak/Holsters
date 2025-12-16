@@ -50,18 +50,8 @@ namespace Holsters
             if (BodyOffsetsSideModifiers == null)
                 BodyOffsetsSideModifiers = GetDefaultBodyModifiersDictionary();
 
-            Log.Message(bodyTypeDefName);
-
-
             bodyTypeDefName = bodyTypeDefName.ToLower();
             Dictionary<string, float> dict = side ? BodyOffsetsSideModifiers : BodyOffsetsModifiers;
-
-            Log.Message($"Looking for body modifier for {bodyTypeDefName} in {(side ? "side" : "normal")} dictionary.");
-
-            foreach (var key in dict.Keys)
-            {
-                Log.Message($"Key: {key}, Value: {dict[key]}");
-            }
 
             if (dict.ContainsKey(bodyTypeDefName))
                 return dict[bodyTypeDefName];
@@ -149,6 +139,7 @@ namespace Holsters
             { "fat", 1f },
             { "hulk", 0.5f },
             { "thin", -0.2f },
+            { "child", -0.5f }
         };
     }
 }

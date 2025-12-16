@@ -12,6 +12,9 @@ namespace RimWorldHolsters.Utility
             var bodyTypes = new List<BodyTypeData>();
             foreach (BodyTypeDef def in DefDatabase<BodyTypeDef>.AllDefs)
             {
+                if (def.defName == "Baby")
+                    continue;
+
                 bodyTypes.Add(new BodyTypeData(def));
             }
 

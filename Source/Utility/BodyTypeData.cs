@@ -13,6 +13,9 @@ namespace RimWorldHolsters.Utility
             Label = bodyTypeDef.label;
             Offset = bodyTypeDef.headOffset;
 
+            if (bodyTypeDef.defName == "Child")
+                HeadSizeFactor = 0.75f;
+
             BodyTextures = new Dictionary<Rot4, Texture2D>();
             Graphic graphic = GraphicDatabase.Get<Graphic_Multi>(bodyTypeDef.bodyNakedGraphicPath);
             if (graphic == null)
@@ -42,5 +45,6 @@ namespace RimWorldHolsters.Utility
         public Vector2 Offset { get; }
         public string DefName { get; }
         public string Label { get; }
+        public float HeadSizeFactor { get; } = 1f;
     }
 }

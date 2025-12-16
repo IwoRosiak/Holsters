@@ -89,14 +89,6 @@ namespace RimWorldHolsters
         public static HolsterWeaponRenderGroup GetWeaponGroupOf(string weaponDefName) =>
             RenderGroups.SingleOrDefault(rg => rg.HasWeapon(weaponDefName)) ?? new HolsterWeaponRenderGroup("noGroup");
 
-        //GETTING DATA
-        public static Vector3 GetWeaponPos(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide, Pawn pawn)
-        {
-            BodyTypeData bodyTypeData = BodyTypeDataProvider.AllBodyTypes.FirstOrDefault(b => b.DefName.Equals(pawn.story?.bodyType?.defName.ToLower()));
-
-            return GetWeaponPos(group, rot, isSide, bodyTypeData);
-        }
-
         public static Vector3 GetWeaponPos(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide, BodyTypeData body)
         {
             HolsterConfiguration configuration = group.HolsterRenderData.GetConfiguration(rot, isSide);
@@ -112,9 +104,7 @@ namespace RimWorldHolsters
 
         public static Vector3 GetWeaponPos(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide)
         {
-            Vector3 pos = group.HolsterRenderData.GetConfiguration(rot, isSide).Position;
-
-            return pos;
+            return group.HolsterRenderData.GetConfiguration(rot, isSide).Position;
         }
 
         public static float GetWeaponAngle(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide) => group.HolsterRenderData.GetConfiguration(rot, isSide).Rotation;

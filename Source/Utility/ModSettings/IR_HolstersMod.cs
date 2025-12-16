@@ -42,15 +42,10 @@ namespace RimWorldHolsters
             set => _currentBody = value;
         }
 
-        internal HeadTypeData CurrentHead;
-
         internal bool IsSidearmMode = false;
         internal bool IsPrimaryMode = true;
 
-
         internal int CurWeaponIndex = 0;
-
-
 
         //private string instructions = "Guide: \nAll placement settings are group specific, not weapon specific. \nIf you use any sidearm mod you can also edit position for those seperately. \nPositions have to be manually adjusted for each side the pawn is looking at. \nBody offsets are there since some bodies have different dimensions. The position offsets are shared for all bodies but can be modified using impacts (impact 0 means body offsets do not affect this body type.)\n";
 
@@ -361,7 +356,7 @@ namespace RimWorldHolsters
                 {
                     _errorLog = GetCurWeapon().defName + " moved to " + IR_HolstersSettings.RenderGroups[(int)_receivingGroupIndex].Name;
                     ChangeCurWeaponsGroup(GetCurGroup(), (int)_receivingGroupIndex);
-                    TryLoadWeapons(false);
+                    _ = TryLoadWeapons(false);
                     return;
                 }
             }
