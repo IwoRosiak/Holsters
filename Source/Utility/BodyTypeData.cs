@@ -5,12 +5,13 @@ using Verse;
 
 namespace RimWorldHolsters.Utility
 {
-    internal class BodyTypeData
+    public class BodyTypeData
     {
         public BodyTypeData(BodyTypeDef bodyTypeDef)
         {
             DefName = bodyTypeDef.defName;
             Label = bodyTypeDef.label;
+            Offset = bodyTypeDef.headOffset;
 
             BodyTextures = new Dictionary<Rot4, Texture2D>();
             Graphic graphic = GraphicDatabase.Get<Graphic_Multi>(bodyTypeDef.bodyNakedGraphicPath);
@@ -25,6 +26,7 @@ namespace RimWorldHolsters.Utility
                 Log.Error($"Graphic for body type {bodyTypeDef.defName} is missing one or more materials.");
                 return;
             }
+
             BodyTextures[Rot4.North] = graphic.MatNorth.mainTexture as Texture2D;
             BodyTextures[Rot4.South] = graphic.MatSouth.mainTexture as Texture2D;
             BodyTextures[Rot4.East] = graphic.MatEast.mainTexture as Texture2D;
@@ -36,8 +38,8 @@ namespace RimWorldHolsters.Utility
             }
         }
 
-        public Dictionary<Rot4, Texture2D> BodyTextures = new Dictionary<Rot4, Texture2D>();
-
+        public Dictionary<Rot4, Texture2D> BodyTextures { get; } = new Dictionary<Rot4, Texture2D>();
+        public Vector2 Offset { get; }
         public string DefName { get; }
         public string Label { get; }
     }

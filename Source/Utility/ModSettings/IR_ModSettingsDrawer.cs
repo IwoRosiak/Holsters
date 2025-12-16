@@ -1,21 +1,15 @@
 ﻿using Holsters;
-using RimWorld;
 using RimWorldHolsters.Utility;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using Verse.Noise;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace RimWorldHolsters
 {
     internal static class IR_ModSettingsDrawer
     {
-        public static IR_HolstersMod mod;
+        public static IR_HolstersMod Mod;
         public static void DrawPawn(Rect bodyFrameRect)
         {
 
@@ -40,23 +34,17 @@ namespace RimWorldHolsters
             DrawButtons(bodyFrameRect);
         }
 
-        internal static bool IsWeaponInFrontLayer()
-        {
-            return mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).IsAtFront;
-        }
+        internal static bool IsWeaponInFrontLayer() => Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).IsAtFront;
 
         private static void DrawWeapon(Rect rect)
         {
-            if (mod.CurWeapons.NullOrEmpty()) //||mod.GetCurGroup()sIndex == WeaponType.doNotDisplay)
-            {
+            if (Mod.CurWeapons.NullOrEmpty()) //||mod.GetCurGroup()sIndex == WeaponType.doNotDisplay)
                 return;
-            }
-            Vector2 offset = new Vector2(IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.CurDir, mod.IsSidearmMode, mod.CurrentBody).x, -IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.CurDir, mod.IsSidearmMode, mod.CurrentBody).z);
 
-            Texture text = mod.GetCurWeapon().graphic.MatNorth.mainTexture;
-            float scale = (((1 / mod.GetCurWeapon().uiIconScale) / (text.width / 64)) * 1.35f * mod.GetCurWeapon().graphic.drawSize.x) * mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Size;
+            var offset = new Vector2(IR_HolstersSettings.GetWeaponPos(Mod.GetCurGroup(), Mod.CurDir, Mod.IsSidearmMode, Mod.CurrentBody).x, -IR_HolstersSettings.GetWeaponPos(Mod.GetCurGroup(), Mod.CurDir, Mod.IsSidearmMode, Mod.CurrentBody).z);
 
-            //Widgets.DrawTextureRotated(rect.center + (offset * pixelRatio), text, IR_WeaponData.GetWeaponAngle(GetCurGroup()sIndex, currentDir), scale);
+            Texture text = Mod.GetCurWeapon().graphic.MatNorth.mainTexture;
+            float scale = (((1 / Mod.GetCurWeapon().uiIconScale) / (text.width / 64)) * 1.35f * Mod.GetCurWeapon().graphic.drawSize.x) * Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Size;
 
             Vector2 center = rect.center + (offset * IR_HolstersMod.PIXEL_RATIO);
 
@@ -64,52 +52,59 @@ namespace RimWorldHolsters
 
             float num2 = text.height * scale;
 
-            if (mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).IsFlipped)
+            if (Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).IsFlipped)
             {
                 num2 = text.height * -scale;
             }
 
-            Widgets.DrawTextureRotated(new Rect(center.x - num / 2f, center.y - num2 / 2f, num, num2), text, IR_HolstersSettings.GetWeaponAngle(mod.GetCurGroup(), mod.CurDir, mod.IsSidearmMode));
+            Widgets.DrawTextureRotated(new Rect(center.x - num / 2f, center.y - num2 / 2f, num, num2), text, IR_HolstersSettings.GetWeaponAngle(Mod.GetCurGroup(), Mod.CurDir, Mod.IsSidearmMode));
         }
 
         private static void DrawBody(Rect rect)
         {
-            //Rect bodyRect = new Rect(rect.x + (0.2f * rect.width), rect.y + (0.3f * rect.height), 0.6f * rect.width, 0.6f * rect.width);
-
             Texture texture = ChooseBodyTexture();
 
             float width = texture.width;
-
             float height = texture.height;
-            
-            
-            if (mod.CurDir == Rot4.West)
+
+            if (Mod.CurDir == Rot4.West)
             {
                 width *= -1;
             }
 
             Widgets.DrawTextureRotated(new Rect(rect.center.x - width / 2f, rect.center.y - height / 2f, width, height), texture, 0);
-
         }
 
         private static void DrawHead(Rect rect)
         {
-            //Rect headRect = new Rect(rect.x + (0.2f * rect.width), rect.y + (0.3f * rect.height), 0.6f * rect.width, 0.6f * rect.width);
-
             Texture texture = ChooseHeadTexture();
 
-            float offset = 0;
+            Vector2 offset = Vector2.zero;
 
-            if (mod.CurDir == Rot4.East)
+            float width = texture.width;
+            float height = texture.height;
+
+            Vector2 headOffset = ChooseHeadOffset();
+
+            if (Mod.CurDir == Rot4.West)
             {
-                offset = -ChooseHeadOffset();
+                width *= -1;
+                offset = new Vector2(headOffset.x, headOffset.y);
             }
-            else if (mod.CurDir == Rot4.West)
+            else if (Mod.CurDir == Rot4.East)
             {
-                offset = ChooseHeadOffset();
+                offset = new Vector2(-headOffset.x, headOffset.y);
+            }
+            else
+            {
+                offset = new Vector2(0, headOffset.y);
             }
 
-            Widgets.DrawTextureRotated(rect.center - new Vector2(offset * IR_HolstersMod.PIXEL_RATIO, 34), texture, 0);
+            offset *= IR_HolstersMod.PIXEL_RATIO;
+
+            var headRect = new Rect(rect.center.x - width / 2f - offset.x, rect.center.y - height / 2f - offset.y, width, height);
+
+            Widgets.DrawTextureRotated(headRect, texture, 0);
         }
 
         internal static void DrawButtons(Rect rect)
@@ -120,7 +115,7 @@ namespace RimWorldHolsters
             DrawPositionButtons(rect);
             DrawLayerButtons(rect);
 
-            var buttonFlip = new Rect(rect.x + (0.2f * rect.width), rect.y +(rect.height), 0.15f * rect.width, 0.1f * rect.height);
+            var buttonFlip = new Rect(rect.x + (0.2f * rect.width), rect.y + (rect.height), 0.15f * rect.width, 0.1f * rect.height);
 
             var textPosition = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.02f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
             var textBodyPos = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.12f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
@@ -128,19 +123,19 @@ namespace RimWorldHolsters
             //FLIP
             if (Widgets.ButtonText(buttonFlip, "Flip"))
             {
-                bool flip = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).IsFlipped;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).IsFlipped = !flip;
+                bool flip = Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).IsFlipped;
+                Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).IsFlipped = !flip;
                 return;
             }
 
-            Vector2 pos = new Vector2(IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.CurDir, mod.IsSidearmMode).x, -IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.CurDir, mod.IsSidearmMode).z);
+            Vector2 pos = new Vector2(IR_HolstersSettings.GetWeaponPos(Mod.GetCurGroup(), Mod.CurDir, Mod.IsSidearmMode).x, -IR_HolstersSettings.GetWeaponPos(Mod.GetCurGroup(), Mod.CurDir, Mod.IsSidearmMode).z);
             //+Math.Round(IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode).x, 4) + ", " + Math.Round(IR_HolstersSettings.GetWeaponPos(mod.GetCurGroup(), mod.curDir, mod.isSidearmMode).z, 4)
             Widgets.Label(textPosition, "Position: " + Math.Round(pos.x, 3) + " and " + -Math.Round(pos.y, 3));
 
-            //TODO: Body offsets! Vector3 bodyOffset = mod.GetCurGroup().GetBodyOffset(mod.curDir, mod.isSidearmMode) * mod.GetCurGroup().GetBodyOffsetModif(mod.currentBody, mod.isSidearmMode);
+            Vector3 bodyOffset = Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).BodyOffset * Mod.GetCurGroup().HolsterRenderData.GetBodyModifier(Mod.CurrentBody.DefName, Mod.IsSidearmMode);
 
 
-            //TODO: Body offsets! Widgets.Label(textBodyPos, "Body offset: " + Math.Round(bodyOffset.x, 3) + ", " + Math.Round(bodyOffset.z, 3));
+            Widgets.Label(textBodyPos, "Body offset: " + Math.Round(bodyOffset.x, 3) + ", " + Math.Round(bodyOffset.z, 3));
             //Widgets.Label(textPosition, "Total: " + Math.Round(mod.GetCurGroup().GetBodyOffset(mod.curDir, mod.isSidearmMode).x, 3) + ", " + Math.Round(mod.GetCurGroup().GetBodyOffset(mod.curDir, mod.isSidearmMode).z, 3));
         }
 
@@ -152,9 +147,9 @@ namespace RimWorldHolsters
 
             if (Widgets.ButtonText(buttonLayer, "Layer: " + layerLabel))
             {
-                var temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).IsAtFront;
+                var temp = Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).IsAtFront;
                 temp = !temp;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).IsAtFront = temp;
+                Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).IsAtFront = temp;
             }
         }
 
@@ -164,30 +159,30 @@ namespace RimWorldHolsters
             var buttonEast = new Rect(rect.x + (0.9f * rect.width), rect.y + (0.45f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
             var buttonNorth = new Rect(rect.x + (0.45f * rect.width), rect.y, 0.1f * rect.width, 0.1f * rect.height);
             var buttonSouth = new Rect(rect.x + (0.45f * rect.width), rect.y + (0.9f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-       
+
             if (Widgets.ButtonText(buttonWest, "-X"))
             {
-                Vector3 temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Position;
+                Vector3 temp = Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Position;
                 temp.x -= 0.05f;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Position = temp;
+                Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Position = temp;
             }
             if (Widgets.ButtonText(buttonEast, "+X"))
             {
-                Vector3 temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Position;
+                Vector3 temp = Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Position;
                 temp.x += 0.05f;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Position = temp;
+                Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Position = temp;
             }
             if (Widgets.ButtonText(buttonNorth, "+Y"))
             {
-                Vector3 temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Position;
+                Vector3 temp = Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Position;
                 temp.z += 0.05f;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Position = temp;
+                Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Position = temp;
             }
             if (Widgets.ButtonText(buttonSouth, "-Y"))
             {
-                Vector3 temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Position;
+                Vector3 temp = Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Position;
                 temp.z -= 0.05f;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Position = temp;
+                Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Position = temp;
             }
         }
 
@@ -201,19 +196,19 @@ namespace RimWorldHolsters
             //DIRECTION
             if (Widgets.ButtonText(buttonLookWest, "W"))
             {
-                mod.CurDir = Rot4.West;
+                Mod.CurDir = Rot4.West;
             }
             if (Widgets.ButtonText(buttonLookEast, "E"))
             {
-                mod.CurDir = Rot4.East;
+                Mod.CurDir = Rot4.East;
             }
             if (Widgets.ButtonText(buttonLookNorth, "N"))
             {
-                mod.CurDir = Rot4.North;
+                Mod.CurDir = Rot4.North;
             }
             if (Widgets.ButtonText(buttonLookSouth, "S"))
             {
-                mod.CurDir = Rot4.South;
+                Mod.CurDir = Rot4.South;
             }
         }
 
@@ -225,18 +220,18 @@ namespace RimWorldHolsters
 
             if (Widgets.ButtonText(buttonMinusSize, "<"))
             {
-                var temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Size;
+                var temp = Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Size;
                 temp -= 0.05f;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Size = temp;
+                Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Size = temp;
             }
 
-            _ = Widgets.ButtonText(buttonSize, "Size: " + Math.Round(mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Size * 100, 3) + "%");
+            _ = Widgets.ButtonText(buttonSize, "Size: " + Math.Round(Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Size * 100, 3) + "%");
 
             if (Widgets.ButtonText(buttonPlusSize, ">"))
             {
-                var temp = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Size;
+                var temp = Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Size;
                 temp += 0.05f;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Size = temp;
+                Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Size = temp;
             }
         }
 
@@ -252,66 +247,56 @@ namespace RimWorldHolsters
 
 
 
-            _ = Widgets.ButtonText(buttonAngle, "Angle: " + IR_HolstersSettings.GetWeaponAngle(mod.GetCurGroup(), mod.CurDir, mod.IsSidearmMode) % 360 + "°");
+            _ = Widgets.ButtonText(buttonAngle, "Angle: " + IR_HolstersSettings.GetWeaponAngle(Mod.GetCurGroup(), Mod.CurDir, Mod.IsSidearmMode) % 360 + "°");
 
             if (Widgets.ButtonText(buttonRotateLeftPlus, "<<"))
             {
-                var tempX = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Rotation;
+                var tempX = Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Rotation;
                 tempX -= 5;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Rotation = tempX;
+                Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Rotation = tempX;
             }
             if (Widgets.ButtonText(buttonRotateLeft, "<"))
             {
-                var tempX = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Rotation;
+                var tempX = Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Rotation;
                 tempX -= 1;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Rotation = tempX;
+                Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Rotation = tempX;
             }
 
             if (Widgets.ButtonText(buttonRotateRight, ">"))
             {
-                var tempX = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Rotation;
+                var tempX = Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Rotation;
                 tempX += 1;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Rotation = tempX;
+                Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Rotation = tempX;
             }
             if (Widgets.ButtonText(buttonRotateRightPlus, ">>"))
             {
-                var tempX = mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Rotation;
+                var tempX = Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Rotation;
                 tempX += 5;
-                mod.GetCurGroup().HolsterRenderData.GetConfiguration(mod.CurDir, mod.IsSidearmMode).Rotation = tempX;
+                Mod.GetCurGroup().HolsterRenderData.GetConfiguration(Mod.CurDir, Mod.IsSidearmMode).Rotation = tempX;
             }
         }
-        /*
+
+        /*internal static void DrawBodyManagement(Rect rect)
+        {
+            float offsetY = 0;
+            float offsetButtonsBy = 0.1f;
+
+            foreach (HeadTypeData headType in HeadTypeDataProvider.AllHeadTypes)
+            {
+                var buttonHead = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.1f + offsetY * rect.height), 0.3f * rect.width, 0.1f * rect.height);
+
+                if (Widgets.ButtonText(buttonHead, headType.DefName))
+                {
+                    Mod.CurrentHead = headType;
+                }
+
+                offsetY += offsetButtonsBy;
+            }
+        }*/
+
+
         internal static void DrawBodyManagement(Rect rect)
         {
-            Rect buttonHulk = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.1f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
-            Rect buttonThin = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.2f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
-            Rect buttonFat = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.3f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
-            Rect buttonMale = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.4f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
-            Rect buttonFemale = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.5f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
-
-            Rect buttonHulkImpact = new Rect(rect.x + (0.4f * rect.width), rect.y + (0.1f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
-            Rect buttonThinImpact = new Rect(rect.x + (0.4f * rect.width), rect.y + (0.2f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
-            Rect buttonFatImpact = new Rect(rect.x + (0.4f * rect.width), rect.y + (0.3f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
-            Rect buttonMaleImpact = new Rect(rect.x + (0.4f * rect.width), rect.y + (0.4f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
-            Rect buttonFemaleImpact = new Rect(rect.x + (0.4f * rect.width), rect.y + (0.5f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
-
-            Rect buttonHulkImpactLess = new Rect(rect.x, rect.y + (0.1f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonThinImpactLess = new Rect(rect.x, rect.y + (0.2f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonFatImpactLess = new Rect(rect.x, rect.y + (0.3f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonMaleImpactLess = new Rect(rect.x, rect.y + (0.4f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonFemaleImpactLess = new Rect(rect.x, rect.y + (0.5f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-
-            Rect buttonHulkImpactMore = new Rect(rect.x + (0.9f * rect.width), rect.y + (0.1f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonThinImpactMore = new Rect(rect.x + (0.9f * rect.width), rect.y + (0.2f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonFatImpactMore = new Rect(rect.x + (0.9f * rect.width), rect.y + (0.3f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonMaleImpactMore = new Rect(rect.x + (0.9f * rect.width), rect.y + (0.4f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-            Rect buttonFemaleImpactMore = new Rect(rect.x + (0.9f * rect.width), rect.y + (0.5f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
-
-            Rect buttonBodyWest = new Rect(rect.x , rect.y + (0.6f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
-            Rect buttonBodyEast = new Rect(rect.x + (0.5f * rect.width), rect.y + (0.6f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
-            Rect buttonBodyNorth = new Rect(rect.x + (0.5f * rect.width), rect.y + (0.7f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
-            Rect buttonBodySouth = new Rect(rect.x, rect.y + (0.7f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
-
             Rect gapLine = rect;
 
             gapLine.height = 30;
@@ -319,180 +304,205 @@ namespace RimWorldHolsters
             Widgets.Label(gapLine, "Body Types ");
             Widgets.DrawLineHorizontal(gapLine.x, gapLine.y + 24f, gapLine.width);
 
+            float positionY = rect.y + 30f;
+            float height = 0.1f * rect.height;
+
+            foreach (BodyTypeData bodyType in BodyTypeDataProvider.AllBodyTypes)
+            {
+                var buttonReduceImpact = new Rect(rect.x, positionY, 0.1f * rect.width, height);
+                var buttonBody = new Rect(rect.x + (0.1f * rect.width), positionY, 0.3f * rect.width, height);
+                var buttonDisplayImpact = new Rect(rect.x + (0.4f * rect.width), positionY, 0.5f * rect.width, height);
+                var buttonIncreaseImpact = new Rect(rect.x + (0.9f * rect.width), positionY, 0.1f * rect.width, height);
+
+                if (Widgets.ButtonText(buttonBody, bodyType.DefName))
+                {
+                    Mod.CurrentBody = bodyType;
+                }
+
+                var offsetModifier = Mod.GetCurGroup().HolsterRenderData.GetBodyModifier(bodyType.DefName, Mod.IsSidearmMode);
+
+                Widgets.ButtonText(buttonDisplayImpact, "Impact: " + Math.Round(offsetModifier * 100, 3) + "%");
+
+                if (Widgets.ButtonText(buttonReduceImpact, "<"))
+                {
+                    offsetModifier -= 0.05f;
+
+                    Mod.GetCurGroup().HolsterRenderData.SetBodyModifier(bodyType.DefName, Mod.IsSidearmMode, offsetModifier);
+                }
+
+                if (Widgets.ButtonText(buttonIncreaseImpact, ">"))
+                {
+                    offsetModifier += 0.05f;
+
+                    Mod.GetCurGroup().HolsterRenderData.SetBodyModifier(bodyType.DefName, Mod.IsSidearmMode, offsetModifier);
+                }
+
+                positionY += height;
+            }
+        
+
+            //Rect buttonBodyWest = new Rect(rect.x, rect.y + (0.6f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
+            //Rect buttonBodyEast = new Rect(rect.x + (0.5f * rect.width), rect.y + (0.6f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
+            //Rect buttonBodyNorth = new Rect(rect.x + (0.5f * rect.width), rect.y + (0.7f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
+            //Rect buttonBodySouth = new Rect(rect.x, rect.y + (0.7f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
+
+
+            /*
+
+            if (Widgets.ButtonText(buttonBodyWest, "-X", true, true, Color.blue, true))
+            {
+                var bodyOffset = Mod.GetCurGroup().GetBodyOffset(Mod.curDir, Mod.isSidearmMode);
+                bodyOffset.x -= 0.05f;
+                Mod.GetCurGroup().SetBodyOffset(Mod.curDir, bodyOffset, Mod.isSidearmMode);
+            }
+            if (Widgets.ButtonText(buttonBodyEast, "+X"))
+            {
+                var bodyOffset = Mod.GetCurGroup().GetBodyOffset(Mod.curDir, Mod.isSidearmMode);
+                bodyOffset.x += 0.05f;
+                Mod.GetCurGroup().SetBodyOffset(Mod.curDir, bodyOffset, Mod.isSidearmMode);
+            }
+            if (Widgets.ButtonText(buttonBodyNorth, "+Y"))
+            {
+                var bodyOffset = Mod.GetCurGroup().GetBodyOffset(Mod.curDir, Mod.isSidearmMode);
+                bodyOffset.z += 0.05f;
+                Mod.GetCurGroup().SetBodyOffset(Mod.curDir, bodyOffset, Mod.isSidearmMode);
+            }
+            if (Widgets.ButtonText(buttonBodySouth, "-Y"))
+            {
+                var bodyOffset = Mod.GetCurGroup().GetBodyOffset(Mod.curDir, Mod.isSidearmMode);
+                bodyOffset.z -= 0.05f;
+                Mod.GetCurGroup().SetBodyOffset(Mod.curDir, bodyOffset, Mod.isSidearmMode);
+            }*/
+
+            /*
+            Rect buttonThin = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.2f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
+            Rect buttonFat = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.3f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
+            Rect buttonMale = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.4f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
+            Rect buttonFemale = new Rect(rect.x + (0.1f * rect.width), rect.y + (0.5f * rect.height), 0.3f * rect.width, 0.1f * rect.height);
+
+            Rect buttonThinImpact = new Rect(rect.x + (0.4f * rect.width), rect.y + (0.2f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
+            Rect buttonFatImpact = new Rect(rect.x + (0.4f * rect.width), rect.y + (0.3f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
+            Rect buttonMaleImpact = new Rect(rect.x + (0.4f * rect.width), rect.y + (0.4f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
+            Rect buttonFemaleImpact = new Rect(rect.x + (0.4f * rect.width), rect.y + (0.5f * rect.height), 0.5f * rect.width, 0.1f * rect.height);
+
+            Rect buttonThinImpactLess = new Rect(rect.x, rect.y + (0.2f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+            Rect buttonFatImpactLess = new Rect(rect.x, rect.y + (0.3f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+            Rect buttonMaleImpactLess = new Rect(rect.x, rect.y + (0.4f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+            Rect buttonFemaleImpactLess = new Rect(rect.x, rect.y + (0.5f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+
+            Rect buttonThinImpactMore = new Rect(rect.x + (0.9f * rect.width), rect.y + (0.2f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+            Rect buttonFatImpactMore = new Rect(rect.x + (0.9f * rect.width), rect.y + (0.3f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+            Rect buttonMaleImpactMore = new Rect(rect.x + (0.9f * rect.width), rect.y + (0.4f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+            Rect buttonFemaleImpactMore = new Rect(rect.x + (0.9f * rect.width), rect.y + (0.5f * rect.height), 0.1f * rect.width, 0.1f * rect.height);
+
+
+
             //BODIES
             if (Widgets.ButtonText(buttonFat, "Fat"))
             {
-                mod.currentBody = BodyType.fat;
+                Mod.CurrentBody = BodyType.fat;
             }
             if (Widgets.ButtonText(buttonThin, "Thin"))
             {
-                mod.currentBody = BodyType.thin;
+                Mod.CurrentBody = BodyType.thin;
             }
-            if (Widgets.ButtonText(buttonHulk, "Hulk"))
-            {
-                mod.currentBody = BodyType.hulk;
-            }
+
             if (Widgets.ButtonText(buttonMale, "Male"))
             {
-                mod.currentBody = BodyType.male;
+                Mod.CurrentBody = BodyType.male;
             }
             if (Widgets.ButtonText(buttonFemale, "Female"))
             {
-                mod.currentBody = BodyType.female;
+                Mod.CurrentBody = BodyType.female;
             }
 
-            Widgets.ButtonText(buttonFatImpact, "Impact: " + Math.Round(mod.GetCurGroup().GetBodyOffsetModif(BodyType.fat, mod.isSidearmMode)*100, 3) + "%");
-            Widgets.ButtonText(buttonThinImpact, "Impact: " + Math.Round(mod.GetCurGroup().GetBodyOffsetModif(BodyType.thin, mod.isSidearmMode) * 100, 3) + "%");
-            Widgets.ButtonText(buttonHulkImpact, "Impact: " + Math.Round(mod.GetCurGroup().GetBodyOffsetModif(BodyType.hulk, mod.isSidearmMode) * 100, 3) + "%");
-            Widgets.ButtonText(buttonMaleImpact, "Impact: " + Math.Round(mod.GetCurGroup().GetBodyOffsetModif(BodyType.male, mod.isSidearmMode) * 100, 3) + "%");
-            Widgets.ButtonText(buttonFemaleImpact, "Impact: " + Math.Round(mod.GetCurGroup().GetBodyOffsetModif(BodyType.female, mod.isSidearmMode) * 100, 3) + "%");
+            Widgets.ButtonText(buttonFatImpact, "Impact: " + Math.Round(Mod.GetCurGroup().GetBodyOffsetModif(BodyType.fat, Mod.isSidearmMode)*100, 3) + "%");
+            Widgets.ButtonText(buttonThinImpact, "Impact: " + Math.Round(Mod.GetCurGroup().GetBodyOffsetModif(BodyType.thin, Mod.isSidearmMode) * 100, 3) + "%");
+
+            Widgets.ButtonText(buttonMaleImpact, "Impact: " + Math.Round(Mod.GetCurGroup().GetBodyOffsetModif(BodyType.male, Mod.isSidearmMode) * 100, 3) + "%");
+            Widgets.ButtonText(buttonFemaleImpact, "Impact: " + Math.Round(Mod.GetCurGroup().GetBodyOffsetModif(BodyType.female, Mod.isSidearmMode) * 100, 3) + "%");
 
             if (Widgets.ButtonText(buttonFatImpactLess, "<"))
             {
-                float bodyModif = mod.GetCurGroup().GetBodyOffsetModif(BodyType.fat, mod.isSidearmMode);
+                float bodyModif = Mod.GetCurGroup().GetBodyOffsetModif(BodyType.fat, Mod.isSidearmMode);
                 bodyModif -=0.05f;
 
-                mod.GetCurGroup().SetBodyOffsetModif(BodyType.fat, bodyModif, mod.isSidearmMode);
+                Mod.GetCurGroup().SetBodyOffsetModif(BodyType.fat, bodyModif, Mod.isSidearmMode);
             }
             if (Widgets.ButtonText(buttonThinImpactLess, "<"))
             {
-                float bodyModif = mod.GetCurGroup().GetBodyOffsetModif(BodyType.thin, mod.isSidearmMode);
+                float bodyModif = Mod.GetCurGroup().GetBodyOffsetModif(BodyType.thin, Mod.isSidearmMode);
                 bodyModif -= 0.05f;
 
-                mod.GetCurGroup().SetBodyOffsetModif(BodyType.thin, bodyModif, mod.isSidearmMode);
+                Mod.GetCurGroup().SetBodyOffsetModif(BodyType.thin, bodyModif, Mod.isSidearmMode);
             }
-            if (Widgets.ButtonText(buttonHulkImpactLess, "<"))
-            {
-                float bodyModif = mod.GetCurGroup().GetBodyOffsetModif(BodyType.hulk, mod.isSidearmMode);
-                bodyModif -= 0.05f;
 
-                mod.GetCurGroup().SetBodyOffsetModif(BodyType.hulk, bodyModif, mod.isSidearmMode);
-            }
             if (Widgets.ButtonText(buttonMaleImpactLess, "<"))
             {
-                float bodyModif = mod.GetCurGroup().GetBodyOffsetModif(BodyType.male, mod.isSidearmMode);
+                float bodyModif = Mod.GetCurGroup().GetBodyOffsetModif(BodyType.male, Mod.isSidearmMode);
                 bodyModif -= 0.05f;
 
-                mod.GetCurGroup().SetBodyOffsetModif(BodyType.male, bodyModif, mod.isSidearmMode);
+                Mod.GetCurGroup().SetBodyOffsetModif(BodyType.male, bodyModif, Mod.isSidearmMode);
             }
             if (Widgets.ButtonText(buttonFemaleImpactLess, "<"))
             {
-                float bodyModif = mod.GetCurGroup().GetBodyOffsetModif(BodyType.female, mod.isSidearmMode);
+                float bodyModif = Mod.GetCurGroup().GetBodyOffsetModif(BodyType.female, Mod.isSidearmMode);
                 bodyModif -= 0.05f;
 
-                mod.GetCurGroup().SetBodyOffsetModif(BodyType.female, bodyModif, mod.isSidearmMode);
+                Mod.GetCurGroup().SetBodyOffsetModif(BodyType.female, bodyModif, Mod.isSidearmMode);
             }
 
 
             if (Widgets.ButtonText(buttonFatImpactMore, ">"))
             {
-                float bodyModif = mod.GetCurGroup().GetBodyOffsetModif(BodyType.fat, mod.isSidearmMode);
+                float bodyModif = Mod.GetCurGroup().GetBodyOffsetModif(BodyType.fat, Mod.isSidearmMode);
                 bodyModif += 0.05f;
 
-                mod.GetCurGroup().SetBodyOffsetModif(BodyType.fat, bodyModif, mod.isSidearmMode);
+                Mod.GetCurGroup().SetBodyOffsetModif(BodyType.fat, bodyModif, Mod.isSidearmMode); 
             }
             if (Widgets.ButtonText(buttonThinImpactMore, ">"))
             {
-                float bodyModif = mod.GetCurGroup().GetBodyOffsetModif(BodyType.thin, mod.isSidearmMode);
+                float bodyModif = Mod.GetCurGroup().GetBodyOffsetModif(BodyType.thin, Mod.isSidearmMode);
                 bodyModif += 0.05f;
 
-                mod.GetCurGroup().SetBodyOffsetModif(BodyType.thin, bodyModif, mod.isSidearmMode);
-            }
-            if (Widgets.ButtonText(buttonHulkImpactMore, ">"))
-            {
-                float bodyModif = mod.GetCurGroup().GetBodyOffsetModif(BodyType.hulk, mod.isSidearmMode);
-                bodyModif += 0.05f;
-
-                mod.GetCurGroup().SetBodyOffsetModif(BodyType.hulk, bodyModif, mod.isSidearmMode);
+                Mod.GetCurGroup().SetBodyOffsetModif(BodyType.thin, bodyModif, Mod.isSidearmMode); 
             }
             if (Widgets.ButtonText(buttonMaleImpactMore, ">"))
             {
-                float bodyModif = mod.GetCurGroup().GetBodyOffsetModif(BodyType.male, mod.isSidearmMode);
+                float bodyModif = Mod.GetCurGroup().GetBodyOffsetModif(BodyType.male, Mod.isSidearmMode);
                 bodyModif += 0.05f;
 
-                mod.GetCurGroup().SetBodyOffsetModif(BodyType.male, bodyModif, mod.isSidearmMode);
+                Mod.GetCurGroup().SetBodyOffsetModif(BodyType.male, bodyModif, Mod.isSidearmMode); 
             }
             if (Widgets.ButtonText(buttonFemaleImpactMore, ">"))
             {
-                float bodyModif = mod.GetCurGroup().GetBodyOffsetModif(BodyType.female, mod.isSidearmMode);
+                float bodyModif = Mod.GetCurGroup().GetBodyOffsetModif(BodyType.female, Mod.isSidearmMode);
                 bodyModif += 0.05f;
 
-                mod.GetCurGroup().SetBodyOffsetModif(BodyType.female, bodyModif, mod.isSidearmMode);
+                Mod.GetCurGroup().SetBodyOffsetModif(BodyType.female, bodyModif, Mod.isSidearmMode); 
             }
 
+            */
 
 
-            if (Widgets.ButtonText(buttonBodyWest, "-X", true, true, Color.blue, true))
-            {
-                var bodyOffset = mod.GetCurGroup().GetBodyOffset(mod.curDir, mod.isSidearmMode);
-                bodyOffset.x -= 0.05f;
-                mod.GetCurGroup().SetBodyOffset(mod.curDir, bodyOffset, mod.isSidearmMode);
-            }
-            if (Widgets.ButtonText(buttonBodyEast, "+X"))
-            {
-                var bodyOffset = mod.GetCurGroup().GetBodyOffset(mod.curDir, mod.isSidearmMode);
-                bodyOffset.x += 0.05f;
-                mod.GetCurGroup().SetBodyOffset(mod.curDir, bodyOffset, mod.isSidearmMode);
-            }
-            if (Widgets.ButtonText(buttonBodyNorth, "+Y"))
-            {
-                var bodyOffset = mod.GetCurGroup().GetBodyOffset(mod.curDir, mod.isSidearmMode);
-                bodyOffset.z += 0.05f;
-                mod.GetCurGroup().SetBodyOffset(mod.curDir, bodyOffset, mod.isSidearmMode);
-            }
-            if (Widgets.ButtonText(buttonBodySouth, "-Y"))
-            {
-                var bodyOffset = mod.GetCurGroup().GetBodyOffset(mod.curDir, mod.isSidearmMode);
-                bodyOffset.z -= 0.05f;
-                mod.GetCurGroup().SetBodyOffset(mod.curDir, bodyOffset, mod.isSidearmMode);
-            }
-        }*/
+        }
 
-        private static Texture ChooseBodyTexture() => BodyTypeDataProvider.AllBodyTypes.SingleOrDefault(b => b.DefName.ToLower() == mod.CurrentBody.ToString()).BodyTextures[mod.CurDir];
+        private static Texture ChooseBodyTexture() => Mod.CurrentBody.BodyTextures[Mod.CurDir];
 
         private static Texture ChooseHeadTexture()
         {
-            switch (mod.CurrentBody)
-            {
-                default:
-                case BodyType.hulk:
-                case BodyType.fat:
-                case BodyType.male:
-                    return IR_Textures.maleHead[mod.CurDir];
-                    break;
+            if (Mod.CurrentHead == null)
+                return HeadTypeDataProvider.AllHeadTypes.First().HeadTextures[Mod.CurDir];
 
-                case BodyType.thin:
-                case BodyType.female:
-                    return IR_Textures.femaleHead[mod.CurDir];
-                    break;
-            }
+            return Mod.CurrentHead.HeadTextures[Mod.CurDir];
         }
 
-        private static float ChooseHeadOffset()
+        private static Vector2 ChooseHeadOffset()
         {
-            switch (mod.CurrentBody)
-            {
-                default:
-                case BodyType.hulk:
-                    return BodyTypeDefOf.Hulk.headOffset.x;
-                    break;
+            if (Mod.CurrentHead == null)
+                return BodyTypeDataProvider.AllBodyTypes.First().Offset;
 
-                case BodyType.fat:
-                    return BodyTypeDefOf.Fat.headOffset.x;
-                    break;
-
-                case BodyType.male:
-                    return BodyTypeDefOf.Male.headOffset.x;
-                    break;
-
-                case BodyType.thin:
-                    return BodyTypeDefOf.Thin.headOffset.x;
-                    break;
-
-                case BodyType.female:
-                    return BodyTypeDefOf.Female.headOffset.x;
-                    break;
-            }
+            return BodyTypeDataProvider.AllBodyTypes.SingleOrDefault(b => b.DefName.ToLower() == Mod.CurrentBody.ToString()).Offset;
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using Holsters;
-using RimWorldHolsters.Core;
 using RimWorldHolsters.Utility;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,6 +9,9 @@ namespace RimWorldHolsters
 {
     public class IR_HolstersSettings : ModSettings
     {
+        public static string LastSelectedHeadType;
+
+
         public static bool IsFirstLaunch;
 
         public static bool DisplaySidearms;
@@ -28,8 +29,8 @@ namespace RimWorldHolsters
         {
             // New
             Scribe_Collections.Look(ref RenderGroups, "renderGroups", LookMode.Deep);
-            
-            
+
+
             // Old
             //Scribe_Collections.Look(ref groups,"groupsCordSettings4" /*changed from 3 to 4 for development for now*/, LookMode.Deep);
             Scribe_Values.Look(ref DisplaySidearms, "displaySide", true);
@@ -48,7 +49,7 @@ namespace RimWorldHolsters
             {
                 Log.Message("[Holsters] Groups initialised.");
                 ResetAllGroups();
-            } 
+            }
             else
             {
                 CheckIfAllWeaponsBelongToAGroup();
@@ -68,14 +69,13 @@ namespace RimWorldHolsters
 
             foreach (ThingDef thing in GenDefDatabase.GetAllDefsInDatabaseForDef(typeof(ThingDef)))
             {
-                if (GetWeaponGroupOf(thing.defName).Name.Equals("noGroup") )
+                if (GetWeaponGroupOf(thing.defName).Name.Equals("noGroup"))
                 {
                     weaponsWithoutGroup.Add(thing);
                 }
-            } 
+            }
 
             IR_HolstersInitialisation.SortWeaponsIntoGroups(ref RenderGroups, weaponsWithoutGroup);
-            
         }
 
         public static void ResetGroup(HolsterWeaponRenderGroup group) => group.HolsterRenderData.Reset();
@@ -92,18 +92,20 @@ namespace RimWorldHolsters
         //GETTING DATA
         public static Vector3 GetWeaponPos(string weaponDefName, Rot4 rot, bool isSide, Pawn pawn, HolsterWeaponRenderGroup group)
         {
-            BodyType bodyType = (BodyType)Enum.Parse(typeof(BodyType), pawn.story?.bodyType?.defName.ToLower());
+            BodyTypeData bodyTypeData = BodyTypeDataProvider.AllBodyTypes.FirstOrDefault(b => b.DefName.Equals(pawn.story?.bodyType?.defName.ToLower()));
 
-            return GetWeaponPos(group, rot, isSide, bodyType);
+            return GetWeaponPos(group, rot, isSide, bodyTypeData);
         }
 
-        public static Vector3 GetWeaponPos(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide, BodyType body)
+        public static Vector3 GetWeaponPos(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide, BodyTypeData body)
         {
-            Vector3 pos = group.HolsterRenderData.GetConfiguration(rot, isSide).Position;
+            HolsterConfiguration configuration = group.HolsterRenderData.GetConfiguration(rot, isSide);
 
-            //TODO: Body offsets! Vector3 offset = group.GetBodyOffset(rot, isSide) * group.GetBodyOffsetModif(body,isSide);
+            Vector3 pos = configuration.Position;
 
-            //pos += offset;
+            Vector3 offset = configuration.BodyOffset * group.HolsterRenderData.GetBodyModifier(body.DefName, isSide);
+
+            pos += offset;
 
             return pos;
         }
@@ -115,14 +117,8 @@ namespace RimWorldHolsters
             return pos;
         }
 
-        public static float GetWeaponAngle(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide)
-        {
-            return group.HolsterRenderData.GetConfiguration(rot, isSide).Rotation;
-        }
+        public static float GetWeaponAngle(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide) => group.HolsterRenderData.GetConfiguration(rot, isSide).Rotation;
 
-        public static bool GetWeaponFlip(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide)
-        {
-            return group.HolsterRenderData.GetConfiguration(rot, isSide).IsFlipped;
-        }
+        public static bool GetWeaponFlip(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide) => group.HolsterRenderData.GetConfiguration(rot, isSide).IsFlipped;
     }
 }

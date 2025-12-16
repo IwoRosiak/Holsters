@@ -2,6 +2,7 @@
 using RimWorldHolsters.Utility;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -9,7 +10,9 @@ namespace RimWorldHolsters
 {
     public class IR_HolstersMod : Mod
     {
-        internal const float PIXEL_RATIO = 96;
+        private BodyTypeData _currentBody;
+
+        internal const float PIXEL_RATIO = 100;
 
         private readonly IR_HolstersSettings _settings;
 
@@ -19,12 +22,28 @@ namespace RimWorldHolsters
         private float _receivingGroupIndex;
         private string _groupName;
 
-        internal BodyType CurrentBody = BodyType.male;
-        internal List<ThingDef> CurWeapons = new List<ThingDef>();
         internal int CurGroupIndex = 0;
 
 
         internal Rot4 CurDir = Rot4.South;
+        internal List<ThingDef> CurWeapons = new List<ThingDef>();
+
+        internal BodyTypeData CurrentBody 
+        { 
+            get
+            {
+                if (_currentBody == null)
+                {
+                    _currentBody = BodyTypeDataProvider.AllBodyTypes.First();
+                }
+
+                return _currentBody;
+            }
+            set => _currentBody = value;
+        }
+
+        internal HeadTypeData CurrentHead;
+
         internal bool IsSidearmMode = false;
         internal bool IsPrimaryMode = true;
 
@@ -44,7 +63,7 @@ namespace RimWorldHolsters
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
-            IR_ModSettingsDrawer.mod = this;
+            IR_ModSettingsDrawer.Mod = this;
 
             if (CurWeapons.NullOrEmpty())
             {
@@ -99,10 +118,10 @@ namespace RimWorldHolsters
 
             dangerZoneListing.End();
 
-            //Rect layerOffsetsRect= new Rect(inRect.x + 10f, inRect.y + (0.5f * inRect.height), 0.2f * inRect.width - 20f, 0.6f * inRect.height);
 
 
-            //TODO: BODY MODIFS IR_ModSettingsDrawer.DrawBodyManagement(new Rect(inRect.x + (0.8f * inRect.width) + 10f, inRect.y + (0.3f * inRect.height), 0.2f * inRect.width -20f, 0.6f * inRect.height));
+            //TODO: Move this perhaps!
+            IR_ModSettingsDrawer.DrawBodyManagement(new Rect(inRect.x + (0.8f * inRect.width) + 10f, inRect.y + (0.3f * inRect.height), 0.2f * inRect.width -20f, 0.6f * inRect.height));
 
             
 
@@ -396,7 +415,5 @@ namespace RimWorldHolsters
             _ = fromGroup.Weapons.Remove(weapon.defName);
             IR_HolstersSettings.RenderGroups[toGroupIndex].Weapons.Add(weapon.defName);
         }
-
-
     }
 }

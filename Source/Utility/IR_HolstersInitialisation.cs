@@ -34,7 +34,15 @@ namespace RimWorldHolsters
                             { Rot4.North, new HolsterConfiguration(new Vector3(-1f, 0, 0.5f), 265f, 1f, true, true, new Vector3(-1f, 0, 0f)) },
                             { Rot4.East,  new HolsterConfiguration(new Vector3(-2f, 0, 0.5f), 290f, 1f, false, false, new Vector3(-2f, 0, 0f)) },
                             { Rot4.West,  new HolsterConfiguration(new Vector3(2f, 0, 0.5f), 255f, 1f, true, true, new Vector3(2f, 0, 0f)) }
-                        }
+                        },
+                        AllBodyOffsetsModifiers = new Dictionary<string, float>
+                        {
+                            { "male", 0f },
+                            { "female", 0f },
+                            { "fat", 1f },
+                            { "hulk", 0.5f },
+                            { "thin", -0.2f },
+                        },
                     }
                 },
                 new HolsterWeaponRenderGroup("Short Ranged")
@@ -54,7 +62,15 @@ namespace RimWorldHolsters
                             { Rot4.North, new HolsterConfiguration(new Vector3(1.5f, 0, -2.5f), 155f, 1f, true, false, new Vector3(2f, 0, -0.5f)) },
                             { Rot4.East,  new HolsterConfiguration(new Vector3(0.5f, 0, -2.5f), 380f, 1f, false, true, new Vector3(-2f, 0, 0f)) },
                             { Rot4.West,  new HolsterConfiguration(new Vector3(0f, 0, -2.5f), 145f, 1f, true, false, new Vector3(2f, 0, 0f)) }
-                        }
+                        },
+                        AllBodyOffsetsModifiers = new Dictionary<string, float>
+                        {
+                            { "male", 0f },
+                            { "female", 0f },
+                            { "fat", 1f },
+                            { "hulk", 0.8f },
+                            { "thin", -0.2f },
+                        },
                     }
                 },
                 new HolsterWeaponRenderGroup("Bows")
@@ -74,7 +90,15 @@ namespace RimWorldHolsters
                             { Rot4.North, new HolsterConfiguration(new Vector3(0f, 0, -2f), 80f, 1f, false, true, new Vector3(0f, 0, 0f)) },
                             { Rot4.East,  new HolsterConfiguration(new Vector3(-0.5f, 0, -2f), 80f, 1f, false, true, new Vector3(0f, 0, 0f)) },
                             { Rot4.West,  new HolsterConfiguration(new Vector3(0f, 0, -2f), 95f, 1f, false, false, new Vector3(0f, 0, 0f)) }
-                        }
+                        },
+                        AllBodyOffsetsModifiers = new Dictionary<string, float>
+                        {
+                            { "male", 0f },
+                            { "female", 0f },
+                            { "fat", 1f },
+                            { "hulk", 1f },
+                            { "thin", -0.2f },
+                        },
                     }
                 },
                 new HolsterWeaponRenderGroup("Long Melee")
@@ -94,7 +118,15 @@ namespace RimWorldHolsters
                             { Rot4.North, new HolsterConfiguration(new Vector3(0f, 0, -0.5f), 115f, 1f, false, true, new Vector3(0f, 0, 0f)) },
                             { Rot4.East,  new HolsterConfiguration(new Vector3(-2f, 0, -0.5f), 110f, 1f, false, true, new Vector3(-2f, 0, 0f)) },
                             { Rot4.West,  new HolsterConfiguration(new Vector3(1f, 0, 0.5f), 75f, 1f, false, false, new Vector3(2f, 0, 0f)) }
-                        }
+                        },
+                        AllBodyOffsetsModifiers = new Dictionary<string, float>
+                        {
+                            { "male", 0.3f },
+                            { "female", 0.3f },
+                            { "fat", 1f },
+                            { "hulk", 0.8f },
+                            { "thin", 0f },
+                        },
                     }
                 },
                 new HolsterWeaponRenderGroup("Short Melee")
@@ -114,7 +146,15 @@ namespace RimWorldHolsters
                             { Rot4.North, new HolsterConfiguration(new Vector3(1.5f, 0, -2f), 75f, 0.8f, true, false, new Vector3(2f, 0, 0f)) },
                             { Rot4.East,  new HolsterConfiguration(new Vector3(0.5f, 0, -2f), 135f, 0.8f, false, true, new Vector3(-1f, 0, 0f)) },
                             { Rot4.West,  new HolsterConfiguration(new Vector3(-0.5f, 0, -2f), 50f, 0.8f, true, false, new Vector3(1f, 0, 0f)) }
-                        }
+                        },
+                        AllBodyOffsetsModifiers = new Dictionary<string, float>
+                        {
+                            { "male", 0 },
+                            { "female", 0 },
+                            { "fat", 1f },
+                            { "hulk", 0.25f },
+                            { "thin", -0.2f },
+                        },
                     }
                 },
                 new HolsterWeaponRenderGroup("Grenades")
@@ -134,7 +174,15 @@ namespace RimWorldHolsters
                             { Rot4.North, new HolsterConfiguration(new Vector3(1.5f, 0, -2f), 320f, 0.6f, true, false, new Vector3(1.5f, 0, 0f)) },
                             { Rot4.East,  new HolsterConfiguration(new Vector3(2f, 0, -0.5f), 260f, 0.6f, false, false, new Vector3(1f, 0, 0f)) },
                             { Rot4.West,  new HolsterConfiguration(new Vector3(-2f, 0, -0.5f), 285f, 0.6f, true, false, new Vector3(-1f, 0, 0f)) }
-                        }
+                        },
+                        AllBodyOffsetsModifiers = new Dictionary<string, float>
+                        {
+                            { "male", 0 },
+                            { "female", 0 },
+                            { "fat", 1f },
+                            { "hulk", 0.5f },
+                            { "thin", -0.2f },
+                        },
                     }
                 }
             };

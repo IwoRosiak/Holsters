@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using Verse;
 
 namespace Holsters
@@ -11,7 +10,8 @@ namespace Holsters
         public Dictionary<Rot4, HolsterConfiguration> SideConfiguration = new Dictionary<Rot4, HolsterConfiguration>();
 
 
-        //public Dictionary<BodyType, float> BodyOffsetsModifs = new Dictionary<BodyType, float>();
+        public Dictionary<string, float> BodyOffsetsModifiers;
+        public Dictionary<string, float> BodyOffsetsSideModifiers;
 
         public HolsterRenderData() { }
 
@@ -29,7 +29,68 @@ namespace Holsters
                 SideConfiguration.Add(pair.Key, pair.Value.Copy());
             }
 
-            //BodyOffsetsModifs = new Dictionary<BodyType, float>(copy.BodyOffsetsModifs);
+            BodyOffsetsModifiers = new Dictionary<string, float>(copy.BodyOffsetsModifiers);
+            BodyOffsetsSideModifiers = new Dictionary<string, float>(copy.BodyOffsetsSideModifiers);
+
+        }
+
+        public Dictionary<string, float> AllBodyOffsetsModifiers 
+        { 
+            set
+            {
+                BodyOffsetsModifiers = new Dictionary<string, float>(value);
+                BodyOffsetsSideModifiers = new Dictionary<string, float>(value);
+            } 
+        }
+
+        public float GetBodyModifier(string bodyTypeDefName, bool side)
+        {
+            if (BodyOffsetsModifiers == null)
+                BodyOffsetsModifiers = GetDefaultBodyModifiersDictionary();
+            if (BodyOffsetsSideModifiers == null)
+                BodyOffsetsSideModifiers = GetDefaultBodyModifiersDictionary();
+
+            Log.Message(bodyTypeDefName);
+
+
+            bodyTypeDefName = bodyTypeDefName.ToLower();
+            Dictionary<string, float> dict = side ? BodyOffsetsSideModifiers : BodyOffsetsModifiers;
+
+            Log.Message($"Looking for body modifier for {bodyTypeDefName} in {(side ? "side" : "normal")} dictionary.");
+
+            foreach (var key in dict.Keys)
+            {
+                Log.Message($"Key: {key}, Value: {dict[key]}");
+            }
+
+            if (dict.ContainsKey(bodyTypeDefName))
+                return dict[bodyTypeDefName];
+
+            float defaultValue = 0;
+            dict.Add(bodyTypeDefName, defaultValue);
+
+            return defaultValue;
+        }
+
+        public void SetBodyModifier(string bodyTypeDefName, bool side, float newValue)
+        {
+            if (BodyOffsetsModifiers == null)
+                BodyOffsetsModifiers = GetDefaultBodyModifiersDictionary();
+            if (BodyOffsetsSideModifiers == null)
+                BodyOffsetsSideModifiers = GetDefaultBodyModifiersDictionary();
+
+            bodyTypeDefName = bodyTypeDefName.ToLower();
+
+            Dictionary<string, float> dict = side ? BodyOffsetsSideModifiers : BodyOffsetsModifiers;
+
+            if (dict.ContainsKey(bodyTypeDefName))
+            {
+                dict[bodyTypeDefName] = newValue;
+            }
+            else
+            {
+                dict.Add(bodyTypeDefName, newValue);
+            }
         }
 
         public HolsterConfiguration GetConfiguration(Rot4 rot, bool side)
@@ -70,13 +131,6 @@ namespace Holsters
             SideConfiguration.Add(Rot4.North, HolsterConfiguration.EmptyConfiguration);
             SideConfiguration.Add(Rot4.West, HolsterConfiguration.EmptyConfiguration);
             SideConfiguration.Add(Rot4.East, HolsterConfiguration.EmptyConfiguration);
-
-
-            //BodyOffsetsModifs.Add(BodyType.hulk, 0);
-            //BodyOffsetsModifs.Add(BodyType.thin, 0);
-            //BodyOffsetsModifs.Add(BodyType.female, 0);
-            //BodyOffsetsModifs.Add(BodyType.male, 0);
-            //BodyOffsetsModifs.Add(BodyType.fat, 0);
         }
 
         public void ExposeData()
@@ -84,7 +138,17 @@ namespace Holsters
             Scribe_Collections.Look(ref Configuration, "configuration", LookMode.Value, LookMode.Deep);
             Scribe_Collections.Look(ref SideConfiguration, "sideConfiguration", LookMode.Value, LookMode.Deep);
 
-            //Scribe_Collections.Look(ref BodyOffsetsModifs, "bodyOffsets", LookMode.Value, LookMode.Value);
+            Scribe_Collections.Look(ref BodyOffsetsModifiers, "bodyOffsetsModifiers", LookMode.Value, LookMode.Value);
+            Scribe_Collections.Look(ref BodyOffsetsSideModifiers, "bodyOffsetsSideModifiers", LookMode.Value, LookMode.Value);
         }
+
+        private static Dictionary<string, float> GetDefaultBodyModifiersDictionary() => new Dictionary<string, float>
+        {
+            { "male", 0f },
+            { "female", 0f },
+            { "fat", 1f },
+            { "hulk", 0.5f },
+            { "thin", -0.2f },
+        };
     }
 }

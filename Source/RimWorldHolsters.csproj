@@ -113,6 +113,8 @@
     <Compile Include="Utility\BodyTypeData.cs" />
     <Compile Include="Utility\BodyTypeDataProvider.cs" />
     <Compile Include="Utility\ExceptionHandler.cs" />
+    <Compile Include="Utility\HeadTypeData.cs" />
+    <Compile Include="Utility\HeadTypeDataProvider.cs" />
     <Compile Include="Utility\IR_HolstersInitialisation.cs" />
     <Compile Include="Utility\ModSettings\IR_ModSettingsDrawer.cs" />
     <Compile Include="Core\WeaponGroupCordInfo.cs" />

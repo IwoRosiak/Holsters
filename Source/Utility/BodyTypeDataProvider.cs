@@ -12,7 +12,6 @@ namespace RimWorldHolsters.Utility
             var bodyTypes = new List<BodyTypeData>();
             foreach (BodyTypeDef def in DefDatabase<BodyTypeDef>.AllDefs)
             {
-                Log.Message("Adding body type");
                 bodyTypes.Add(new BodyTypeData(def));
             }
 
