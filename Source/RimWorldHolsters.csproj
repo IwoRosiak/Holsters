@@ -109,7 +109,6 @@
     <Compile Include="HolsterConfiguration.cs" />
     <Compile Include="HolsterRenderData.cs" />
     <Compile Include="HolsterWeaponRenderGroup.cs" />
-    <Compile Include="Utility\BodyType.cs" />
     <Compile Include="Utility\BodyTypeData.cs" />
     <Compile Include="Utility\BodyTypeDataProvider.cs" />
     <Compile Include="Utility\ExceptionHandler.cs" />
@@ -117,10 +116,9 @@
     <Compile Include="Utility\HeadTypeDataProvider.cs" />
     <Compile Include="Utility\IR_HolstersInitialisation.cs" />
     <Compile Include="Utility\ModSettings\IR_ModSettingsDrawer.cs" />
-    <Compile Include="Core\WeaponGroupCordInfo.cs" />
     <Compile Include="Utility\IR_Textures.cs" />
     <Compile Include="Utility\ModSettings\IR_HolstersMod.cs" />
-    <Compile Include="Utility\ModSettings\IR_HolstersSettings.cs" />
+    <Compile Include="IR_HolstersSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

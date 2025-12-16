@@ -1,7 +1,5 @@
 ﻿using Holsters;
 using RimWorld;
-using RimWorldHolsters.Utility;
-using System;
 using UnityEngine;
 using Verse;
 namespace RimWorldHolsters.Core.RenderNodes
@@ -16,9 +14,6 @@ namespace RimWorldHolsters.Core.RenderNodes
             Pawn pawn = parms.pawn;
 
             if (pawn.Dead)
-                return false;
-
-            if (!Enum.TryParse<BodyType>(pawn.story?.bodyType?.defName.ToLower(), out _))
                 return false;
 
             if (parms.Portrait)
@@ -55,7 +50,13 @@ namespace RimWorldHolsters.Core.RenderNodes
         {
             var holsterNode = node as PawnRenderNode_Holsters;
 
-            Vector3 pos = holsterNode.GetRenderData(parms.facing).Position; // TODO: Need to include body modifs!
+            HolsterConfiguration configuration = holsterNode.RenderData.GetConfiguration(parms.facing, holsterNode.DrawInAlternativePosition);
+
+            Vector3 pos = configuration.Position;
+
+            Vector3 offset = configuration.BodyOffset * holsterNode.RenderData.GetBodyModifier(parms.pawn.story?.bodyType?.defName.ToLower(), holsterNode.DrawInAlternativePosition);
+
+            pos += offset;
             Vector3 vector = base.OffsetFor(node, parms, out pivot);
             vector += pos;
 
@@ -68,7 +69,7 @@ namespace RimWorldHolsters.Core.RenderNodes
 
             HolsterConfiguration renderData = holsterNode.GetRenderData(parms.facing);
 
-            float rotation = renderData.Rotation; 
+            float rotation = renderData.Rotation;
 
             if (renderData.IsFlipped)
                 rotation += 180;

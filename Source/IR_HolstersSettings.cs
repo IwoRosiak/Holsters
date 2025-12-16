@@ -90,7 +90,7 @@ namespace RimWorldHolsters
             RenderGroups.SingleOrDefault(rg => rg.HasWeapon(weaponDefName)) ?? new HolsterWeaponRenderGroup("noGroup");
 
         //GETTING DATA
-        public static Vector3 GetWeaponPos(string weaponDefName, Rot4 rot, bool isSide, Pawn pawn, HolsterWeaponRenderGroup group)
+        public static Vector3 GetWeaponPos(HolsterWeaponRenderGroup group, Rot4 rot, bool isSide, Pawn pawn)
         {
             BodyTypeData bodyTypeData = BodyTypeDataProvider.AllBodyTypes.FirstOrDefault(b => b.DefName.Equals(pawn.story?.bodyType?.defName.ToLower()));
 
