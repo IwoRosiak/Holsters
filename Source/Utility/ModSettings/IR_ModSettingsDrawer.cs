@@ -1,4 +1,5 @@
-﻿using RimWorldHolsters.Utility;
+﻿using RimWorld;
+using RimWorldHolsters.Utility;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -102,25 +103,30 @@ namespace RimWorldHolsters
             float height = texture.height * Mod.CurrentBody.HeadSizeFactor;
 
             Vector2 headOffset = ChooseHeadOffset();
+            
+            switch (Mod.CurDir.AsInt)
+            {
+                case 0: // North
+                case 2: // South
+                    offset = new Vector2(0f, headOffset.y);
+                    break;
+                case 1: //East
+                    offset = new Vector2(-headOffset.x, headOffset.y);
+                    break;
+                case 3: // West
+                    width *= -1;
+                    offset = new Vector2(headOffset.x, headOffset.y);
+                    break;
+            }
 
-            if (Mod.CurDir == Rot4.West)
-            {
-                width *= -1;
-                offset = new Vector2(headOffset.x, headOffset.y);
-            }
-            else if (Mod.CurDir == Rot4.East)
-            {
-                offset = new Vector2(-headOffset.x, headOffset.y);
-            }
-            else
-            {
-                offset = new Vector2(0, headOffset.y);
-            }
+            Vector2 anchorOffset = Mod.CurrentBody.HeadAnchors[Mod.CurDir];
+
+            offset = new Vector2(offset.x - anchorOffset.x, offset.y - anchorOffset.y);
 
             offset *= IR_HolstersMod.PIXEL_RATIO;
 
             var headRect = new Rect(rect.center.x - width / 2f - offset.x, rect.center.y - height / 2f - offset.y, width, height);
-
+            
             Widgets.DrawTextureRotated(headRect, texture, 0);
         }
 
